@@ -9,5 +9,6 @@ public class ShaderStatic extends Shader {
     @Override
     protected void bindAttributes() {
         super.bindAttribute(0, "position");
+        super.bindAttribute(1, "textureCoords");
     }
 }

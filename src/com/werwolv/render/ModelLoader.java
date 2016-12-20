@@ -1,5 +1,7 @@
 package com.werwolv.render;
 
+import com.werwolv.model.ModelRaw;
+import com.werwolv.resource.Texture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -11,18 +13,21 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ModelLoader {
 
     private List<Integer> vaos = new ArrayList<>();
     private List<Integer> vbos = new ArrayList<>();
+    private List<Integer> textures = new ArrayList<>();
 
-    public RawModel loadToVAO(float[] positions, int[] indices) {
+    public ModelRaw loadToVAO(float[] positions, float[] textureCoords, int[] indices) {
         int vaoID = createVAO();
         bindIndicesBuffer(indices);
-        storeDataInAttrList(0, positions);
+        storeDataInAttrList(0, 3, positions);
+        storeDataInAttrList(1, 2, textureCoords);
         unbindVAO();
 
-        return new RawModel(vaoID, indices.length);
+        return new ModelRaw(vaoID, indices.length);
     }
 
     private int createVAO() {
@@ -33,14 +38,14 @@ public class ModelLoader {
         return vaoID;
     }
 
-    private void  storeDataInAttrList(int attrNr, float[] data) {
+    private void  storeDataInAttrList(int attrNr, int coordSize, float[] data) {
         int vboID = GL15.glGenBuffers();
 
         vbos.add(vboID);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, storeDataInFloatBuffer(data), GL15.GL_STATIC_DRAW);
 
-        GL20.glVertexAttribPointer(attrNr, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(attrNr, coordSize, GL11.GL_FLOAT, false, 0, 0);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 
@@ -58,6 +63,17 @@ public class ModelLoader {
 
         for(int vbo : vbos)
             GL15.glDeleteBuffers(vbo);
+
+        for(int texture : textures)
+            GL11.glDeleteTextures(texture);
+    }
+
+    public int loadTexture(String fileName) {
+        Texture texture = Texture.loadTexture("res/" + fileName + ".png");
+
+        textures.add(texture.getTextureId());
+
+        return texture.getTextureId();
     }
 
     private void unbindVAO() {

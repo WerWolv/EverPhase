@@ -5,8 +5,10 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import com.werwolv.input.KeyListener;
+import com.werwolv.model.ModelTextured;
 import com.werwolv.render.ModelLoader;
 import com.werwolv.render.Renderer;
+import com.werwolv.resource.TextureModel;
 import com.werwolv.shader.Shader;
 import com.werwolv.shader.ShaderStatic;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -25,6 +27,8 @@ public class Main {
     private ModelLoader loader = new ModelLoader();
     private float[] vertices = { -0.5F, 0.5F, 0F, -0.5F, -0.5F, 0F, 0.5F, -0.5F, 0F, 0.5F, 0.5F, 0F };
     private int[] indices = { 0, 1, 3, 3, 1, 2};
+    private float[] textureCoords = {0, 0, 0, 1, 1, 1, 1, 0 };
+
     Shader shader;
 
     public static void main(String[] args) {
@@ -80,7 +84,7 @@ public class Main {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shader.start();
-        renderer.renderModel(loader.loadToVAO(vertices, indices));
+        renderer.renderModel(new ModelTextured(loader.loadToVAO(vertices, textureCoords, indices), new TextureModel(loader.loadTexture("texture"))));
         shader.stop();
     }
 
