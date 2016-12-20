@@ -6,8 +6,9 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 import com.werwolv.input.KeyListener;
 import com.werwolv.render.ModelLoader;
-import com.werwolv.render.RawModel;
 import com.werwolv.render.Renderer;
+import com.werwolv.shader.Shader;
+import com.werwolv.shader.ShaderStatic;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -24,8 +25,8 @@ public class Main {
     private ModelLoader loader = new ModelLoader();
     private float[] vertices = { -0.5F, 0.5F, 0F, -0.5F, -0.5F, 0F, 0.5F, -0.5F, 0F, 0.5F, 0.5F, 0F };
     private int[] indices = { 0, 1, 3, 3, 1, 2};
+    Shader shader;
 
-    private RawModel model;
     public static void main(String[] args) {
         Main game = new Main();
         game.start();
@@ -73,12 +74,14 @@ public class Main {
     }
 
     public void render() {
+        shader = new ShaderStatic();
         glfwSwapBuffers(window);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+        shader.start();
         renderer.renderModel(loader.loadToVAO(vertices, indices));
+        shader.stop();
     }
 
     public void run() {
@@ -95,6 +98,7 @@ public class Main {
 
         keyCallback.free();
         loader.clean();
+        shader.clean();
     }
 
 }
