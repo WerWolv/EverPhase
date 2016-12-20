@@ -25,12 +25,12 @@ public class Main {
 
     public void start() {
         running = true;
-        thread = new Thread(() -> run(), "GameRunner");
+        thread = new Thread(this::run, "GameRunner");
         thread.start();
     }
 
     public void init() {
-        if(!glfwInit()) {
+        if(!glfwInit()){
             System.err.println("GLFW initialization failed!");
         }
 
@@ -61,7 +61,7 @@ public class Main {
     public void update() {
         glfwPollEvents();
 
-        //if(KeyListener.keys[GLFW_KEY_SPACE])
+        if(KeyListener.keys[GLFW_KEY_SPACE]) System.out.println("Test");
     }
 
     public void render() {
