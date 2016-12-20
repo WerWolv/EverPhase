@@ -22,7 +22,8 @@ public class Main {
     private GLFWKeyCallback keyCallback;
     private Renderer renderer = new Renderer();
     private ModelLoader loader = new ModelLoader();
-    private float[] vertices = { -0.5f, 0.5f, 0f, -0.5f, -0.5f, 0f, 0.5f, -0.5f, 0f, 0.5f, -0.5f, 0f, 0.5f, 0.5f, 0f, -0.5f, 0.5f, 0f };
+    private float[] vertices = { -0.5F, 0.5F, 0F, -0.5F, -0.5F, 0F, 0.5F, -0.5F, 0F, 0.5F, 0.5F, 0F };
+    private int[] indices = { 0, 1, 3, 3, 1, 2};
 
     private RawModel model;
     public static void main(String[] args) {
@@ -77,7 +78,7 @@ public class Main {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-        renderer.renderModel(loader.loadToVAO(vertices));
+        renderer.renderModel(loader.loadToVAO(vertices, indices));
     }
 
     public void run() {
