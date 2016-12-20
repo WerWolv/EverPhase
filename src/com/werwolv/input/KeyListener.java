@@ -1,4 +1,4 @@
-package com.werwolv.main.com.werwolv.input;
+package com.werwolv.input;
 
 import org.lwjgl.glfw.GLFWKeyCallback;
 import static org.lwjgl.glfw.GLFW.*;

@@ -4,7 +4,10 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-import com.werwolv.main.com.werwolv.input.KeyListener;
+import com.werwolv.input.KeyListener;
+import com.werwolv.render.ModelLoader;
+import com.werwolv.render.RawModel;
+import com.werwolv.render.Renderer;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -17,7 +20,11 @@ public class Main {
     public long window;
 
     private GLFWKeyCallback keyCallback;
+    private Renderer renderer = new Renderer();
+    private ModelLoader loader = new ModelLoader();
+    private float[] vertices = { -0.5f, 0.5f, 0f, -0.5f, -0.5f, 0f, 0.5f, -0.5f, 0f, 0.5f, -0.5f, 0f, 0.5f, 0.5f, 0f, -0.5f, 0.5f, 0f };
 
+    private RawModel model;
     public static void main(String[] args) {
         Main game = new Main();
         game.start();
@@ -68,6 +75,9 @@ public class Main {
         glfwSwapBuffers(window);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        renderer.renderModel(loader.loadToVAO(vertices));
     }
 
     public void run() {
@@ -83,6 +93,7 @@ public class Main {
         }
 
         keyCallback.free();
+        loader.clean();
     }
 
 }
