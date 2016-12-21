@@ -1,10 +1,12 @@
 package com.werwolv.shader;
 
+import com.werwolv.entity.Camera;
+import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
 
 public class ShaderStatic extends Shader {
 
-    private int loc_transMatrix, loc_projMatrix;
+    private int loc_transMatrix, loc_projMatrix, loc_viewMatrix;
 
     public ShaderStatic() {
         super("vertexShader", "fragmentShader");
@@ -20,6 +22,7 @@ public class ShaderStatic extends Shader {
     protected void getAllUniformLocations() {
         loc_transMatrix = super.getUniformLocation("transformationMatrix");
         loc_projMatrix = super.getUniformLocation("projectionMatrix");
+        loc_viewMatrix = super.getUniformLocation("viewMatrix");
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -28,5 +31,8 @@ public class ShaderStatic extends Shader {
 
     public void loadProjectionMatrix(Matrix4f matrix) {
         super.loadMatrix(loc_projMatrix, matrix);
+    }
+    public void loadViewMatrix(Camera camera) {
+        super.loadMatrix(loc_viewMatrix, Maths.createViewMatrix(camera));
     }
 }

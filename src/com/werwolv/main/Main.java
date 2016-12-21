@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import com.werwolv.entity.Camera;
 import com.werwolv.entity.Entity;
 import com.werwolv.input.KeyListener;
 import com.werwolv.model.ModelTextured;
@@ -24,7 +25,7 @@ public class Main {
     private Thread thread;
     private boolean running = false;
 
-    public static long window;
+    private static long window;
 
     private GLFWKeyCallback keyCallback;
     private ModelLoader loader = new ModelLoader();
@@ -35,19 +36,20 @@ public class Main {
     private ShaderStatic shader;
     private Entity entity;
     private Renderer renderer;
+    private Camera camera;
 
     public static void main(String[] args) {
         Main game = new Main();
         game.start();
     }
 
-    public void start() {
+    private void start() {
         running = true;
         thread = new Thread(this::run, "GameRunner");
         thread.start();
     }
 
-    public void init() {
+    private void init() {
         if(!glfwInit()){
             System.err.println("GLFW initialization failed!");
         }
@@ -79,29 +81,29 @@ public class Main {
         entity = new Entity(new ModelTextured(loader.loadToVAO(vertices, textureCoords, indices), new TextureModel(loader.loadTexture("texture"))), new Vector3f(0, 0, -1), 0, 0, 0, 1);
 
         renderer = new Renderer(shader);
+        camera = new Camera();
     }
 
-    public void update() {
+    private void update() {
         glfwPollEvents();
 
         if(KeyListener.keys[GLFW_KEY_SPACE]) System.out.println("Test");
     }
 
-    public void render() {
+    private void render() {
 
         glfwSwapBuffers(window);
-
-
-        entity.increasePosition(0, 0, -0.01F);
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        camera.moveCamera();
+
         shader.start();
+        shader.loadViewMatrix(camera);
         renderer.renderModel(entity, shader);
         shader.stop();
     }
 
-    public void run() {
+    private void run() {
         init();
 
         while(running) {
