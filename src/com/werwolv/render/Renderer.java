@@ -4,6 +4,7 @@ import com.werwolv.entity.Entity;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
 import com.werwolv.model.ModelTextured;
+import com.werwolv.resource.TextureModel;
 import com.werwolv.shader.ShaderStatic;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
@@ -14,9 +15,9 @@ import org.lwjgl.opengl.GL30;
 
 public class Renderer {
 
-    public static final float FOV = 70;
-    public static final float NEAR_PLANE = 0.1F;
-    public static final float FAR_PLANE = 1000.0F;
+    private static final float FOV = 70;
+    private static final float NEAR_PLANE = 0.1F;
+    private static final float FAR_PLANE = 1000.0F;
 
     private Matrix4f projectionMatrix;
 
@@ -34,15 +35,20 @@ public class Renderer {
         GL30.glBindVertexArray(rawModel.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
+        GL20.glEnableVertexAttribArray(2);
 
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
         shader.loadTransformationMatrix(transformationMatrix);
+
+        TextureModel texture = model.getTexture();
+        shader.loadShineVars(texture.getShineDamper(), texture.getReflectivity());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, rawModel.getVertexCnt(), GL11.GL_UNSIGNED_INT, 0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
 
         GL30.glBindVertexArray(0);
     }
