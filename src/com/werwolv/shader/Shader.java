@@ -17,7 +17,7 @@ public abstract class Shader {
     private int vertexShaderID;
     private int fragmentShaderID;
 
-    private FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+    private static FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
 
 
     public Shader(String vertexFile, String fragmentFile) {
@@ -58,7 +58,23 @@ public abstract class Shader {
     }
 
     protected void loadMatrix(int location, Matrix4f matrix) {
-        matrix.set(buffer);
+        buffer.put(matrix.m00());
+        buffer.put(matrix.m01());
+        buffer.put(matrix.m02());
+        buffer.put(matrix.m03());
+        buffer.put(matrix.m10());
+        buffer.put(matrix.m11());
+        buffer.put(matrix.m12());
+        buffer.put(matrix.m13());
+        buffer.put(matrix.m20());
+        buffer.put(matrix.m21());
+        buffer.put(matrix.m22());
+        buffer.put(matrix.m23());
+        buffer.put(matrix.m30());
+        buffer.put(matrix.m31());
+        buffer.put(matrix.m32());
+        buffer.put(matrix.m33());
+
         buffer.flip();
         GL20.glUniformMatrix4fv(location, false, buffer);
     }
