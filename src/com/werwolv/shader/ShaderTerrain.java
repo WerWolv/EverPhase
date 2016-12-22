@@ -5,14 +5,14 @@ import com.werwolv.entity.EntityLight;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
 
-public class ShaderStatic extends Shader {
+public class ShaderTerrain extends Shader {
 
     private int loc_transMatrix, loc_projMatrix, loc_viewMatrix;
     private int loc_lightPos, loc_lightColor;
     private int loc_shineDamper, loc_reflectivity;
 
-    public ShaderStatic() {
-        super("shaderEntity", "shaderEntity");
+    public ShaderTerrain() {
+        super("shaderTerrain", "shaderTerrain");
     }
 
     @Override

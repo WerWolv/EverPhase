@@ -9,11 +9,11 @@ import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.input.KeyListener;
 import com.werwolv.model.ModelTextured;
+import com.werwolv.render.RendererMaster;
 import com.werwolv.render.ModelLoader;
 import com.werwolv.render.OBJModelLoader;
-import com.werwolv.render.Renderer;
 import com.werwolv.resource.TextureModel;
-import com.werwolv.shader.ShaderStatic;
+import com.werwolv.terrain.Terrain;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -32,11 +32,13 @@ public class Main {
     private GLFWKeyCallback keyCallback;
     private ModelLoader loader = new ModelLoader();
 
-    private ShaderStatic shader;
+    private RendererMaster renderer;
+
     private Entity entity;
-    private Renderer renderer;
     private EntityCamera camera;
     private EntityLight light;
+
+    private Terrain terrain;
 
     public static void main(String[] args) {
         Main game = new Main();
@@ -77,37 +79,34 @@ public class Main {
 
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
 
-        shader = new ShaderStatic();
+        renderer = new RendererMaster();
+
         TextureModel texture = new TextureModel(loader.loadTexture("models/dragon"));
         texture.setShineDamper(10);
         texture.setReflectivity(1);
         entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
 
-        renderer = new Renderer(shader);
         camera = new EntityCamera();
-        light = new EntityLight(new Vector3f(20, 20, 0), new Vector3f(1, 1, 1));
+        light = new EntityLight(new Vector3f(20, 20, 0), new Vector3f(0.5F, 0.5F, 0.5F));
+
+        terrain = new Terrain(0, 0, loader, new TextureModel(loader.loadTexture("texture")));
     }
 
     private void update() {
         glfwPollEvents();
-
-        if(KeyListener.keys[GLFW_KEY_SPACE]) System.out.println("Test");
     }
 
     private void render() {
-
         glfwSwapBuffers(window);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        entity.increaseRotation(0, 1, 0);
-
         camera.moveCamera();
+        entity.increaseRotation(0, 0.5F, 0);
 
-        shader.start();
-        shader.loadLight(light);
-        shader.loadViewMatrix(camera);
-        renderer.renderModel(entity, shader);
-        shader.stop();
+        renderer.processTerrains(terrain);
+        renderer.processEntity(entity);
+
+        renderer.render(light, camera);
+
+
     }
 
     private void run() {
@@ -122,9 +121,9 @@ public class Main {
             }
         }
 
+        renderer.clean();
         keyCallback.free();
         loader.clean();
-        shader.clean();
     }
 
     public static int[] getWindowSize() {
