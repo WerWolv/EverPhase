@@ -50,6 +50,10 @@ public class RendererEntity {
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
+        if(texture.hasTransparency())
+            RendererMaster.disableCulling();
+
+        shader.loadFakeLightningVar(texture.useFakeLightning());
         shader.loadShineVars(texture.getShineDamper(), texture.getReflectivity());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -57,6 +61,8 @@ public class RendererEntity {
     }
 
     private void unbindModels() {
+        RendererMaster.enableCulling();
+
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL20.glDisableVertexAttribArray(2);

@@ -14,12 +14,20 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPos;
 
+uniform float useFakeLightning;
+
 void main(void) {
 
     vec4 worldPos = transformationMatrix * vec4(position, 1.0);
 
     gl_Position = projectionMatrix * viewMatrix * worldPos;
     pass_textureCoords = textureCoords;
+
+    vec3 actualNormal = normal;
+
+    if(useFakeLightning > 0.5) {
+        actualNormal = vec3(0.0, 1.0, 0.0);
+    }
 
     surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
     toLightVector = lightPos - worldPos.xyz;

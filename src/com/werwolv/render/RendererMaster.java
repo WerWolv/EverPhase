@@ -34,8 +34,7 @@ public class RendererMaster {
     private List<Terrain> terrains = new ArrayList<>();
 
     public RendererMaster() {
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_BACK);
+        enableCulling();
 
         createProjectionMatrix();
         rendererEntity = new RendererEntity(shader, projectionMatrix);
@@ -98,6 +97,15 @@ public class RendererMaster {
             newBatch.add(entity);
             entities.put(entityModel, newBatch);
         }
+    }
+
+    public static void enableCulling() {
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
+    }
+
+    public static void disableCulling() {
+        GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
     public void clean() {

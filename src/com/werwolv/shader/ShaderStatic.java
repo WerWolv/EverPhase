@@ -10,6 +10,7 @@ public class ShaderStatic extends Shader {
     private int loc_transMatrix, loc_projMatrix, loc_viewMatrix;
     private int loc_lightPos, loc_lightColor;
     private int loc_shineDamper, loc_reflectivity;
+    private int loc_useFakeLightning;
 
     public ShaderStatic() {
         super("shaderEntity", "shaderEntity");
@@ -33,6 +34,7 @@ public class ShaderStatic extends Shader {
 
         loc_shineDamper = super.getUniformLocation("shineDamper");
         loc_reflectivity = super.getUniformLocation("reflectivity");
+        loc_useFakeLightning = super.getUniformLocation("useFakeLightning");
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -55,5 +57,9 @@ public class ShaderStatic extends Shader {
     public void loadShineVars(float damper, float reflectivity) {
         super.loadFloat(loc_shineDamper, damper);
         super.loadFloat(loc_reflectivity, reflectivity);
+    }
+
+    public void loadFakeLightningVar(boolean useFakeLightning) {
+        super.loadBoolean(loc_useFakeLightning, useFakeLightning);
     }
 }
