@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="047e6b7f-2e9a-4ca3-8156-2375edfec994" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/werwolv/toolbox/ValueNoise.java" afterPath="$PROJECT_DIR$/src/com/werwolv/toolbox/ValueNoise.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,8 +54,8 @@
       <file leaf-file-name="RendererTerrain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/werwolv/render/RendererTerrain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
+            <state relative-caret-position="17">
+              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -888,7 +887,7 @@
       <workItem from="1482413804082" duration="403000" />
       <workItem from="1482433822650" duration="371000" />
       <workItem from="1482435025440" duration="822000" />
-      <workItem from="1482435867290" duration="1673000" />
+      <workItem from="1482435867290" duration="1856000" />
     </task>
     <task id="LOCAL-00001" summary="Test">
       <created>1482259886980</created>
@@ -967,11 +966,18 @@
       <option name="project" value="LOCAL" />
       <updated>1482437184283</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="ValueNoise added">
+      <created>1482437551392</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1482437551392</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44204000" />
+    <option name="totallyTimeSpent" value="44387000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1327,8 +1333,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/werwolv/render/RendererTerrain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
+        <state relative-caret-position="17">
+          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>
