@@ -9,6 +9,7 @@ import com.werwolv.shader.ShaderStatic;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -16,11 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.lwjgl.opengl.GL11.glClearColor;
+
 public class RendererMaster {
 
     private static final float FOV = 70;
     private static final float NEAR_PLANE = 0.1F;
     private static final float FAR_PLANE = 1000.0F;
+
+    private static final Vector3f SKY_COLOR = new Vector3f(0.5F, 0.5F, 0.5F);
 
     private Matrix4f projectionMatrix;
 
@@ -44,6 +49,7 @@ public class RendererMaster {
     public void render(EntityLight light, EntityCamera camera) {
         init();
         shader.start();
+        shader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         shader.loadLight(light);
         shader.loadViewMatrix(camera);
 
@@ -52,6 +58,7 @@ public class RendererMaster {
         shader.stop();
 
         terrainShader.start();
+        terrainShader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         terrainShader.loadLight(light);
         terrainShader.loadViewMatrix(camera);
         rendererTerrain.render(terrains);
@@ -61,9 +68,11 @@ public class RendererMaster {
         terrains.clear();
     }
 
-    public void init() {
+    private void init() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0F);
+
     }
 
 

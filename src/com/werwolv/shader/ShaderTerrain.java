@@ -4,12 +4,14 @@ import com.werwolv.entity.EntityCamera;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class ShaderTerrain extends Shader {
 
     private int loc_transMatrix, loc_projMatrix, loc_viewMatrix;
     private int loc_lightPos, loc_lightColor;
     private int loc_shineDamper, loc_reflectivity;
+    private int loc_skyColor;
 
     public ShaderTerrain() {
         super("shaderTerrain", "shaderTerrain");
@@ -33,6 +35,8 @@ public class ShaderTerrain extends Shader {
 
         loc_shineDamper = super.getUniformLocation("shineDamper");
         loc_reflectivity = super.getUniformLocation("reflectivity");
+
+        loc_skyColor = super.getUniformLocation("skyColor");
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -55,5 +59,9 @@ public class ShaderTerrain extends Shader {
     public void loadShineVars(float damper, float reflectivity) {
         super.loadFloat(loc_shineDamper, damper);
         super.loadFloat(loc_reflectivity, reflectivity);
+    }
+
+    public void loadSkyColor(float r, float g, float b) {
+        super.loadVector(loc_skyColor, new Vector3f(r, g, b));
     }
 }

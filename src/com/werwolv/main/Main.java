@@ -7,6 +7,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 import com.werwolv.entity.EntityCamera;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.input.CursorListener;
 import com.werwolv.input.KeyListener;
 import com.werwolv.input.MouseListener;
 import com.werwolv.model.ModelTextured;
@@ -17,9 +18,7 @@ import com.werwolv.resource.TextureModel;
 import com.werwolv.terrain.Terrain;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
-import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 
 import java.nio.IntBuffer;
@@ -31,15 +30,16 @@ public class Main {
 
     private static long window;
 
-    private GLFWKeyCallback keyCallback;
-    private GLFWMouseButtonCallback mouseButtonCallback;
+    private KeyListener keyCallback;
+    private MouseListener mouseButtonCallback;
+    private CursorListener cursorPosCallback;
 
     private ModelLoader loader = new ModelLoader();
 
     private RendererMaster renderer;
 
     private Entity entity;
-    private EntityCamera camera;
+    public static EntityCamera camera;
     private EntityLight light;
 
     private Terrain terrain;
@@ -73,6 +73,7 @@ public class Main {
 
         glfwSetKeyCallback(window, keyCallback = new KeyListener());
         glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseListener());
+        glfwSetCursorPosCallback(window, cursorPosCallback = new CursorListener());
 
         glfwSetWindowPos(window, 100, 100);
         glfwMakeContextCurrent(window);
@@ -80,7 +81,6 @@ public class Main {
         glfwShowWindow(window);
 
         GL.createCapabilities();
-        glClearColor(0.56F, 0.258F, 0.425F, 1.0F);
 
         glEnable(GL_DEPTH_TEST);
 
@@ -128,7 +128,6 @@ public class Main {
         if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
 
         if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) camera.addPosition(0, 0.4F, 0);
-
     }
 
     private void run() {
