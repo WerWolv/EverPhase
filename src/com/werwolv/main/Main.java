@@ -8,6 +8,7 @@ import com.werwolv.entity.EntityCamera;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.input.KeyListener;
+import com.werwolv.input.MouseListener;
 import com.werwolv.model.ModelTextured;
 import com.werwolv.render.RendererMaster;
 import com.werwolv.render.ModelLoader;
@@ -17,6 +18,7 @@ import com.werwolv.terrain.Terrain;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -31,6 +33,8 @@ public class Main {
     private static long window;
 
     private GLFWKeyCallback keyCallback;
+    private GLFWMouseButtonCallback mouseButtonCallback;
+
     private ModelLoader loader = new ModelLoader();
 
     private RendererMaster renderer;
@@ -40,8 +44,6 @@ public class Main {
     private EntityLight light;
 
     private Terrain terrain;
-
-    private long windowSizeCallback;
 
     public static void main(String[] args) {
         Main game = new Main();
@@ -71,6 +73,7 @@ public class Main {
         }
 
         glfwSetKeyCallback(window, keyCallback = new KeyListener());
+        glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseListener());
 
         glfwSetWindowPos(window, 100, 100);
         glfwMakeContextCurrent(window);
@@ -124,6 +127,9 @@ public class Main {
         if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) camera.addPosition(0, -0.4F, 0);
 
         if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
+
+        if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) camera.addPosition(0, 0.4F, 0);
+
     }
 
     private void run() {
