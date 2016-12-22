@@ -28,6 +28,7 @@ public class Terrain {
         float[] textureCoords = new float[count * 2];
         int[] indices = new int[6 * (VERTEX_CNT - 1) * (VERTEX_CNT - 1)];
         int vertexPointer = 0;
+
         for(int i = 0; i < VERTEX_CNT; i++){
             for(int j = 0; j < VERTEX_CNT; j++){
                 vertices[vertexPointer * 3] = (float) j /((float) VERTEX_CNT - 1) * SIZE;
@@ -37,17 +38,20 @@ public class Terrain {
                 normals[vertexPointer * 3 + 1] = 1;
                 normals[vertexPointer * 3 + 2] = 0;
                 textureCoords[vertexPointer * 2] = (float) j /((float) VERTEX_CNT - 1);
-                textureCoords[vertexPointer *2 + 1] = (float) i /((float) VERTEX_CNT - 1);
+                textureCoords[vertexPointer * 2 + 1] = (float) i /((float) VERTEX_CNT - 1);
                 vertexPointer++;
             }
         }
+
         int pointer = 0;
+
         for(int gz = 0; gz < VERTEX_CNT-1; gz++){
-            for(int gx = 0; gx<VERTEX_CNT - 1; gx++){
+            for(int gx = 0; gx < VERTEX_CNT - 1; gx++){
                 int topLeft = (gz * VERTEX_CNT) + gx;
                 int topRight = topLeft + 1;
                 int bottomLeft = ((gz + 1) * VERTEX_CNT) + gx;
                 int bottomRight = bottomLeft + 1;
+
                 indices[pointer++] = topLeft;
                 indices[pointer++] = bottomLeft;
                 indices[pointer++] = topRight;
