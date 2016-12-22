@@ -1,8 +1,6 @@
 package com.werwolv.render;
 
-import com.werwolv.entity.Entity;
 import com.werwolv.model.ModelRaw;
-import com.werwolv.model.ModelTextured;
 import com.werwolv.resource.TextureModel;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
@@ -16,7 +14,6 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import java.util.List;
-import java.util.Random;
 
 public class RendererTerrain {
 
