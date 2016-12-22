@@ -18,6 +18,7 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 
 import java.nio.IntBuffer;
@@ -40,6 +41,8 @@ public class Main {
 
     private Terrain terrain;
 
+    private long windowSizeCallback;
+
     public static void main(String[] args) {
         Main game = new Main();
         game.start();
@@ -58,7 +61,10 @@ public class Main {
 
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-        window = glfwCreateWindow(800, 600, "GameRunner", NULL, NULL);
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+        window = glfwCreateWindow(vidmode.width(), vidmode.height(), "GameRunner", glfwGetPrimaryMonitor(), NULL);
+
 
         if(window == NULL) {
             System.err.println("Could not create window!");
@@ -66,7 +72,6 @@ public class Main {
 
         glfwSetKeyCallback(window, keyCallback = new KeyListener());
 
-        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(window, 100, 100);
         glfwMakeContextCurrent(window);
 
@@ -87,18 +92,19 @@ public class Main {
         entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
 
         camera = new EntityCamera();
-        light = new EntityLight(new Vector3f(20, 20, 0), new Vector3f(0.5F, 0.5F, 0.5F));
+        light = new EntityLight(new Vector3f(20, 100, 0), new Vector3f(0.5F, 0.5F, 0.5F));
 
         terrain = new Terrain(0, 0, loader, new TextureModel(loader.loadTexture("texture")));
     }
 
     private void update() {
         glfwPollEvents();
+
+        handleInput();
     }
 
     private void render() {
         glfwSwapBuffers(window);
-        camera.moveCamera();
         entity.increaseRotation(0, 0.5F, 0);
 
         renderer.processTerrains(terrain);
@@ -109,10 +115,22 @@ public class Main {
 
     }
 
+    private void handleInput() {
+        if(KeyListener.isKeyPressed(GLFW_KEY_W)) camera.addPosition(0, 0, -0.4F);
+        if(KeyListener.isKeyPressed(GLFW_KEY_S)) camera.addPosition(0, 0, 0.4F);
+        if(KeyListener.isKeyPressed(GLFW_KEY_A)) camera.addPosition(-0.4F, 0, 0);
+        if(KeyListener.isKeyPressed(GLFW_KEY_D)) camera.addPosition(0.4F, 0, 0);
+        if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) camera.addPosition(0, 0.4F, 0);
+        if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) camera.addPosition(0, -0.4F, 0);
+
+        if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
+    }
+
     private void run() {
         init();
 
         while(running) {
+
             update();
             render();
 
@@ -134,5 +152,7 @@ public class Main {
 
         return new int[] { w.get(0), h.get(0) };
     }
+
+
 
 }

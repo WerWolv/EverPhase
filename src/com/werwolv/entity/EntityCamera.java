@@ -3,7 +3,6 @@ package com.werwolv.entity;
 import com.werwolv.input.KeyListener;
 import org.joml.Vector3f;
 
-import static org.lwjgl.glfw.GLFW.*;
 
 public class EntityCamera {
 
@@ -16,29 +15,37 @@ public class EntityCamera {
 
     }
 
-    public void moveCamera() {
-        if(KeyListener.isKeyPressed(GLFW_KEY_W)) position.z -= 0.4F;
-        if(KeyListener.isKeyPressed(GLFW_KEY_S)) position.z += 0.4F;
-        if(KeyListener.isKeyPressed(GLFW_KEY_A)) position.x -= 0.4F;
-        if(KeyListener.isKeyPressed(GLFW_KEY_D)) position.x += 0.4F;
-        if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) position.y += 0.4F;
-        if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) position.y -= 0.4F;
-
-    }
-
     public Vector3f getPosition() {
         return position;
+    }
+
+    public void addPosition(float x, float y, float z) {
+        position.x += x;
+        position.y += y;
+        position.z += z;
     }
 
     public float getPitch() {
         return pitch;
     }
 
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
+
     public float getYaw() {
         return yaw;
     }
 
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
+    }
+
     public float getRoll() {
         return roll;
+    }
+
+    public void setRoll(float roll) {
+        this.roll = roll;
     }
 }
