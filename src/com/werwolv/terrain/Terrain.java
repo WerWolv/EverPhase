@@ -36,7 +36,7 @@ public class Terrain {
         for(int i = 0; i < VERTEX_CNT; i++){
             for(int j = 0; j < VERTEX_CNT; j++){
                 vertices[vertexPointer * 3] = (float) j /((float) VERTEX_CNT - 1) * SIZE;
-                vertices[vertexPointer * 3 + 1] = heightMap[i][j] * 1000 - 600;
+                vertices[vertexPointer * 3 + 1] = heightMap[i][j] * 1000 - heightMap[0][0] * 1000;
                 vertices[vertexPointer * 3 + 2] = (float) i /((float) VERTEX_CNT - 1) * SIZE;
                 normals[vertexPointer * 3] = 0;
                 normals[vertexPointer * 3 + 1] = 1;
