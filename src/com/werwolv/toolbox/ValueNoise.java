@@ -8,7 +8,6 @@ public class ValueNoise{
 	public final int height;
 	
 	private float[][] heightMap;
-	private int[][] Map;
 	public int octaves = 8;
 	public int startFrequencyX = 2;
 	public int startFrequencyY = 2;
@@ -18,7 +17,6 @@ public class ValueNoise{
 		this.width = width;
 		this.height = height;
 		heightMap = new float[width][height];
-		Map = new int[width][height];
 		calculate();
 	}
 	
@@ -56,13 +54,6 @@ public class ValueNoise{
 			}
 		}
 		normalize();
-		
-		for(int i = 0; i < width; i++) {
-			for (int k = 0; k < height; k++) {
-				if (heightMap[i][k] > 0.5) Map[i][k] = 1;
-				else Map[i][k] = 0;
-			}
-		}
 	}
 	
 	private void normalize(){
