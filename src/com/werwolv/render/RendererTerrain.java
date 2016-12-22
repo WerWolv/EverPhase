@@ -19,7 +19,6 @@ public class RendererTerrain {
 
     private ShaderTerrain shader;
 
-    private ValueNoise map = new ValueNoise(800, 800);
 
     public RendererTerrain(ShaderTerrain shader, Matrix4f projectionMatrix) {
         this.shader = shader;
@@ -62,7 +61,8 @@ public class RendererTerrain {
     }
 
     private void loadModelMatrix(Terrain terrain) {
-        Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 200 * map.getHeightmap()[(int)terrain.getX()][(int)terrain.getZ()], terrain.getZ()), 0.0F, 0.0F, 0.0F, 1);
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 0.0F, terrain.getZ()), 0.0F, 0.0F, 0.0F, 1);
+
         shader.loadTransformationMatrix(transformationMatrix);
 
     }
