@@ -1,6 +1,7 @@
 package com.werwolv.entity;
 
 import com.werwolv.input.KeyListener;
+import com.werwolv.input.MouseListener;
 import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -23,6 +24,7 @@ public class EntityCamera {
         if(KeyListener.isKeyPressed(GLFW_KEY_D)) position.x += 0.4F;
         if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) position.y += 0.4F;
         if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) position.y -= 0.4F;
+        if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) position.y += 2.5F;
 
     }
 
