@@ -7,6 +7,7 @@ import com.werwolv.resource.TextureModel;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.toolbox.Maths;
+import com.werwolv.toolbox.ValueNoise;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -20,6 +21,8 @@ import java.util.Random;
 public class RendererTerrain {
 
     private ShaderTerrain shader;
+
+    private ValueNoise map = new ValueNoise(800, 800);
 
     public RendererTerrain(ShaderTerrain shader, Matrix4f projectionMatrix) {
         this.shader = shader;
@@ -62,7 +65,7 @@ public class RendererTerrain {
     }
 
     private void loadModelMatrix(Terrain terrain) {
-        Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 0.0F, terrain.getZ()), 0.0F, 0.0F, 0.0F, 1);
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 200 * map.getHeightmap()[(int)terrain.getX()][(int)terrain.getZ()], terrain.getZ()), 0.0F, 0.0F, 0.0F, 1);
         shader.loadTransformationMatrix(transformationMatrix);
 
     }
