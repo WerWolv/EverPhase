@@ -53,6 +53,7 @@ public class Main {
         running = true;
         thread = new Thread(this::run, "GameRunner");
         thread.start();
+        //Haiiiiii
     }
 
     private void init() {
@@ -81,6 +82,7 @@ public class Main {
         glfwShowWindow(window);
 
         GL.createCapabilities();
+        glClearColor(0.56F, 0.258F, 0.425F, 1.0F);
 
         glEnable(GL_DEPTH_TEST);
 
@@ -128,6 +130,7 @@ public class Main {
         if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
 
         if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) camera.addPosition(0, 0.4F, 0);
+
     }
 
     private void run() {
