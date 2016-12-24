@@ -20,6 +20,7 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import java.lang.Math;
 
 import java.nio.IntBuffer;
 
@@ -120,16 +121,16 @@ public class Main {
     }
 
     private void handleInput() {
-        if(KeyListener.isKeyPressed(GLFW_KEY_W)) camera.addPosition(0, 0, -0.4F);
-        if(KeyListener.isKeyPressed(GLFW_KEY_S)) camera.addPosition(0, 0, 0.4F);
-        if(KeyListener.isKeyPressed(GLFW_KEY_A)) camera.addPosition(-0.4F, 0, 0);
-        if(KeyListener.isKeyPressed(GLFW_KEY_D)) camera.addPosition(0.4F, 0, 0);
+        if(KeyListener.isKeyPressed(GLFW_KEY_W)) camera.addPosition(0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())), 0, -0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())));
+        if(KeyListener.isKeyPressed(GLFW_KEY_S)) camera.addPosition(-0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())), 0, 0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())));
+        if(KeyListener.isKeyPressed(GLFW_KEY_A)) camera.addPosition(-0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())), 0, -0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())));
+        if(KeyListener.isKeyPressed(GLFW_KEY_D)) camera.addPosition(0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())), 0, 0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())));
         if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) camera.addPosition(0, 0.4F, 0);
         if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) camera.addPosition(0, -0.4F, 0);
 
         if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
 
-        if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) camera.addPosition(0, 0.4F, 0);
+        if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) ;//camera.addPosition(0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())), 0, -0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())));
 
     }
 
