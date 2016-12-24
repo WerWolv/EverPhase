@@ -2,7 +2,8 @@ package com.werwolv.terrain;
 
 import com.werwolv.model.ModelRaw;
 import com.werwolv.render.ModelLoader;
-import com.werwolv.resource.TextureModel;
+import com.werwolv.resource.TextureTerrain;
+import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.toolbox.ValueNoise;
 
 public class Terrain {
@@ -12,11 +13,15 @@ public class Terrain {
 
     private float x, z;
     private ModelRaw model;
-    private TextureModel texture;
+    private TextureTerrainPack texturePack;
+    private TextureTerrain blendMap;
+
+
     private ValueNoise map = new ValueNoise(800, 800);
 
-    public Terrain(int gridX, int gridZ, ModelLoader loader, TextureModel texture) {
-        this.texture = texture;
+    public Terrain(int gridX, int gridZ, ModelLoader loader, TextureTerrainPack texturePack, TextureTerrain blendMap) {
+        this.texturePack = texturePack;
+        this.blendMap = blendMap;
         this.x = gridX * SIZE;
         this.z = gridZ * SIZE;
 
@@ -36,8 +41,8 @@ public class Terrain {
         for(int i = 0; i < VERTEX_CNT; i++){
             for(int j = 0; j < VERTEX_CNT; j++){
                 vertices[vertexPointer * 3] = (float) j /((float) VERTEX_CNT - 1) * SIZE;
-                vertices[vertexPointer * 3 + 1] = heightMap[i][j] * 1000 - heightMap[0][0] * 1000;
-                //vertices[vertexPointer * 3 + 1] = 0;
+                //vertices[vertexPointer * 3 + 1] = heightMap[i][j] * 1000 - heightMap[0][0] * 1000;
+                vertices[vertexPointer * 3 + 1] = 0;
                 vertices[vertexPointer * 3 + 2] = (float) i /((float) VERTEX_CNT - 1) * SIZE;
                 normals[vertexPointer * 3] = 0;
                 normals[vertexPointer * 3 + 1] = 1;
@@ -81,7 +86,11 @@ public class Terrain {
         return model;
     }
 
-    public TextureModel getTexture() {
-        return texture;
+    public TextureTerrainPack getTexturePack() {
+        return texturePack;
+    }
+
+    public TextureTerrain getBlendMap() {
+        return blendMap;
     }
 }

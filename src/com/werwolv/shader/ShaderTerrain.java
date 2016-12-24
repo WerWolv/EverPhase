@@ -12,6 +12,7 @@ public class ShaderTerrain extends Shader {
     private int loc_lightPos, loc_lightColor;
     private int loc_shineDamper, loc_reflectivity;
     private int loc_skyColor;
+    private int loc_backgroundTexture, loc_rTexture, loc_gTexture, loc_bTexture, loc_blendMap;
 
     public ShaderTerrain() {
         super("shaderTerrain", "shaderTerrain");
@@ -37,6 +38,12 @@ public class ShaderTerrain extends Shader {
         loc_reflectivity = super.getUniformLocation("reflectivity");
 
         loc_skyColor = super.getUniformLocation("skyColor");
+
+        loc_backgroundTexture = super.getUniformLocation("backgroundTexture");
+        loc_rTexture = super.getUniformLocation("rTexture");
+        loc_bTexture = super.getUniformLocation("gTexture");
+        loc_gTexture = super.getUniformLocation("bTexture");
+        loc_blendMap = super.getUniformLocation("blendMap");
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -63,5 +70,14 @@ public class ShaderTerrain extends Shader {
 
     public void loadSkyColor(float r, float g, float b) {
         super.loadVector(loc_skyColor, new Vector3f(r, g, b));
+    }
+
+    public void connectTextureUnits() {
+        super.loadInteger(loc_backgroundTexture, 0);
+        super.loadInteger(loc_rTexture, 1);
+        super.loadInteger(loc_gTexture, 2);
+        super.loadInteger(loc_bTexture, 3);
+        super.loadInteger(loc_blendMap, 4);
+
     }
 }

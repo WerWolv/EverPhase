@@ -15,6 +15,8 @@ import com.werwolv.render.RendererMaster;
 import com.werwolv.render.ModelLoader;
 import com.werwolv.render.OBJModelLoader;
 import com.werwolv.resource.TextureModel;
+import com.werwolv.resource.TextureTerrain;
+import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.terrain.Terrain;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -45,6 +47,14 @@ public class Main {
 
     private Terrain terrain;
 
+    private TextureTerrain bgTexture;
+    private TextureTerrain rTexture;
+    private TextureTerrain gTexture;
+    private TextureTerrain bTexture;
+    private TextureTerrain blendMap;
+
+    private TextureTerrainPack textureTerrainPack;
+
     public static void main(String[] args) {
         Main game = new Main();
         game.start();
@@ -54,7 +64,6 @@ public class Main {
         running = true;
         thread = new Thread(this::run, "GameRunner");
         thread.start();
-        //Haiiiiii
     }
 
     private void init() {
@@ -91,7 +100,7 @@ public class Main {
 
         renderer = new RendererMaster();
 
-        TextureModel texture = new TextureModel(loader.loadTexture("models/dragon"));
+        TextureModel texture = new TextureModel(loader.loadTexture("white"));
         texture.setShineDamper(10);
         texture.setReflectivity(1);
         entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
@@ -99,7 +108,15 @@ public class Main {
         camera = new EntityCamera();
         light = new EntityLight(new Vector3f(20, 100, 0), new Vector3f(0.5F, 0.5F, 0.5F));
 
-        terrain = new Terrain(0, 0, loader, new TextureModel(loader.loadTexture("texture")));
+        bgTexture = new TextureTerrain(loader.loadTexture("grassy"));
+        rTexture = new TextureTerrain(loader.loadTexture("dirt"));
+        gTexture = new TextureTerrain(loader.loadTexture("path"));
+        bTexture = new TextureTerrain(loader.loadTexture("pinkFlowers"));
+
+        textureTerrainPack = new TextureTerrainPack(bgTexture, rTexture, gTexture, bTexture);
+        blendMap = new TextureTerrain(loader.loadTexture("blendMap"));
+
+        terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap);
     }
 
     private void update() {
