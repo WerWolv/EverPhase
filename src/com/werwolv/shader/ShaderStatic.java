@@ -14,7 +14,7 @@ public class ShaderStatic extends Shader {
     private static final int MAX_LIGHTS = 16;
 
     private int loc_transMatrix, loc_projMatrix, loc_viewMatrix;
-    private int loc_lightPos[], loc_lightColor[];
+    private int loc_lightPos[], loc_lightColor[], loc_attenuation[];
     private int loc_shineDamper, loc_reflectivity;
     private int loc_useFakeLightning;
     private int loc_skyColor;
@@ -47,10 +47,12 @@ public class ShaderStatic extends Shader {
 
         loc_lightPos = new int[MAX_LIGHTS];
         loc_lightColor = new int[MAX_LIGHTS];
+        loc_attenuation = new int[MAX_LIGHTS];
 
         for(int i = 0; i < MAX_LIGHTS; i++) {
             loc_lightPos[i] = super.getUniformLocation("lightPos[" + i + "]");
             loc_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
+            loc_attenuation[i] = super.getUniformLocation("attenuation[" + i + "]");
         }
     }
 
@@ -79,10 +81,11 @@ public class ShaderStatic extends Shader {
             if(i < lights.size()) {
                 super.loadVector(loc_lightPos[i], lights.get(i).getPosition());
                 super.loadVector(loc_lightColor[i], lights.get(i).getColor());
+                super.loadVector(loc_attenuation[i], lights.get(i).getAttenuation());
             } else {
                 super.loadVector(loc_lightPos[i], new Vector3f(0.0F, 0.0F, 0.0F));
                 super.loadVector(loc_lightColor[i], new Vector3f(0.0F, 0.0F, 0.0F));
-            }
+                super.loadVector(loc_attenuation[i], new Vector3f(1.0F, 0.0F, 0.0F));}
         }
     }
 

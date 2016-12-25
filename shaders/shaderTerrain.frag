@@ -16,6 +16,7 @@ uniform sampler2D blendMap;
 
 
 uniform vec3 lightColor[16];
+uniform vec3 attenuation[16];
 
 uniform float shineDamper;
 uniform float reflectivity;
@@ -41,6 +42,8 @@ void main(void) {
     vec3 totalSpecular = vec3(0.0);
 
     for(int i = 0; i < 16; i++) {
+        float distance = length(toLightVector[i]);
+        float attFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
         vec3 unitLightVector = normalize(toLightVector[i]);
 
         float nDotl = dot(unitNormal, unitLightVector);
@@ -51,8 +54,8 @@ void main(void) {
         float specularFactor = dot(reflectLightDirection, unitVectorToCamera);
         specularFactor = max(specularFactor, 0.0);
         float dampedFactor = pow(specularFactor, shineDamper);
-        totalDiffuse += brightness * lightColor[i];
-        totalSpecular += dampedFactor * lightColor[i];
+        totalDiffuse += (brightness * lightColor[i]) / attFactor;
+        totalSpecular += (dampedFactor * lightColor[i]) / attFactor;
     }
 
     totalDiffuse = max(totalDiffuse, 0.15);

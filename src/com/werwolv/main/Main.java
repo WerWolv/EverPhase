@@ -127,11 +127,11 @@ public class Main {
         entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
 
         player = new EntityPlayer(new Vector3f(0, 10, 0), 0, 0, 0, 1);
-        lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0)));
-        lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0)));
-        lights.add(new EntityLight(new Vector3f(-20, 10, -75), new Vector3f(0, 0, 1)));
-        lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0)));
-        lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1)));
+        lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(-20, 10, -75), new Vector3f(0, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
 
         bgTexture = new TextureTerrain(loader.loadTexture("grassy"));
         rTexture = new TextureTerrain(loader.loadTexture("dirt"));
