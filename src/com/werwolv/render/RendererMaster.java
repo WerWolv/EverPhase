@@ -32,26 +32,28 @@ public class RendererMaster {
     private ShaderStatic shader = new ShaderStatic();
     private ShaderTerrain terrainShader = new ShaderTerrain();
 
-    private RendererEntity rendererEntity;
+    private RendererEntity  rendererEntity;
     private RendererTerrain rendererTerrain;
+    private RendererSkybox  rendererSkybox;
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();
     private List<Terrain> terrains = new ArrayList<>();
 
-    public RendererMaster() {
+    public RendererMaster(ModelLoader loader) {
         enableCulling();
 
         createProjectionMatrix();
         rendererEntity = new RendererEntity(shader, projectionMatrix);
         rendererTerrain = new RendererTerrain(terrainShader, projectionMatrix);
+        rendererSkybox = new RendererSkybox(loader, projectionMatrix);
     }
 
-    public void render(List<EntityLight> lights, EntityPlayer camera) {
+    public void render(List<EntityLight> lights, EntityPlayer player) {
         init();
         shader.start();
         shader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         shader.loadLights(lights);
-        shader.loadViewMatrix(camera);
+        shader.loadViewMatrix(player);
 
         rendererEntity.render(entities);
 
@@ -60,10 +62,11 @@ public class RendererMaster {
         terrainShader.start();
         terrainShader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         terrainShader.loadLights(lights);
-        terrainShader.loadViewMatrix(camera);
+        terrainShader.loadViewMatrix(player);
         rendererTerrain.render(terrains);
         terrainShader.stop();
 
+        rendererSkybox.render(player);
         entities.clear();
         terrains.clear();
     }

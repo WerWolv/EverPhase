@@ -118,7 +118,7 @@ public class Main {
 
         lastFrameTime = getCurrentTime();
 
-        renderer = new RendererMaster();
+        renderer = new RendererMaster(loader);
         guiRenderer = new RendererGui(loader);
 
         TextureModel texture = new TextureModel(loader.loadTexture("white"));
