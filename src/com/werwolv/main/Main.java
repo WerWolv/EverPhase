@@ -163,7 +163,7 @@ public class Main {
 
         if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
 
-        if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) ;//camera.addPosition(0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())), 0, -0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())));
+        if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT));
 
     }
 
