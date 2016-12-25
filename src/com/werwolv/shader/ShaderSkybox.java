@@ -11,6 +11,10 @@ public class ShaderSkybox extends Shader {
     private int loc_viewMatrix;
     private int loc_fogColor;
 
+    private static final float ROTATION_SPEED = 0.01F;
+
+    private float rotation;
+
     public ShaderSkybox() {
         super("shaderSkybox", "shaderSkybox");
     }
@@ -25,6 +29,8 @@ public class ShaderSkybox extends Shader {
         matrix.m31(0);
         matrix.m32(0);
 
+        rotation += ROTATION_SPEED;
+        matrix.rotate((float) Math.toRadians(rotation), new Vector3f(0.0F, 1.0F, 0.0F));
         super.loadMatrix(loc_viewMatrix, matrix);
     }
 
