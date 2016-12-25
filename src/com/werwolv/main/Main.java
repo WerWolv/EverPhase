@@ -52,7 +52,7 @@ public class Main {
     private RendererMaster renderer;
 
     private Entity entity;
-    public static EntityCamera camera;
+    private static EntityCamera camera;
     private EntityLight light;
 
     private Terrain terrain;
@@ -128,7 +128,7 @@ public class Main {
         textureTerrainPack = new TextureTerrainPack(bgTexture, rTexture, gTexture, bTexture);
         blendMap = new TextureTerrain(loader.loadTexture("blendMap"));
 
-        terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap);
+        terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "");
     }
 
     private void update() {
@@ -161,9 +161,6 @@ public class Main {
         if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) camera.addPosition(0, -0.4F, 0);
 
         if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
-
-        if(MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT));
-
     }
 
     private void run() {
