@@ -7,10 +7,14 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.util.List;
+
 public class ShaderStatic extends Shader {
 
+    private static final int MAX_LIGHTS = 16;
+
     private int loc_transMatrix, loc_projMatrix, loc_viewMatrix;
-    private int loc_lightPos, loc_lightColor;
+    private int loc_lightPos[], loc_lightColor[];
     private int loc_shineDamper, loc_reflectivity;
     private int loc_useFakeLightning;
     private int loc_skyColor;
@@ -33,9 +37,6 @@ public class ShaderStatic extends Shader {
         loc_projMatrix = super.getUniformLocation("projectionMatrix");
         loc_viewMatrix = super.getUniformLocation("viewMatrix");
 
-        loc_lightPos = super.getUniformLocation("lightPos");
-        loc_lightColor = super.getUniformLocation("lightColor");
-
         loc_shineDamper = super.getUniformLocation("shineDamper");
         loc_reflectivity = super.getUniformLocation("reflectivity");
         loc_useFakeLightning = super.getUniformLocation("useFakeLightning");
@@ -43,6 +44,14 @@ public class ShaderStatic extends Shader {
 
         loc_numOfRows = super.getUniformLocation("numOfRows");
         loc_offset = super.getUniformLocation("offset");
+
+        loc_lightPos = new int[MAX_LIGHTS];
+        loc_lightColor = new int[MAX_LIGHTS];
+
+        for(int i = 0; i < MAX_LIGHTS; i++) {
+            loc_lightPos[i] = super.getUniformLocation("lightPos[" + i + "]");
+            loc_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
+        }
     }
 
     public void loadNumOfRows(int numOfRows) {
@@ -65,9 +74,16 @@ public class ShaderStatic extends Shader {
         super.loadMatrix(loc_viewMatrix, Maths.createViewMatrix(camera));
     }
 
-    public void loadLight(EntityLight light) {
-        super.loadVector(loc_lightPos, light.getPosition());
-        super.loadVector(loc_lightColor, light.getColor());
+    public void loadLights(List<EntityLight> lights) {
+        for(int i = 0; i < MAX_LIGHTS; i++) {
+            if(i < lights.size()) {
+                super.loadVector(loc_lightPos[i], lights.get(i).getPosition());
+                super.loadVector(loc_lightColor[i], lights.get(i).getColor());
+            } else {
+                super.loadVector(loc_lightPos[i], new Vector3f(0.0F, 0.0F, 0.0F));
+                super.loadVector(loc_lightColor[i], new Vector3f(0.0F, 0.0F, 0.0F));
+            }
+        }
     }
 
     public void loadShineVars(float damper, float reflectivity) {

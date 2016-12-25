@@ -46,11 +46,11 @@ public class RendererMaster {
         rendererTerrain = new RendererTerrain(terrainShader, projectionMatrix);
     }
 
-    public void render(EntityLight light, EntityPlayer camera) {
+    public void render(List<EntityLight> lights, EntityPlayer camera) {
         init();
         shader.start();
         shader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
-        shader.loadLight(light);
+        shader.loadLights(lights);
         shader.loadViewMatrix(camera);
 
         rendererEntity.render(entities);
@@ -59,7 +59,7 @@ public class RendererMaster {
 
         terrainShader.start();
         terrainShader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
-        terrainShader.loadLight(light);
+        terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(camera);
         rendererTerrain.render(terrains);
         terrainShader.stop();

@@ -59,7 +59,7 @@ public class Main {
 
     private Entity entity;
     private static EntityPlayer player;
-    private EntityLight light;
+    private List<EntityLight> lights = new ArrayList<>();
 
     private Terrain terrain;
 
@@ -127,7 +127,11 @@ public class Main {
         entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
 
         player = new EntityPlayer(new Vector3f(0, 10, 0), 0, 0, 0, 1);
-        light = new EntityLight(new Vector3f(20, 100, 0), new Vector3f(0.5F, 0.5F, 0.5F));
+        lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0)));
+        lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0)));
+        lights.add(new EntityLight(new Vector3f(-20, 10, -75), new Vector3f(0, 0, 1)));
+        lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0)));
+        lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1)));
 
         bgTexture = new TextureTerrain(loader.loadTexture("grassy"));
         rTexture = new TextureTerrain(loader.loadTexture("dirt"));
@@ -160,7 +164,7 @@ public class Main {
         renderer.processTerrains(terrain);
         renderer.processEntity(entity);
 
-        renderer.render(light, player);
+        renderer.render(lights, player);
 
         guiRenderer.render(guis);
 
