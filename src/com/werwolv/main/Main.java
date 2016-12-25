@@ -22,11 +22,22 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import org.lwjglx.Sys;
+
 import java.lang.Math;
 
 import java.nio.IntBuffer;
 
 public class Main {
+
+    private static final int FPS_CAP = 120;
+    private static long lastFrameTime;
+    private static float delta;
+
+    double interpolation = 0;
+    private final int TICKS_PER_SECOND = 50;
+    private final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+    private final int MAX_FRAMESKIP = 5;
 
     private Thread thread;
     private boolean running = false;
@@ -98,6 +109,8 @@ public class Main {
 
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
 
+        lastFrameTime = getCurrentTime();
+
         renderer = new RendererMaster();
 
         TextureModel texture = new TextureModel(loader.loadTexture("white"));
@@ -121,8 +134,11 @@ public class Main {
 
     private void update() {
         glfwPollEvents();
-
         handleInput();
+
+        long currFrameTime = getCurrentTime();
+        delta = (currFrameTime - lastFrameTime) / 1000.0F;
+        lastFrameTime = currFrameTime;
     }
 
     private void render() {
@@ -152,13 +168,19 @@ public class Main {
     }
 
     private void run() {
+        int loops;
+        double nextGameTick = System.currentTimeMillis();
+
         init();
-
         while(running) {
+            loops = 0;
+            while(System.currentTimeMillis() > nextGameTick && loops < MAX_FRAMESKIP) {
+                update();
+                render();
 
-            update();
-            render();
-
+                nextGameTick += SKIP_TICKS;
+                loops++;
+            }
             if(glfwWindowShouldClose(window)) {
                 running = false;
             }
@@ -178,6 +200,11 @@ public class Main {
         return new int[] { w.get(0), h.get(0) };
     }
 
+    private static long getCurrentTime() {
+        return (long)(GLFW.glfwGetTime() * 1000.0F);
+    }
 
-
+    public static float getFrameTimeSeconds() {
+        return delta;
+    }
 }
