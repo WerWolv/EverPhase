@@ -71,9 +71,10 @@ public class RendererSkybox {
         shader.stop();
     }
 
-    public void render(EntityPlayer player) {
+    public void render(EntityPlayer player, float fogR, float fogG, float fogB) {
         shader.start();
         shader.loadViewMatrix(player);
+        shader.loadFogColor(fogR, fogG, fogB);
         GL30.glBindVertexArray(cube.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);

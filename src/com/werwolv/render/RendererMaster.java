@@ -66,7 +66,7 @@ public class RendererMaster {
         rendererTerrain.render(terrains);
         terrainShader.stop();
 
-        rendererSkybox.render(player);
+        rendererSkybox.render(player, SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         entities.clear();
         terrains.clear();
     }
