@@ -20,6 +20,7 @@ import com.werwolv.resource.TextureModel;
 import com.werwolv.resource.TextureTerrain;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.terrain.Terrain;
+import com.werwolv.terrain.TileWater;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -34,11 +35,9 @@ import java.util.List;
 
 public class Main {
 
-    private static final int FPS_CAP = 120;
     private static long lastFrameTime;
     private static float delta;
 
-    double interpolation = 0;
     private final int TICKS_PER_SECOND = 50;
     private final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     private final int MAX_FRAMESKIP = 5;
@@ -58,8 +57,12 @@ public class Main {
     private RendererGui guiRenderer;
 
     private Entity entity;
-    private static EntityPlayer player;
+
+    private List<Entity> entities = new ArrayList<>();
+    private List<Terrain> terrains = new ArrayList<>();
+    private List<TileWater> waters = new ArrayList<>();
     private List<EntityLight> lights = new ArrayList<>();
+    private static EntityPlayer player;
 
     private Terrain terrain;
 
@@ -120,6 +123,9 @@ public class Main {
 
         renderer = new RendererMaster(loader);
         guiRenderer = new RendererGui(loader);
+    }
+
+    private void addContent() {
 
         TextureModel texture = new TextureModel(loader.loadTexture("white"));
         texture.setShineDamper(10);
@@ -127,11 +133,6 @@ public class Main {
         entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
 
         player = new EntityPlayer(new Vector3f(0, 10, 0), 0, 0, 0, 1);
-        lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0), new Vector3f(1, 0.01F, 0.002F)));
-        lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
-        lights.add(new EntityLight(new Vector3f(-20, 10, -75), new Vector3f(0, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
-        lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
-        lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
 
         bgTexture = new TextureTerrain(loader.loadTexture("grassy"));
         rTexture = new TextureTerrain(loader.loadTexture("dirt"));
@@ -145,6 +146,17 @@ public class Main {
 
         Gui gui = new Gui(loader.loadTexture("grassTexture"), new Vector2f(0.5F, 0.5F), new Vector2f(0.25F, 0.25F));
         guis.add(gui);
+
+        lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(-20, 10, -75), new Vector3f(0, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
+
+        entities.add(entity);
+        terrains.add(terrain);
+
+        waters.add(new TileWater(75, -75, 0));
     }
 
     private void update() {
@@ -161,10 +173,7 @@ public class Main {
         glfwSwapBuffers(window);
         entity.increaseRotation(0, 0.5F, 0);
 
-        renderer.processTerrains(terrain);
-        renderer.processEntity(entity);
-
-        renderer.render(lights, player);
+        renderer.renderScene(entities, terrains, waters, lights, player);
 
         guiRenderer.render(guis);
 
@@ -181,6 +190,7 @@ public class Main {
         double nextGameTick = System.currentTimeMillis();
 
         init();
+        addContent();
         while(running) {
             loops = 0;
             while(System.currentTimeMillis() > nextGameTick && loops < MAX_FRAMESKIP) {

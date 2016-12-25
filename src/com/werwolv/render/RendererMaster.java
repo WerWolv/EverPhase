@@ -8,6 +8,7 @@ import com.werwolv.model.ModelTextured;
 import com.werwolv.shader.ShaderStatic;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
+import com.werwolv.terrain.TileWater;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -35,6 +36,7 @@ public class RendererMaster {
     private RendererEntity  rendererEntity;
     private RendererTerrain rendererTerrain;
     private RendererSkybox  rendererSkybox;
+    private RendererWater   rendererWater;
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();
     private List<Terrain> terrains = new ArrayList<>();
@@ -46,6 +48,15 @@ public class RendererMaster {
         rendererEntity = new RendererEntity(shader, projectionMatrix);
         rendererTerrain = new RendererTerrain(terrainShader, projectionMatrix);
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
+        rendererWater = new RendererWater(loader, projectionMatrix);
+    }
+
+    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TileWater> waters, List<EntityLight> lights, EntityPlayer player) {
+        for(Terrain terrain : terrains) processTerrains(terrain);
+        for(Entity entity : entities) processEntity(entity);
+
+        this.render(lights, player);
+        rendererWater.render(waters, player);
     }
 
     public void render(List<EntityLight> lights, EntityPlayer player) {
