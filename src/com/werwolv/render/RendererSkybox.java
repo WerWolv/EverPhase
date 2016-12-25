@@ -57,16 +57,21 @@ public class RendererSkybox {
             SKYBOX_SIZE, -SKYBOX_SIZE,  SKYBOX_SIZE
     };
 
-    private static String[] TEXTURE_FILES = { "day/right", "day/left", "day/top", "day/bottom", "day/back", "day/front"};
+    private static String[] DAY_TEXTURE_FILES = { "day/right", "day/left", "day/top", "day/bottom", "day/back", "day/front"};
+    private static String[] NIGHT_TEXTURE_FILES = { "night/right", "night/left", "night/top", "night/bottom", "night/back", "night/front"};
 
     private ModelRaw cube;
-    private int texture;
+    private int dayTexture, nightTexture;
     private ShaderSkybox shader = new ShaderSkybox();
+
+    private float timeOfDay = 0;
 
     public RendererSkybox(ModelLoader loader, Matrix4f projectionMatrix) {
         cube = loader.loadToVAO(VERTICES, 3);
-        texture = loader.loadCubeMap(TEXTURE_FILES);
+        dayTexture = loader.loadCubeMap(DAY_TEXTURE_FILES);
+        nightTexture = loader.loadCubeMap(NIGHT_TEXTURE_FILES);
         shader.start();
+        shader.connectTextureUnits();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
     }
@@ -77,12 +82,42 @@ public class RendererSkybox {
         shader.loadFogColor(fogR, fogG, fogB);
         GL30.glBindVertexArray(cube.getVaoID());
         GL20.glEnableVertexAttribArray(0);
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture);
+        bindTextures();
         GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, cube.getVertexCnt());
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);
         shader.stop();
+    }
+
+    private void bindTextures(){
+        timeOfDay += 10;
+        timeOfDay %= 24000;
+        int texture1;
+        int texture2;
+        float blendFactor;
+        if(timeOfDay >= 0 && timeOfDay < 5000){
+            texture1 = nightTexture;
+            texture2 = nightTexture;
+            blendFactor = (timeOfDay - 0)/(5000 - 0);
+        }else if(timeOfDay >= 5000 && timeOfDay < 8000){
+            texture1 = nightTexture;
+            texture2 = dayTexture;
+            blendFactor = (timeOfDay - 5000)/(8000 - 5000);
+        }else if(timeOfDay >= 8000 && timeOfDay < 21000){
+            texture1 = dayTexture;
+            texture2 = dayTexture;
+            blendFactor = (timeOfDay - 8000)/(21000 - 8000);
+        }else{
+            texture1 = dayTexture;
+            texture2 = nightTexture;
+            blendFactor = (timeOfDay - 21000)/(24000 - 21000);
+        }
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture1);
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture2);
+        shader.loadBlendFactor(blendFactor);
     }
 
 }

@@ -10,6 +10,7 @@ public class ShaderSkybox extends Shader {
     private int loc_projectionMatrix;
     private int loc_viewMatrix;
     private int loc_fogColor;
+    private int loc_cubeMap, loc_cubeMap2, loc_blendFactor;
 
     private static final float ROTATION_SPEED = 0.01F;
 
@@ -38,11 +39,23 @@ public class ShaderSkybox extends Shader {
         super.loadVector(loc_fogColor, new Vector3f(r, g, b));
     }
 
+    public void loadBlendFactor(float blend) {
+        super.loadFloat(loc_blendFactor, blend);
+    }
+
+    public void connectTextureUnits() {
+        super.loadInteger(loc_cubeMap, 0);
+        super.loadInteger(loc_cubeMap2, 1);
+    }
+
     @Override
     protected void getAllUniformLocations() {
         loc_projectionMatrix = super.getUniformLocation("projectionMatrix");
         loc_viewMatrix = super.getUniformLocation("viewMatrix");
         loc_fogColor = super.getUniformLocation("fogColor");
+        loc_blendFactor = super.getUniformLocation("blendFactor");
+        loc_cubeMap = super.getUniformLocation("cubeMap");
+        loc_cubeMap2 = super.getUniformLocation("cubeMap2");
     }
 
     @Override
