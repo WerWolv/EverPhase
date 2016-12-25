@@ -13,10 +13,10 @@ public class CursorListener extends GLFWCursorPosCallback {
     public void invoke(long window, double xpos, double ypos) {
         GLFW.glfwSetCursorPos(window, 300, 300);
 
-        Main.camera.setPitch(Main.camera.getPitch() + (float)(ypos - 300) / 10);    //Vertical Camera move
-        Main.camera.setYaw(Main.camera.getYaw() + (float)(xpos - 300) / 10);        //Horizontal Camera move
+        Main.getCamera().setPitch(Main.getCamera().getPitch() + (float)(ypos - 300) / 10);    //Vertical Camera move
+        Main.getCamera().setYaw(Main.getCamera().getYaw() + (float)(xpos - 300) / 10);        //Horizontal Camera move
 
-        if(Main.camera.getPitch() > 90.0F)  Main.camera.setPitch(90.0F);
-        if(Main.camera.getPitch() < -90.0F) Main.camera.setPitch(-90.0F);
+        if(Main.getCamera().getPitch() > 90.0F)  Main.getCamera().setPitch(90.0F);
+        if(Main.getCamera().getPitch() < -90.0F) Main.getCamera().setPitch(-90.0F);
     }
 }

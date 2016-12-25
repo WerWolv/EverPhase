@@ -22,7 +22,6 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
-import org.lwjglx.Sys;
 
 import java.lang.Math;
 
@@ -206,5 +205,9 @@ public class Main {
 
     public static float getFrameTimeSeconds() {
         return delta;
+    }
+
+    public static EntityCamera getCamera() {
+        return camera;
     }
 }
