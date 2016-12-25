@@ -10,6 +10,8 @@ public class Entity {
     private float rotX, rotY, rotZ;
     private float scale;
 
+    private int textureIndex = 0;
+
     public Entity(ModelTextured model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
         this.model = model;
         this.position = position;
@@ -17,6 +19,26 @@ public class Entity {
         this.rotY = rotY;
         this.rotZ = rotZ;
         this.scale = scale;
+    }
+
+    public Entity(ModelTextured model, int index, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+        this.textureIndex = index;
+        this.model = model;
+        this.position = position;
+        this.rotX = rotX;
+        this.rotY = rotY;
+        this.rotZ = rotZ;
+        this.scale = scale;
+    }
+
+    public float getTextureXOffset() {
+        int col = textureIndex % model.getTexture().getNumOfRows();
+        return (float) col / (float) model.getTexture().getNumOfRows();
+    }
+
+    public float getTextureYOffset() {
+        int row = textureIndex / model.getTexture().getNumOfRows();
+        return (float) row / (float) model.getTexture().getNumOfRows();
     }
 
     public void increasePosition(float dx, float dy, float dz) {

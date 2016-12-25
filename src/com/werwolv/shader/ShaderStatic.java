@@ -4,6 +4,7 @@ import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class ShaderStatic extends Shader {
@@ -13,6 +14,7 @@ public class ShaderStatic extends Shader {
     private int loc_shineDamper, loc_reflectivity;
     private int loc_useFakeLightning;
     private int loc_skyColor;
+    private int loc_numOfRows, loc_offset;
 
     public ShaderStatic() {
         super("shaderEntity", "shaderEntity");
@@ -38,6 +40,17 @@ public class ShaderStatic extends Shader {
         loc_reflectivity = super.getUniformLocation("reflectivity");
         loc_useFakeLightning = super.getUniformLocation("useFakeLightning");
         loc_skyColor = super.getUniformLocation("skyColor");
+
+        loc_numOfRows = super.getUniformLocation("numOfRows");
+        loc_offset = super.getUniformLocation("offset");
+    }
+
+    public void loadNumOfRows(int numOfRows) {
+        super.loadFloat(loc_numOfRows, numOfRows);
+    }
+
+    public void loadOffset(float x, float y) {
+        super.loadVector(loc_offset, new Vector2f(x, y));
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {

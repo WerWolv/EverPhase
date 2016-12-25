@@ -10,6 +10,8 @@ public class TextureModel {
     private boolean hasTransparency = false;
     private boolean useFakeLightning = false;
 
+    private int numOfRows;
+
     public TextureModel(int textureID) {
         this.textureID = textureID;
     }
@@ -49,5 +51,14 @@ public class TextureModel {
 
     public void setuseFakeLightning(boolean useFakeLightning) {
         this.useFakeLightning = useFakeLightning;
+    }
+
+
+    public int getNumOfRows() {
+        return numOfRows;
+    }
+
+    public void setNumOfRows(int numOfRows) {
+        this.numOfRows = numOfRows;
     }
 }

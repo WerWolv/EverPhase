@@ -1,6 +1,7 @@
 package com.werwolv.shader;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -51,6 +52,10 @@ public abstract class Shader {
 
     protected void loadInteger(int location, int value) {
         GL20.glUniform1i(location, value);
+    }
+
+    protected void loadVector(int location, Vector2f vector) {
+        GL20.glUniform2f(location, vector.x, vector.y);
     }
 
     protected void loadVector(int location, Vector3f vector) {
