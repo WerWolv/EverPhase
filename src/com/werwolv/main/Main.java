@@ -7,6 +7,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.gui.Gui;
 import com.werwolv.input.CursorListener;
 import com.werwolv.input.KeyListener;
@@ -23,9 +24,12 @@ import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 import java.lang.Math;
 
@@ -76,6 +80,8 @@ public class Main {
 
     private List<Gui> guis = new ArrayList<>();
 
+    private FrameBufferWater fboWater;
+
     public static void main(String[] args) {
         Main game = new Main();
         game.start();
@@ -123,6 +129,8 @@ public class Main {
 
         renderer = new RendererMaster(loader);
         guiRenderer = new RendererGui(loader);
+
+        fboWater = new FrameBufferWater();
     }
 
     private void addContent() {
@@ -144,8 +152,10 @@ public class Main {
 
         terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "heightmap");
 
-        Gui gui = new Gui(loader.loadTexture("grassTexture"), new Vector2f(0.5F, 0.5F), new Vector2f(0.25F, 0.25F));
-        guis.add(gui);
+        Gui reflectionGui = new Gui(fboWater.getReflectionTexture(),  new Vector2f(0.5F, 0.5F), new Vector2f(0.25F, 0.25F));
+        Gui refractionGui = new Gui(fboWater.getRefractionTexture(),  new Vector2f(-0.5F, 0.5F), new Vector2f(0.25F, 0.25F));
+        guis.add(reflectionGui);
+        guis.add(refractionGui);
 
         lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0), new Vector3f(1, 0.01F, 0.002F)));
         lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
@@ -173,7 +183,23 @@ public class Main {
         glfwSwapBuffers(window);
         entity.increaseRotation(0, 0.5F, 0);
 
-        renderer.renderScene(entities, terrains, waters, lights, player);
+        glEnable(GL30.GL_CLIP_DISTANCE0);
+
+        fboWater.bindReflectionFrameBuffer();
+        float distance = 2 * (player.getPosition().y - waters.get(0).getHeight());
+        player.addPosition(0.0F, -distance, 0.0F);
+        player.setPitch(-player.getPitch());
+        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
+        player.addPosition(0.0F, distance, 0.0F);
+        player.setPitch(-player.getPitch());
+        fboWater.bindRefractionFrameBuffer();
+
+        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, waters.get(0).getHeight()));
+
+        fboWater.unbindCurrentFrameBuffer();
+
+        GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, 100000));
 
         guiRenderer.render(guis);
 
@@ -204,6 +230,7 @@ public class Main {
                 running = false;
             }
         }
+
 
         renderer.clean();
         guiRenderer.clean();

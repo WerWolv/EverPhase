@@ -58,4 +58,8 @@ public class RendererWater {
 		quad = loader.loadToVAO(vertices, 2);
 	}
 
+	public void clean() {
+		shader.clean();
+	}
+
 }

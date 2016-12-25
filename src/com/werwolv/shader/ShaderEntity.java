@@ -6,10 +6,11 @@ import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.List;
 
-public class ShaderStatic extends Shader {
+public class ShaderEntity extends Shader {
 
     private static final int MAX_LIGHTS = 16;
 
@@ -19,8 +20,9 @@ public class ShaderStatic extends Shader {
     private int loc_useFakeLightning;
     private int loc_skyColor;
     private int loc_numOfRows, loc_offset;
+    private int loc_plane;
 
-    public ShaderStatic() {
+    public ShaderEntity() {
         super("shaderEntity", "shaderEntity");
     }
 
@@ -44,6 +46,8 @@ public class ShaderStatic extends Shader {
 
         loc_numOfRows = super.getUniformLocation("numOfRows");
         loc_offset = super.getUniformLocation("offset");
+
+        loc_plane = super.getUniformLocation("plane");
 
         loc_lightPos = new int[MAX_LIGHTS];
         loc_lightColor = new int[MAX_LIGHTS];
@@ -100,5 +104,9 @@ public class ShaderStatic extends Shader {
 
     public void loadSkyColor(float r, float g, float b) {
         super.loadVector(loc_skyColor, new Vector3f(r, g, b));
+    }
+
+    public void loadClipPlane(Vector4f plane) {
+        super.loadVector(loc_plane, plane);
     }
 }

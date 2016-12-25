@@ -6,9 +6,9 @@ import org.joml.Matrix4f;
 
 public class ShaderWater extends Shader {
 
-	private int location_modelMatrix;
-	private int location_viewMatrix;
-	private int location_projectionMatrix;
+	private int loc_modelMatrix;
+	private int loc_viewMatrix;
+	private int loc_projectionMatrix;
 
 	public ShaderWater() {
 		super("shaderWater", "shaderWater");
@@ -21,22 +21,22 @@ public class ShaderWater extends Shader {
 
 	@Override
 	protected void getAllUniformLocations() {
-		location_projectionMatrix = getUniformLocation("projectionMatrix");
-		location_viewMatrix = getUniformLocation("viewMatrix");
-		location_modelMatrix = getUniformLocation("modelMatrix");
+		loc_projectionMatrix = getUniformLocation("projectionMatrix");
+		loc_viewMatrix = getUniformLocation("viewMatrix");
+		loc_modelMatrix = getUniformLocation("modelMatrix");
 	}
 
 	public void loadProjectionMatrix(Matrix4f projection) {
-		loadMatrix(location_projectionMatrix, projection);
+		loadMatrix(loc_projectionMatrix, projection);
 	}
 	
 	public void loadViewMatrix(EntityPlayer player){
 		Matrix4f viewMatrix = Maths.createViewMatrix(player);
-		loadMatrix(location_viewMatrix, viewMatrix);
+		loadMatrix(loc_viewMatrix, viewMatrix);
 	}
 
 	public void loadModelMatrix(Matrix4f modelMatrix){
-		loadMatrix(location_modelMatrix, modelMatrix);
+		loadMatrix(loc_modelMatrix, modelMatrix);
 	}
 
 }

@@ -5,12 +5,13 @@ import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
-import com.werwolv.shader.ShaderStatic;
+import com.werwolv.shader.ShaderEntity;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class RendererMaster {
 
     private Matrix4f projectionMatrix;
 
-    private ShaderStatic shader = new ShaderStatic();
+    private ShaderEntity shader = new ShaderEntity();
     private ShaderTerrain terrainShader = new ShaderTerrain();
 
     private RendererEntity  rendererEntity;
@@ -51,17 +52,18 @@ public class RendererMaster {
         rendererWater = new RendererWater(loader, projectionMatrix);
     }
 
-    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TileWater> waters, List<EntityLight> lights, EntityPlayer player) {
+    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TileWater> waters, List<EntityLight> lights, EntityPlayer player, Vector4f clipPlane) {
         for(Terrain terrain : terrains) processTerrains(terrain);
         for(Entity entity : entities) processEntity(entity);
 
-        this.render(lights, player);
+        this.render(lights, player, clipPlane);
         rendererWater.render(waters, player);
     }
 
-    public void render(List<EntityLight> lights, EntityPlayer player) {
+    public void render(List<EntityLight> lights, EntityPlayer player, Vector4f clipPlane) {
         init();
         shader.start();
+        shader.loadClipPlane(clipPlane);
         shader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         shader.loadLights(lights);
         shader.loadViewMatrix(player);
@@ -71,6 +73,7 @@ public class RendererMaster {
         shader.stop();
 
         terrainShader.start();
+        terrainShader.loadClipPlane(clipPlane);
         terrainShader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(player);
@@ -134,5 +137,6 @@ public class RendererMaster {
     public void clean() {
         shader.clean();
         terrainShader.clean();
+        rendererWater.clean();
     }
 }

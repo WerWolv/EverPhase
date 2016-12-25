@@ -1,11 +1,10 @@
 package com.werwolv.render;
 
 import com.werwolv.entity.Entity;
-import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
 import com.werwolv.model.ModelTextured;
 import com.werwolv.resource.TextureModel;
-import com.werwolv.shader.ShaderStatic;
+import com.werwolv.shader.ShaderEntity;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -18,9 +17,9 @@ import java.util.Map;
 
 public class RendererEntity {
 
-    private ShaderStatic shader;
+    private ShaderEntity shader;
 
-    public RendererEntity(ShaderStatic shader, Matrix4f projectionMatrix) {
+    public RendererEntity(ShaderEntity shader, Matrix4f projectionMatrix) {
         this.shader = shader;
 
         shader.start();
