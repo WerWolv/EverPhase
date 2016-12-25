@@ -7,6 +7,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.fbo.FrameBufferMinimap;
+import com.werwolv.fbo.FrameBufferObject;
 import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.gui.Gui;
 import com.werwolv.input.CursorListener;
@@ -80,7 +82,7 @@ public class Main {
 
     private List<Gui> guis = new ArrayList<>();
 
-    private FrameBufferWater fboWater;
+    private FrameBufferObject fboWater, fboMinimap;
 
     public static void main(String[] args) {
         Main game = new Main();
@@ -130,7 +132,8 @@ public class Main {
         renderer = new RendererMaster(loader);
         guiRenderer = new RendererGui(loader);
 
-        fboWater = new FrameBufferWater();
+        fboWater = new FrameBufferMinimap();
+        fboMinimap = new FrameBufferMinimap();
     }
 
     private void addContent() {
@@ -152,10 +155,8 @@ public class Main {
 
         terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "heightmap");
 
-        Gui reflectionGui = new Gui(fboWater.getReflectionTexture(),  new Vector2f(0.5F, 0.5F), new Vector2f(0.25F, 0.25F));
-        Gui refractionGui = new Gui(fboWater.getRefractionTexture(),  new Vector2f(-0.5F, 0.5F), new Vector2f(0.25F, 0.25F));
-        guis.add(reflectionGui);
-        guis.add(refractionGui);
+        Gui minmapGui = new Gui(((FrameBufferMinimap) fboWater).getMiniMapTexture(),  new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
+        guis.add(minmapGui);
 
         lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0), new Vector3f(1, 0.01F, 0.002F)));
         lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
@@ -167,6 +168,23 @@ public class Main {
         terrains.add(terrain);
 
         waters.add(new TileWater(75, -75, 0));
+    }
+
+    private void renderMinimap() {
+        glEnable(GL30.GL_CLIP_DISTANCE0);
+
+        ((FrameBufferMinimap) fboWater).bindMinimapFrameBuffer();
+
+        float lastPitch = player.getPitch();
+        player.setPitch(90.0F);
+        player.addPosition(0.0F, 100.0F, 0.0F);
+        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, 1000));
+        player.addPosition(0.0F, -100.0F, 0.0F);
+        player.setPitch(lastPitch);
+
+        fboWater.unbindCurrentFrameBuffer();
+
+        GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     }
 
     private void update() {
@@ -183,22 +201,8 @@ public class Main {
         glfwSwapBuffers(window);
         entity.increaseRotation(0, 0.5F, 0);
 
-        glEnable(GL30.GL_CLIP_DISTANCE0);
+        renderMinimap();
 
-        fboWater.bindReflectionFrameBuffer();
-        float distance = 2 * (player.getPosition().y - waters.get(0).getHeight());
-        player.addPosition(0.0F, -distance, 0.0F);
-        player.setPitch(-player.getPitch());
-        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
-        player.addPosition(0.0F, distance, 0.0F);
-        player.setPitch(-player.getPitch());
-        fboWater.bindRefractionFrameBuffer();
-
-        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, waters.get(0).getHeight()));
-
-        fboWater.unbindCurrentFrameBuffer();
-
-        GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
         renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, 100000));
 
         guiRenderer.render(guis);
