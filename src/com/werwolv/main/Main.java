@@ -7,10 +7,12 @@ import static org.lwjgl.system.MemoryUtil.*;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.gui.Gui;
 import com.werwolv.input.CursorListener;
 import com.werwolv.input.KeyListener;
 import com.werwolv.input.MouseListener;
 import com.werwolv.model.ModelTextured;
+import com.werwolv.render.RendererGui;
 import com.werwolv.render.RendererMaster;
 import com.werwolv.render.ModelLoader;
 import com.werwolv.render.OBJModelLoader;
@@ -18,6 +20,7 @@ import com.werwolv.resource.TextureModel;
 import com.werwolv.resource.TextureTerrain;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.terrain.Terrain;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -26,6 +29,8 @@ import org.lwjgl.opengl.GL;
 import java.lang.Math;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -50,6 +55,7 @@ public class Main {
     private ModelLoader loader = new ModelLoader();
 
     private RendererMaster renderer;
+    private RendererGui guiRenderer;
 
     private Entity entity;
     private static EntityPlayer player;
@@ -64,6 +70,8 @@ public class Main {
     private TextureTerrain blendMap;
 
     private TextureTerrainPack textureTerrainPack;
+
+    private List<Gui> guis = new ArrayList<>();
 
     public static void main(String[] args) {
         Main game = new Main();
@@ -111,6 +119,7 @@ public class Main {
         lastFrameTime = getCurrentTime();
 
         renderer = new RendererMaster();
+        guiRenderer = new RendererGui(loader);
 
         TextureModel texture = new TextureModel(loader.loadTexture("white"));
         texture.setShineDamper(10);
@@ -129,6 +138,9 @@ public class Main {
         blendMap = new TextureTerrain(loader.loadTexture("blendMap"));
 
         terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "heightmap");
+
+        Gui gui = new Gui(loader.loadTexture("grassTexture"), new Vector2f(0.5F, 0.5F), new Vector2f(0.25F, 0.25F));
+        guis.add(gui);
     }
 
     private void update() {
@@ -150,6 +162,7 @@ public class Main {
 
         renderer.render(light, player);
 
+        guiRenderer.render(guis);
 
     }
 
@@ -179,6 +192,7 @@ public class Main {
         }
 
         renderer.clean();
+        guiRenderer.clean();
         keyCallback.free();
         loader.clean();
     }

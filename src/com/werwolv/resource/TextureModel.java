@@ -10,7 +10,7 @@ public class TextureModel {
     private boolean hasTransparency = false;
     private boolean useFakeLightning = false;
 
-    private int numOfRows;
+    private int numOfRows = 1;
 
     public TextureModel(int textureID) {
         this.textureID = textureID;

@@ -1,0 +1,28 @@
+package com.werwolv.gui;
+
+import org.joml.Vector2f;
+
+public class Gui {
+
+    private int texture;
+    private Vector2f position;
+    private Vector2f scale;
+
+    public Gui(int texture, Vector2f position, Vector2f scale) {
+        this.texture = texture;
+        this.position = position;
+        this.scale = scale;
+    }
+
+    public int getTexture() {
+        return texture;
+    }
+
+    public Vector2f getPosition() {
+        return position;
+    }
+
+    public Vector2f getScale() {
+        return scale;
+    }
+}
