@@ -4,7 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-import com.werwolv.entity.EntityCamera;
+import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.input.CursorListener;
@@ -52,7 +52,7 @@ public class Main {
     private RendererMaster renderer;
 
     private Entity entity;
-    private static EntityCamera camera;
+    private static EntityPlayer player;
     private EntityLight light;
 
     private Terrain terrain;
@@ -117,7 +117,7 @@ public class Main {
         texture.setReflectivity(1);
         entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
 
-        camera = new EntityCamera();
+        player = new EntityPlayer(new Vector3f(0, 10, 0), 0, 0, 0, 1);
         light = new EntityLight(new Vector3f(20, 100, 0), new Vector3f(0.5F, 0.5F, 0.5F));
 
         bgTexture = new TextureTerrain(loader.loadTexture("grassy"));
@@ -128,12 +128,13 @@ public class Main {
         textureTerrainPack = new TextureTerrainPack(bgTexture, rTexture, gTexture, bTexture);
         blendMap = new TextureTerrain(loader.loadTexture("blendMap"));
 
-        terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "");
+        terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "heightmap");
     }
 
     private void update() {
         glfwPollEvents();
         handleInput();
+        player.move(terrain);
 
         long currFrameTime = getCurrentTime();
         delta = (currFrameTime - lastFrameTime) / 1000.0F;
@@ -147,18 +148,13 @@ public class Main {
         renderer.processTerrains(terrain);
         renderer.processEntity(entity);
 
-        renderer.render(light, camera);
+        renderer.render(light, player);
 
 
     }
 
     private void handleInput() {
-        if(KeyListener.isKeyPressed(GLFW_KEY_W)) camera.addPosition(0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())), 0, -0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())));
-        if(KeyListener.isKeyPressed(GLFW_KEY_S)) camera.addPosition(-0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())), 0, 0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())));
-        if(KeyListener.isKeyPressed(GLFW_KEY_A)) camera.addPosition(-0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())), 0, -0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())));
-        if(KeyListener.isKeyPressed(GLFW_KEY_D)) camera.addPosition(0.4F * (float)Math.cos(Math.toRadians(camera.getYaw())), 0, 0.4F * (float)Math.sin(Math.toRadians(camera.getYaw())));
-        if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) camera.addPosition(0, 0.4F, 0);
-        if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) camera.addPosition(0, -0.4F, 0);
+
 
         if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
     }
@@ -204,7 +200,7 @@ public class Main {
         return delta;
     }
 
-    public static EntityCamera getCamera() {
-        return camera;
+    public static EntityPlayer getPlayer() {
+        return player;
     }
 }

@@ -1,6 +1,6 @@
 package com.werwolv.shader;
 
-import com.werwolv.entity.EntityCamera;
+import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
@@ -54,7 +54,7 @@ public class ShaderTerrain extends Shader {
         super.loadMatrix(loc_projMatrix, matrix);
     }
 
-    public void loadViewMatrix(EntityCamera camera) {
+    public void loadViewMatrix(EntityPlayer camera) {
         super.loadMatrix(loc_viewMatrix, Maths.createViewMatrix(camera));
     }
 

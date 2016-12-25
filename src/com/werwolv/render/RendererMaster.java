@@ -1,7 +1,7 @@
 package com.werwolv.render;
 
 import com.werwolv.entity.Entity;
-import com.werwolv.entity.EntityCamera;
+import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
@@ -46,7 +46,7 @@ public class RendererMaster {
         rendererTerrain = new RendererTerrain(terrainShader, projectionMatrix);
     }
 
-    public void render(EntityLight light, EntityCamera camera) {
+    public void render(EntityLight light, EntityPlayer camera) {
         init();
         shader.start();
         shader.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
