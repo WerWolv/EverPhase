@@ -4,9 +4,9 @@ import org.joml.Vector3f;
 
 public class EntityLight {
 
-    private Vector3f position;
-    private Vector3f color;
-    private Vector3f attenuation = new Vector3f(1, 0, 0);
+    private Vector3f position;  //The position of the light in the world
+    private Vector3f color;     //The color of the light
+    private Vector3f attenuation = new Vector3f(1, 0, 0);   //The intensity of the light (How fast the light decreses over distance)
 
 
     public EntityLight(Vector3f position, Vector3f color) {
@@ -19,6 +19,8 @@ public class EntityLight {
         this.color = color;
         this.attenuation = attenuation;
     }
+
+    /* Getters and Setters */
 
     public Vector3f getPosition() {
         return position;

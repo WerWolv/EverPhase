@@ -14,6 +14,7 @@ import com.werwolv.gui.Gui;
 import com.werwolv.input.CursorListener;
 import com.werwolv.input.KeyListener;
 import com.werwolv.input.MouseListener;
+import com.werwolv.model.ModelRaw;
 import com.werwolv.model.ModelTextured;
 import com.werwolv.render.RendererGui;
 import com.werwolv.render.RendererMaster;
@@ -141,9 +142,9 @@ public class Main {
         TextureModel texture = new TextureModel(loader.loadTexture("white"));
         texture.setShineDamper(10);
         texture.setReflectivity(1);
-        entity = new Entity(new ModelTextured(OBJModelLoader.loadObjModel("dragon", loader), texture), new Vector3f(0, 0, -10), 0, 60, 0, 1);
+        entity = new Entity(loader,"dragon", "white", new Vector3f(0, 0, -10), new Vector3f(0, 60, 0), 1);
 
-        player = new EntityPlayer(new Vector3f(0, 10, 0), 0, 0, 0, 1);
+        player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
 
         bgTexture = new TextureTerrain(loader.loadTexture("grassy"));
         rTexture = new TextureTerrain(loader.loadTexture("dirt"));

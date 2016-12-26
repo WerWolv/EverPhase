@@ -1,57 +1,90 @@
 package com.werwolv.entity;
 
 import com.werwolv.model.ModelTextured;
+import com.werwolv.render.ModelLoader;
+import com.werwolv.render.OBJModelLoader;
+import com.werwolv.resource.TextureModel;
 import org.joml.Vector3f;
 
 public class Entity {
 
-    private ModelTextured model;
-    private Vector3f position;
-    private float rotX, rotY, rotZ;
-    private float scale;
+    private ModelTextured model;    //Model and texture of the entity
+    private Vector3f position;      //Position of the entity in the world
+    private float rotX, rotY, rotZ; //Rotation of the entity
+    private float scale;            //Size of the entity
 
-    private int textureIndex = 0;
+    private int textureIndex = 0;   //Address of the texture stored in memory
 
-    public Entity(ModelTextured model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
-        this.model = model;
+    public Entity(ModelLoader loader, String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale) {
+        if(!(modelPath.equals("") || texturePath.equals("")))
+            this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
         this.position = position;
-        this.rotX = rotX;
-        this.rotY = rotY;
-        this.rotZ = rotZ;
+        this.rotX = rotation.x;
+        this.rotY = rotation.y;
+        this.rotZ = rotation.z;
         this.scale = scale;
     }
 
-    public Entity(ModelTextured model, int index, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+    public Entity(ModelLoader loader, String modelPath, String texturePath, int index, Vector3f position, Vector3f rotation, float scale) {
         this.textureIndex = index;
-        this.model = model;
+        if(!(modelPath.equals("") || texturePath.equals("")))
+            this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
         this.position = position;
-        this.rotX = rotX;
-        this.rotY = rotY;
-        this.rotZ = rotZ;
+        this.rotX = rotation.x;
+        this.rotY = rotation.y;
+        this.rotZ = rotation.z;
         this.scale = scale;
     }
 
+    /*
+     * Calculates the x coordinate of the texture inside the texture
+     * atlas.
+     *
+     * @return  The X-Coordinate of the texture in the texture atlas
+     */
     public float getTextureXOffset() {
         int col = textureIndex % model.getTexture().getNumOfRows();
         return (float) col / (float) model.getTexture().getNumOfRows();
     }
 
+    /*
+     * Calculates the y coordinate of the texture inside the texture
+     * atlas.
+     *
+     * @return  The y-Coordinate of the texture in the texture atlas
+     */
     public float getTextureYOffset() {
         int row = textureIndex / model.getTexture().getNumOfRows();
         return (float) row / (float) model.getTexture().getNumOfRows();
     }
 
+    /*
+     * Increases the position of the entity.
+     *
+     * @param dx    The amount to increase the position of the entity in the x direction.
+     * @param dy    The amount to increase the position of the entity in the y direction.
+     * @param dz    The amount to increase the position of the entity in the z direction.
+     */
     public void increasePosition(float dx, float dy, float dz) {
         this.position.x += dx;
         this.position.y += dy;
         this.position.z += dz;
     }
 
+    /*
+     * Increases the position of the entity.
+     *
+     * @param dx    The amount to increase the rotation of the entity in the x direction.
+     * @param dy    The amount to increase the rotation of the entity in the y direction.
+     * @param dz    The amount to increase the rotation of the entity in the z direction.
+     */
     public void increaseRotation(float dx, float dy, float dz) {
         this.rotX += dx;
         this.rotY += dy;
         this.rotZ += dz;
     }
+
+    /* Getters and Setters */
 
     public ModelTextured getModel() {
         return model;

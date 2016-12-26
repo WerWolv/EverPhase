@@ -2,23 +2,27 @@ package com.werwolv.fbo;
 
 public class FrameBufferMinimap extends FrameBufferObject{
 
-    public static final int FRAMEBUFFER_RESOLUTION = 720;
+    private static final int FRAMEBUFFER_WIDTH = 1280;           //The width of the Minimap
+    private static final int FRAMEBUFFER_HEIGHT = 720;           //The height of the Minimap
 
-    private int fboMinimap, textureMinimap, reflectionDepthBuffer;
+    private int fboMinimap, textureMinimap, minimapDepthBuffer;  //Addresses of the fbo, the texture and the depth buffer
 
     public FrameBufferMinimap(){
         initMinimapFBO();
     }
 
     private void initMinimapFBO() {
-        fboMinimap = createFrameBuffer();
-        textureMinimap = createTextureAttachment(1280,FRAMEBUFFER_RESOLUTION);
-        reflectionDepthBuffer = createDepthBufferAttachment(1280,FRAMEBUFFER_RESOLUTION);
-        unbindCurrentFrameBuffer();
+        fboMinimap = createFrameBuffer();   //Create a new framebuffer in memory and save the address
+        textureMinimap = createTextureAttachment(FRAMEBUFFER_WIDTH,FRAMEBUFFER_HEIGHT); //Create a new texture and bind the framebuffer to it
+        minimapDepthBuffer = createDepthBufferAttachment(FRAMEBUFFER_WIDTH,FRAMEBUFFER_HEIGHT); //Create a new depthbuffer and save the address
+        unbindCurrentFrameBuffer();     //Unbind the current framebuffer to render to the main screen again
     }
 
+    /*
+     * Bind the framebuffer to draw to it instead of the main screen
+     */
     public void bindMinimapFrameBuffer() {
-        bindFrameBuffer(fboMinimap, 1280, FRAMEBUFFER_RESOLUTION);
+        bindFrameBuffer(fboMinimap, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
     }
 
     public int getMiniMapTexture() {

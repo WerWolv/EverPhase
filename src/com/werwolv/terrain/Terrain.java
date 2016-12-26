@@ -1,6 +1,7 @@
 package com.werwolv.terrain;
 
 import com.werwolv.model.ModelRaw;
+import com.werwolv.render.ModelData;
 import com.werwolv.render.ModelLoader;
 import com.werwolv.resource.TextureTerrain;
 import com.werwolv.resource.TextureTerrainPack;
@@ -89,7 +90,7 @@ public class Terrain {
             }
         }
 
-        return loader.loadToVAO(vertices, textureCoords, normals, indices);
+        return loader.loadToVAO(new ModelData(vertices, textureCoords, normals, indices, 0));
     }
 
     private float getHeight(int x, int z, BufferedImage image) {

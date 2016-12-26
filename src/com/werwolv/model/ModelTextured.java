@@ -4,13 +4,15 @@ import com.werwolv.resource.TextureModel;
 
 public class ModelTextured {
 
-    private ModelRaw modelRaw;
-    private TextureModel texture;
+    private ModelRaw modelRaw;          //The model of this model
+    private TextureModel texture;       //The texture of this model
 
     public ModelTextured(ModelRaw model, TextureModel texture) {
         this.modelRaw = model;
         this.texture = texture;
     }
+
+    /* Getters */
 
     public ModelRaw getModelRaw() {
         return modelRaw;
