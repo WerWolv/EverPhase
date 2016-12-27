@@ -15,7 +15,6 @@ public class EntityPlayer extends Entity{
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
     private boolean isInAir = false;                    //Is the player currently in the air?
 
-    private Vector3f position = new Vector3f(0, 0, 0);  //Position of the player in the world
     private float pitch;    //The horizontal angle of the camera
     private float yaw;      //The vertical angle of the camera
     private float roll;     //The longitudinal angle of the camera

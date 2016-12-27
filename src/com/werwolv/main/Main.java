@@ -178,9 +178,10 @@ public class Main {
 
         float lastPitch = player.getPitch();
         player.setPitch(90.0F);
-        player.addPosition(0.0F, 100.0F, 0.0F);
+        Vector3f playerPos = player.getPosition();
+        player.setPosition(new Vector3f(playerPos.x, terrain.getHeightOfTerrain(playerPos.x, playerPos.z) + 100.0F, playerPos.z));
         renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, 1000));
-        player.addPosition(0.0F, -100.0F, 0.0F);
+        player.setPosition(playerPos);
         player.setPitch(lastPitch);
 
         fboWater.unbindCurrentFrameBuffer();

@@ -11,9 +11,10 @@ import org.lwjgl.opengl.GL30;
 
 public class RendererSkybox {
 
-    private static final float SKYBOX_SIZE = 500f;
 
-    private static final float[] VERTICES = {
+    private static final float SKYBOX_SIZE = 500f;          //The size of one side of the sky box
+
+    private static final float[] VERTICES = {               //The vertex positions of every vertex of the sky box
             -SKYBOX_SIZE,  SKYBOX_SIZE, -SKYBOX_SIZE,
             -SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE,
             SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE,
@@ -57,14 +58,14 @@ public class RendererSkybox {
             SKYBOX_SIZE, -SKYBOX_SIZE,  SKYBOX_SIZE
     };
 
-    private static String[] DAY_TEXTURE_FILES = { "day/right", "day/left", "day/top", "day/bottom", "day/back", "day/front"};
-    private static String[] NIGHT_TEXTURE_FILES = { "night/right", "night/left", "night/top", "night/bottom", "night/back", "night/front"};
+    private static String[] DAY_TEXTURE_FILES = { "day/right", "day/left", "day/top", "day/bottom", "day/back", "day/front"};               //The daytime sky box
+    private static String[] NIGHT_TEXTURE_FILES = { "night/right", "night/left", "night/top", "night/bottom", "night/back", "night/front"}; //The nighttime sky box
 
-    private ModelRaw cube;
-    private int dayTexture, nightTexture;
-    private ShaderSkybox shader = new ShaderSkybox();
+    private ModelRaw cube;                                                  //The sky box model
+    private int dayTexture, nightTexture;                                   //The texture locations of the day- and night sky texture
+    private ShaderSkybox shader = new ShaderSkybox();                       //The sky box shader
 
-    private float timeOfDay = 0;
+    private float timeOfDay = 0;                                            //The time of the day
 
     public RendererSkybox(ModelLoader loader, Matrix4f projectionMatrix) {
         cube = loader.loadToVAO(VERTICES, 3);
@@ -76,6 +77,9 @@ public class RendererSkybox {
         shader.stop();
     }
 
+    /*
+     *
+     */
     public void render(EntityPlayer player, float fogR, float fogG, float fogB) {
         shader.start();
         shader.loadViewMatrix(player);

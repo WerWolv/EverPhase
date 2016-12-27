@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 public class Entity {
 
     private ModelTextured model;    //Model and texture of the entity
-    private Vector3f position;      //Position of the entity in the world
+    protected Vector3f position;      //Position of the entity in the world
     private float rotX, rotY, rotZ; //Rotation of the entity
     private float scale;            //Size of the entity
 
