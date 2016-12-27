@@ -173,7 +173,7 @@ public class Main {
         Vector3f playerPos = player.getPosition();
         player.setPitch(90.0F);
         player.setPosition(new Vector3f(playerPos.x, terrain.getHeightOfTerrain(playerPos.x, playerPos.z) + 100.0F, playerPos.z));
-        renderer.getRendererWater().renderWithoutEffects(waters, player);
+        renderer.getRendererWater().renderWithoutEffects(waters);
         renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 1000));
         player.setPosition(playerPos);
         player.setPitch(lastPitch);
@@ -221,7 +221,7 @@ public class Main {
         renderMinimap();
 
         renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
-        renderer.getRendererWater().render(waters, player);
+        renderer.getRendererWater().render(waters, lights, player);
 
 
         guiRenderer.render(guis);

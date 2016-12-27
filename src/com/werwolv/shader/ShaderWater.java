@@ -1,8 +1,11 @@
 package com.werwolv.shader;
 
+import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
+
+import java.util.List;
 
 public class ShaderWater extends Shader {
 
@@ -12,6 +15,8 @@ public class ShaderWater extends Shader {
 	private int loc_reflectionTexture, loc_refractionTexture, loc_dudvMap;
 	private int loc_moveFactor;
 	private int loc_cameraPos;
+	private int loc_normalMap;
+	private int loc_lightPos[], loc_lightColor[];
 
 	public ShaderWater() {
 		super("shaderWater", "shaderWater");
@@ -31,15 +36,32 @@ public class ShaderWater extends Shader {
 		loc_reflectionTexture = getUniformLocation("reflectionTexture");
 		loc_refractionTexture = getUniformLocation("refractionTexture");
 		loc_dudvMap = getUniformLocation("dudvMap");
+		loc_normalMap = getUniformLocation("normalMap");
 
 		loc_moveFactor = getUniformLocation("moveFactor");
 		loc_cameraPos = getUniformLocation("cameraPos");
+
+		loc_lightPos = new int[16];
+		loc_lightColor = new int[16];
+
+		for(int i = 0; i < 16; i++) {
+			loc_lightPos[i] = getUniformLocation("lightPos[" + i + "]");
+			loc_lightColor[i] = getUniformLocation("lightColor[" + i + "]");
+		}
 	}
 
 	public void connectsTextureUnits() {
 		super.loadInteger(loc_reflectionTexture, 0);
 		super.loadInteger(loc_refractionTexture, 1);
 		super.loadInteger(loc_dudvMap, 2);
+		super.loadInteger(loc_normalMap, 3);
+	}
+
+	public void loadLight(List<EntityLight> lights) {
+		for(int i = 0; i < lights.size(); i++) {
+			super.loadVector(loc_lightColor[i], lights.get(i).getColor());
+			super.loadVector(loc_lightPos[i], lights.get(i).getPosition());
+		}
 	}
 
 	public void loadMoveFactor(float moveFactor) {

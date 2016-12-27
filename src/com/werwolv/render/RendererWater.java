@@ -2,6 +2,7 @@ package com.werwolv.render;
 
 import java.util.List;
 
+import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
@@ -27,13 +28,14 @@ public class RendererWater {
 
 	private float moveFactor = 0;
 
-	private int textureIdDuDvMap;
+	private int textureIdDuDvMap, textureIdNormalMap;
 
 	public RendererWater(ModelLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater) {
 		this.shader = new ShaderWater();
 		this.fboWater = fboWater;
 
 		textureIdDuDvMap = loader.loadTexture("dudvMapWater");
+		textureIdNormalMap = loader.loadTexture("normalMap");
 
 		shader.start();
 		shader.connectsTextureUnits();
@@ -42,38 +44,39 @@ public class RendererWater {
 		setUpVAO(loader);
 	}
 
-	public void render(List<TileWater> water, EntityPlayer player) {
+	public void render(List<TileWater> water, List<EntityLight> lights, EntityPlayer player) {
 		shader.start();
-		prepareRender(player);
-		renderWithoutEffects(water, player);
+		prepareRender(player, lights);
+		renderWithoutEffects(water);
 		unbind();
 	}
 
-	public void renderWithoutEffects(List<TileWater> water, EntityPlayer player) {
+	public void renderWithoutEffects(List<TileWater> water) {
 		for (TileWater tile : water) {
-			Matrix4f modelMatrix = Maths.createTransformationMatrix(
-					new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0,
-					TileWater.TILE_SIZE);
+			Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0, TileWater.TILE_SIZE);
 			shader.loadModelMatrix(modelMatrix);
 			GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCnt());
 		}
 	}
 	
-	private void prepareRender(EntityPlayer player){
+	private void prepareRender(EntityPlayer player, List<EntityLight> lights){
 		shader.loadViewMatrix(player);
 
 		moveFactor += WAVE_SPEED * Main.getFrameTimeSeconds();
 		moveFactor %= 1;
 		shader.loadMoveFactor(moveFactor);
+		shader.loadLight(lights);
 
-			GL30.glBindVertexArray(quad.getVaoID());
-			GL20.glEnableVertexAttribArray(0);
-			GL13.glActiveTexture(GL13.GL_TEXTURE0);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getReflectionTexture());
-			GL13.glActiveTexture(GL13.GL_TEXTURE1);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionTexture());
-			GL13.glActiveTexture(GL13.GL_TEXTURE2);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdDuDvMap);
+		GL30.glBindVertexArray(quad.getVaoID());
+		GL20.glEnableVertexAttribArray(0);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getReflectionTexture());
+		GL13.glActiveTexture(GL13.GL_TEXTURE1);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionTexture());
+		GL13.glActiveTexture(GL13.GL_TEXTURE2);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdDuDvMap);
+		GL13.glActiveTexture(GL13.GL_TEXTURE3);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdNormalMap);
 	}
 	
 	private void unbind(){
