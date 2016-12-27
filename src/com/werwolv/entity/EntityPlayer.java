@@ -52,10 +52,6 @@ public class EntityPlayer extends Entity{
 
     /* Getters and Setters */
 
-    public Vector3f getPosition() {
-        return position;
-    }
-
     public void addPosition(float x, float y, float z) {
         position.x += x;
         position.y += y;

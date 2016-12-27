@@ -5,8 +5,8 @@ import org.lwjgl.opengl.GL30;
 
 public class FrameBufferWater extends FrameBufferObject{
 
-    private static final int REFLECTION_WIDTH = 320;
-    private static final int REFLECTION_HEIGHT = 180;
+    private static final int REFLECTION_WIDTH = 1280;
+    private static final int REFLECTION_HEIGHT = 720;
 
     private static final int REFRACTION_WIDTH = 1280;
     private static final int REFRACTION_HEIGHT = 720;
@@ -20,8 +20,8 @@ public class FrameBufferWater extends FrameBufferObject{
     private int refractionDepthTexture;
 
     public FrameBufferWater() {
-        bindFrameBuffer(reflectionFrameBuffer,REFLECTION_WIDTH,REFLECTION_HEIGHT);      //Bind the frame buffer used for reflection of the water to memory
-        bindFrameBuffer(refractionFrameBuffer,REFRACTION_WIDTH,REFRACTION_HEIGHT);      //Bind the frame buffer used for the transparent part of the water to memory
+        initReflectionFrameBuffer();
+        initRefractionFrameBuffer();
     }
 
     public void clean() {
@@ -31,6 +31,14 @@ public class FrameBufferWater extends FrameBufferObject{
         GL30.glDeleteFramebuffers(refractionFrameBuffer);   //Delete the frame buffer from memory
         GL11.glDeleteTextures(refractionTexture);           //Delete the texture from memory
         GL11.glDeleteTextures(refractionDepthTexture);      //Delete the depth buffer from memory
+    }
+
+    public void bindReflectionFrameBuffer() {
+        bindFrameBuffer(reflectionFrameBuffer,REFLECTION_WIDTH,REFLECTION_HEIGHT);      //Bind the frame buffer used for reflection of the water to memory
+    }
+
+    public void bindRefractionFrameBuffer() {
+        bindFrameBuffer(refractionFrameBuffer,REFRACTION_WIDTH,REFRACTION_HEIGHT);      //Bind the frame buffer used for the transparent part of the water to memory
     }
 
     private void initReflectionFrameBuffer() {

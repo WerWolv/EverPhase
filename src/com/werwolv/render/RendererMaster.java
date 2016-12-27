@@ -3,10 +3,12 @@ package com.werwolv.render;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
 import com.werwolv.shader.ShaderEntity;
 import com.werwolv.shader.ShaderTerrain;
+import com.werwolv.shader.ShaderWater;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
 import org.joml.Matrix4f;
@@ -34,6 +36,8 @@ public class RendererMaster {
     private ShaderEntity shaderEntity = new ShaderEntity();     //The shader to use for rendering entities
     private ShaderTerrain shaderTerrain = new ShaderTerrain();  //The shader to use for rendering the terrain
 
+    private FrameBufferWater fboWater = new FrameBufferWater();
+
     private RendererEntity  rendererEntity;             //The renderer to render entities
     private RendererTerrain rendererTerrain;            //The renderer to render the terrain
     private RendererSkybox  rendererSkybox;             //The renderer to render the skybox
@@ -52,7 +56,7 @@ public class RendererMaster {
         rendererEntity = new RendererEntity(shaderEntity, projectionMatrix);
         rendererTerrain = new RendererTerrain(shaderTerrain, projectionMatrix);
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
-        rendererWater = new RendererWater(loader, projectionMatrix);
+        rendererWater = new RendererWater(loader, projectionMatrix, fboWater);
     }
 
 
@@ -66,12 +70,11 @@ public class RendererMaster {
      * @param player    The player to render the camera in the right place
      * @param clipPlane The plane where everything above stops rendering
      */
-    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TileWater> waters, List<EntityLight> lights, EntityPlayer player, Vector4f clipPlane) {
+    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<EntityLight> lights, EntityPlayer player, Vector4f clipPlane) {
         for(Terrain terrain : terrains) processTerrains(terrain);
         for(Entity entity : entities) processEntity(entity);
 
         this.render(player, lights, clipPlane);
-        rendererWater.render(waters, player);
     }
 
     /*
@@ -180,5 +183,27 @@ public class RendererMaster {
         shaderEntity.clean();
         shaderTerrain.clean();
         rendererWater.clean();
+    }
+
+    /* Getter */
+
+    public RendererEntity getRendererEntity() {
+        return rendererEntity;
+    }
+
+    public RendererTerrain getRendererTerrain() {
+        return rendererTerrain;
+    }
+
+    public RendererSkybox getRendererSkybox() {
+        return rendererSkybox;
+    }
+
+    public RendererWater getRendererWater() {
+        return rendererWater;
+    }
+
+    public FrameBufferWater getFboWater() {
+        return fboWater;
     }
 }

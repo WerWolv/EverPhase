@@ -14,12 +14,9 @@ import com.werwolv.gui.Gui;
 import com.werwolv.input.CursorListener;
 import com.werwolv.input.KeyListener;
 import com.werwolv.input.MouseListener;
-import com.werwolv.model.ModelRaw;
-import com.werwolv.model.ModelTextured;
 import com.werwolv.render.RendererGui;
 import com.werwolv.render.RendererMaster;
 import com.werwolv.render.ModelLoader;
-import com.werwolv.render.OBJModelLoader;
 import com.werwolv.resource.TextureModel;
 import com.werwolv.resource.TextureTerrain;
 import com.werwolv.resource.TextureTerrainPack;
@@ -33,8 +30,6 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-
-import java.lang.Math;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -83,7 +78,7 @@ public class Main {
 
     private List<Gui> guis = new ArrayList<>();
 
-    private FrameBufferObject fboWater, fboMinimap;
+    private FrameBufferObject fboMiniMap, fboWater;
 
     public static void main(String[] args) {
         Main game = new Main();
@@ -133,8 +128,8 @@ public class Main {
         renderer = new RendererMaster(loader);
         guiRenderer = new RendererGui(loader);
 
-        fboWater = new FrameBufferMinimap();
-        fboMinimap = new FrameBufferMinimap();
+        fboMiniMap = new FrameBufferMinimap();
+        fboWater = renderer.getFboWater();
     }
 
     private void addContent() {
@@ -156,7 +151,7 @@ public class Main {
 
         terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "heightmap");
 
-        Gui minmapGui = new Gui(((FrameBufferMinimap) fboWater).getMiniMapTexture(),  new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
+        Gui minmapGui = new Gui(((FrameBufferMinimap) fboMiniMap).getMiniMapTexture(),  new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
         guis.add(minmapGui);
 
         lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0), new Vector3f(1, 0.01F, 0.002F)));
@@ -172,21 +167,40 @@ public class Main {
     }
 
     private void renderMinimap() {
-        glEnable(GL30.GL_CLIP_DISTANCE0);
-
-        ((FrameBufferMinimap) fboWater).bindMinimapFrameBuffer();
+        ((FrameBufferMinimap) fboMiniMap).bindMinimapFrameBuffer();
 
         float lastPitch = player.getPitch();
-        player.setPitch(90.0F);
         Vector3f playerPos = player.getPosition();
+        player.setPitch(90.0F);
         player.setPosition(new Vector3f(playerPos.x, terrain.getHeightOfTerrain(playerPos.x, playerPos.z) + 100.0F, playerPos.z));
-        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, 1000));
+        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 1000));
+        renderer.getRendererWater().render(waters, player);
         player.setPosition(playerPos);
         player.setPitch(lastPitch);
 
+        fboMiniMap.unbindCurrentFrameBuffer();
+    }
+
+    private void renderWaterEffects() {
+        glEnable(GL30.GL_CLIP_DISTANCE0);
+
+        ((FrameBufferWater) fboWater).bindReflectionFrameBuffer();
+
+        float distance = 2 * (player.getPosition().y - waters.get(0).getHeight());
+        player.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y - distance, player.getPosition().z));
+        player.setPitch(-player.getPitch());
+
+        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
+
+        player.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y + distance, player.getPosition().z));
+        player.setPitch(-player.getPitch());
+
+        ((FrameBufferWater) fboWater).bindRefractionFrameBuffer();
+        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, waters.get(0).getHeight()));
+        GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+
         fboWater.unbindCurrentFrameBuffer();
 
-        GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     }
 
     private void update() {
@@ -204,8 +218,11 @@ public class Main {
         entity.increaseRotation(0, 0.5F, 0);
 
         renderMinimap();
+        renderWaterEffects();
 
-        renderer.renderScene(entities, terrains, waters, lights, player, new Vector4f(0, -1, 0, 100000));
+        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
+        renderer.getRendererWater().render(waters, player);
+
 
         guiRenderer.render(guis);
 

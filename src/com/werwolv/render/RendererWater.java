@@ -3,6 +3,7 @@ package com.werwolv.render;
 import java.util.List;
 
 import com.werwolv.entity.EntityPlayer;
+import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.model.ModelRaw;
 import com.werwolv.shader.ShaderWater;
 
@@ -11,6 +12,7 @@ import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -18,10 +20,14 @@ public class RendererWater {
 
 	private ModelRaw quad;
 	private ShaderWater shader;
+	private FrameBufferWater fboWater;
 
-	public RendererWater(ModelLoader loader, Matrix4f projectionMatrix) {
+	public RendererWater(ModelLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater) {
 		this.shader = new ShaderWater();
+		this.fboWater = fboWater;
+
 		shader.start();
+		shader.connectsTextureUnits();
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
 		setUpVAO(loader);
@@ -44,6 +50,10 @@ public class RendererWater {
 		shader.loadViewMatrix(player);
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getReflectionTexture());
+		GL13.glActiveTexture(GL13.GL_TEXTURE1);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionTexture());
 	}
 	
 	private void unbind(){
@@ -53,7 +63,6 @@ public class RendererWater {
 	}
 
 	private void setUpVAO(ModelLoader loader) {
-		// Just x and z vectex positions here, y is set to 0 in v.shader
 		float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
 		quad = loader.loadToVAO(vertices, 2);
 	}
