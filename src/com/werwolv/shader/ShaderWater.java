@@ -9,7 +9,8 @@ public class ShaderWater extends Shader {
 	private int loc_modelMatrix;
 	private int loc_viewMatrix;
 	private int loc_projectionMatrix;
-	private int loc_reflectionTexture, loc_refractionTexture;
+	private int loc_reflectionTexture, loc_refractionTexture, loc_dudvMap;
+	private int loc_moveFactor;
 
 	public ShaderWater() {
 		super("shaderWater", "shaderWater");
@@ -28,11 +29,19 @@ public class ShaderWater extends Shader {
 
 		loc_reflectionTexture = getUniformLocation("reflectionTexture");
 		loc_refractionTexture = getUniformLocation("refractionTexture");
+		loc_dudvMap = getUniformLocation("dudvMap");
+
+		loc_moveFactor = getUniformLocation("moveFactor");
 	}
 
 	public void connectsTextureUnits() {
 		super.loadInteger(loc_reflectionTexture, 0);
 		super.loadInteger(loc_refractionTexture, 1);
+		super.loadInteger(loc_dudvMap, 2);
+	}
+
+	public void loadMoveFactor(float moveFactor) {
+		super.loadFloat(loc_moveFactor, moveFactor);
 	}
 
 	public void loadProjectionMatrix(Matrix4f projection) {

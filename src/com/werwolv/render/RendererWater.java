@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.fbo.FrameBufferWater;
+import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
 import com.werwolv.shader.ShaderWater;
 
@@ -18,13 +19,21 @@ import org.lwjgl.opengl.GL30;
 
 public class RendererWater {
 
+	private static final float WAVE_SPEED = 0.03F;
+
 	private ModelRaw quad;
 	private ShaderWater shader;
 	private FrameBufferWater fboWater;
 
+	private float moveFactor = 0;
+
+	private int textureIdDuDvMap;
+
 	public RendererWater(ModelLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater) {
 		this.shader = new ShaderWater();
 		this.fboWater = fboWater;
+
+		textureIdDuDvMap = loader.loadTexture("dudvMapWater");
 
 		shader.start();
 		shader.connectsTextureUnits();
@@ -34,7 +43,13 @@ public class RendererWater {
 	}
 
 	public void render(List<TileWater> water, EntityPlayer player) {
+		shader.start();
 		prepareRender(player);
+		renderWithoutEffects(water, player);
+		unbind();
+	}
+
+	public void renderWithoutEffects(List<TileWater> water, EntityPlayer player) {
 		for (TileWater tile : water) {
 			Matrix4f modelMatrix = Maths.createTransformationMatrix(
 					new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0,
@@ -42,18 +57,23 @@ public class RendererWater {
 			shader.loadModelMatrix(modelMatrix);
 			GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCnt());
 		}
-		unbind();
 	}
 	
 	private void prepareRender(EntityPlayer player){
-		shader.start();
 		shader.loadViewMatrix(player);
-		GL30.glBindVertexArray(quad.getVaoID());
-		GL20.glEnableVertexAttribArray(0);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getReflectionTexture());
-		GL13.glActiveTexture(GL13.GL_TEXTURE1);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionTexture());
+
+		moveFactor += WAVE_SPEED * Main.getFrameTimeSeconds();
+		moveFactor %= 1;
+		shader.loadMoveFactor(moveFactor);
+
+			GL30.glBindVertexArray(quad.getVaoID());
+			GL20.glEnableVertexAttribArray(0);
+			GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getReflectionTexture());
+			GL13.glActiveTexture(GL13.GL_TEXTURE1);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionTexture());
+			GL13.glActiveTexture(GL13.GL_TEXTURE2);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdDuDvMap);
 	}
 	
 	private void unbind(){

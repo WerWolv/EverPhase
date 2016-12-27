@@ -1,6 +1,7 @@
 package com.werwolv.render;
 
 import com.werwolv.entity.EntityPlayer;
+import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
 import com.werwolv.shader.ShaderSkybox;
 import org.joml.Matrix4f;
@@ -65,7 +66,7 @@ public class RendererSkybox {
     private int dayTexture, nightTexture;                                   //The texture locations of the day- and night sky texture
     private ShaderSkybox shader = new ShaderSkybox();                       //The sky box shader
 
-    private float timeOfDay = 0;                                            //The time of the day
+    private float timeOfDay = 5000;                                         //The time of the day
 
     public RendererSkybox(ModelLoader loader, Matrix4f projectionMatrix) {
         cube = loader.loadToVAO(VERTICES, 3);
@@ -94,7 +95,7 @@ public class RendererSkybox {
     }
 
     private void bindTextures(){
-        timeOfDay += 10;
+        timeOfDay += 10 * Main.getFrameTimeSeconds();
         timeOfDay %= 24000;
         int texture1;
         int texture2;
