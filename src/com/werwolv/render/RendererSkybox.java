@@ -66,7 +66,7 @@ public class RendererSkybox {
     private int dayTexture, nightTexture;                                   //The texture locations of the day- and night sky texture
     private ShaderSkybox shader = new ShaderSkybox();                       //The sky box shader
 
-    private float timeOfDay = 5000;                                         //The time of the day
+    private float timeOfDay = 12000;                                         //The time of the day
 
     public RendererSkybox(ModelLoader loader, Matrix4f projectionMatrix) {
         cube = loader.loadToVAO(VERTICES, 3);

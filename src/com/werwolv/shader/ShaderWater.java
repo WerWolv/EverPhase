@@ -17,6 +17,8 @@ public class ShaderWater extends Shader {
 	private int loc_cameraPos;
 	private int loc_normalMap;
 	private int loc_lightPos[], loc_lightColor[];
+	private int loc_depthMap;
+	private int loc_nearPlane, loc_farPlane;
 
 	public ShaderWater() {
 		super("shaderWater", "shaderWater");
@@ -41,6 +43,11 @@ public class ShaderWater extends Shader {
 		loc_moveFactor = getUniformLocation("moveFactor");
 		loc_cameraPos = getUniformLocation("cameraPos");
 
+		loc_depthMap = getUniformLocation("depthMap");
+
+		loc_nearPlane = getUniformLocation("nearPlane");
+		loc_farPlane = getUniformLocation("farPlane");
+
 		loc_lightPos = new int[16];
 		loc_lightColor = new int[16];
 
@@ -55,6 +62,7 @@ public class ShaderWater extends Shader {
 		super.loadInteger(loc_refractionTexture, 1);
 		super.loadInteger(loc_dudvMap, 2);
 		super.loadInteger(loc_normalMap, 3);
+		super.loadInteger(loc_depthMap, 4);
 	}
 
 	public void loadLight(List<EntityLight> lights) {
@@ -62,6 +70,11 @@ public class ShaderWater extends Shader {
 			super.loadVector(loc_lightColor[i], lights.get(i).getColor());
 			super.loadVector(loc_lightPos[i], lights.get(i).getPosition());
 		}
+	}
+
+	public void loadNearAndFarPlane(float near, float far) {
+		super.loadFloat(loc_nearPlane, near);
+		super.loadFloat(loc_farPlane, far);
 	}
 
 	public void loadMoveFactor(float moveFactor) {

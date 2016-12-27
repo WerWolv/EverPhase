@@ -154,7 +154,7 @@ public class Main {
         Gui minmapGui = new Gui(((FrameBufferMinimap) fboMiniMap).getMiniMapTexture(),  new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
         guis.add(minmapGui);
 
-        lights.add(new EntityLight(new Vector3f(-100, 10, -100), new Vector3f(1, 0, 0), new Vector3f(1, 0.01F, 0.002F)));
+        lights.add(new EntityLight(new Vector3f(-100, 100, -100), new Vector3f(1, 0.9F, 0.9F)));
         lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
         lights.add(new EntityLight(new Vector3f(-20, 10, -75), new Vector3f(0, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
         lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0), new Vector3f(1, 0.01F, 0.002F)));

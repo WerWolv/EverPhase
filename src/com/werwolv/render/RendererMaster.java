@@ -56,7 +56,7 @@ public class RendererMaster {
         rendererEntity = new RendererEntity(shaderEntity, projectionMatrix);
         rendererTerrain = new RendererTerrain(shaderTerrain, projectionMatrix);
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
-        rendererWater = new RendererWater(loader, projectionMatrix, fboWater);
+        rendererWater = new RendererWater(loader, projectionMatrix, fboWater, NEAR_PLANE, FAR_PLANE);
     }
 
 
@@ -140,7 +140,7 @@ public class RendererMaster {
     /*
      * Add the passed terrain to the list of terrains
      */
-    public void processTerrains(Terrain terrain) {
+    private void processTerrains(Terrain terrain) {
         terrains.add(terrain);
     }
 
@@ -148,7 +148,7 @@ public class RendererMaster {
      * Add the passed entity to the list of entities and link it to
      * other entities with the same model
      */
-    public void processEntity(Entity entity) {
+    private void processEntity(Entity entity) {
         ModelTextured entityModel = entity.getModel();      //Get the model of the entity
         List<Entity> batch = entities.get(entityModel);     //Get the list of entities linked to that model
 

@@ -30,7 +30,7 @@ public class RendererWater {
 
 	private int textureIdDuDvMap, textureIdNormalMap;
 
-	public RendererWater(ModelLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater) {
+	public RendererWater(ModelLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater, float nearPlane, float farPlane) {
 		this.shader = new ShaderWater();
 		this.fboWater = fboWater;
 
@@ -38,6 +38,7 @@ public class RendererWater {
 		textureIdNormalMap = loader.loadTexture("normalMap");
 
 		shader.start();
+		shader.loadNearAndFarPlane(nearPlane, farPlane);
 		shader.connectsTextureUnits();
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
@@ -77,9 +78,15 @@ public class RendererWater {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdDuDvMap);
 		GL13.glActiveTexture(GL13.GL_TEXTURE3);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdNormalMap);
+		GL13.glActiveTexture(GL13.GL_TEXTURE4);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionDepthTexture());
+
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	private void unbind(){
+		GL11.glDisable(GL11.GL_BLEND);
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 		shader.stop();
