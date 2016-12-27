@@ -11,6 +11,7 @@ public class ShaderWater extends Shader {
 	private int loc_projectionMatrix;
 	private int loc_reflectionTexture, loc_refractionTexture, loc_dudvMap;
 	private int loc_moveFactor;
+	private int loc_cameraPos;
 
 	public ShaderWater() {
 		super("shaderWater", "shaderWater");
@@ -32,6 +33,7 @@ public class ShaderWater extends Shader {
 		loc_dudvMap = getUniformLocation("dudvMap");
 
 		loc_moveFactor = getUniformLocation("moveFactor");
+		loc_cameraPos = getUniformLocation("cameraPos");
 	}
 
 	public void connectsTextureUnits() {
@@ -50,11 +52,12 @@ public class ShaderWater extends Shader {
 	
 	public void loadViewMatrix(EntityPlayer player){
 		Matrix4f viewMatrix = Maths.createViewMatrix(player);
-		loadMatrix(loc_viewMatrix, viewMatrix);
+		super.loadMatrix(loc_viewMatrix, viewMatrix);
+		super.loadVector(loc_cameraPos, player.getPosition());
 	}
 
 	public void loadModelMatrix(Matrix4f modelMatrix){
-		loadMatrix(loc_modelMatrix, modelMatrix);
+		super.loadMatrix(loc_modelMatrix, modelMatrix);
 	}
 
 }
