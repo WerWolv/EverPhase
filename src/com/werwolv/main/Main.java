@@ -190,13 +190,13 @@ public class Main {
         player.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y - distance, player.getPosition().z));
         player.setPitch(-player.getPitch());
 
-        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
+        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, 1, 0, -waters.get(0).getHeight() + 1.0F));
 
         player.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y + distance, player.getPosition().z));
         player.setPitch(-player.getPitch());
 
         ((FrameBufferWater) fboWater).bindRefractionFrameBuffer();
-        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, waters.get(0).getHeight()));
+        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, waters.get(0).getHeight() + 1.0F));
         GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 
         fboWater.unbindCurrentFrameBuffer();
