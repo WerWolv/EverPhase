@@ -13,7 +13,7 @@
 |Render Engine|Nik|◔|
 |Skilltree|-|✗|
 |Skills|-|✗|
-|Random Dungeons (Rogue Like)|-|✗|
+|Random Dungeons (Rogue Like)|Mrasam|◔|
 |Magic (Teleports, etc.)|-|✗|
 |Tinkering / Invention|-|✗|
 |Quests|-|✗|
