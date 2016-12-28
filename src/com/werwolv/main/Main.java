@@ -20,6 +20,8 @@ import com.werwolv.render.ModelLoader;
 import com.werwolv.resource.TextureModel;
 import com.werwolv.resource.TextureTerrain;
 import com.werwolv.resource.TextureTerrainPack;
+import com.werwolv.structure.Labyrinth;
+import com.werwolv.structure.RoomRectangle;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
 import org.joml.Vector2f;
@@ -59,6 +61,8 @@ public class Main {
     private RendererGui guiRenderer;
 
     private Entity entity;
+
+    private Labyrinth labyrinth = new Labyrinth(loader, 0, 0, 0);
 
     private List<Entity> entities = new ArrayList<>();
     private List<Terrain> terrains = new ArrayList<>();
@@ -160,7 +164,12 @@ public class Main {
         lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
         lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
 
-        entities.add(entity);
+        //entities.add(entity);
+
+        labyrinth.process();
+
+        entities.addAll(labyrinth.RenderLabyrinth());
+
         terrains.add(terrain);
 
         waters.add(new TileWater(75, -75, 0));
