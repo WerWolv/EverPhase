@@ -27,7 +27,7 @@ public class EntityPlayer extends Entity{
     public void move(Terrain terrain) {
         speedX = speedZ = 0;    //Reset the speed of the player
 
-        speedY += GRAVITY;      //Add gravity to the player to keep it on the ground
+        //speedY += GRAVITY;      //Add gravity to the player to keep it on the ground
 
         //Keybindings to move the player in different directions based of the pressed buttons and the direction of the camera
         if(KeyListener.isKeyPressed(GLFW_KEY_W)) { speedX = 0.4F * (float)Math.sin(Math.toRadians(getYaw())); speedZ = -0.4F * (float)Math.cos(Math.toRadians(getYaw())); }
@@ -35,10 +35,13 @@ public class EntityPlayer extends Entity{
         if(KeyListener.isKeyPressed(GLFW_KEY_A)) { speedX = -0.4F * (float)Math.cos(Math.toRadians(getYaw())); speedZ = -0.4F * (float)Math.sin(Math.toRadians(getYaw())); }
         if(KeyListener.isKeyPressed(GLFW_KEY_D)) { speedX = 0.4F * (float)Math.cos(Math.toRadians(getYaw())); speedZ = 0.4F * (float)Math.sin(Math.toRadians(getYaw())); }
 
-        if(KeyListener.isKeyPressed(GLFW_KEY_SPACE) && !isInAir) {
+        if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) addPosition(0, 0.4F, 0);
+        if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) addPosition(0, -0.4F, 0);
+
+        /*if(KeyListener.isKeyPressed(GLFW_KEY_SPACE) && !isInAir) {
             speedY = 0.5F;      //Add vertical speed to the player
             isInAir = true;     //The player is now in the air
-        }
+        }*/
 
         addPosition(speedX, speedY, speedZ);    //Add the speeds calculated above to the player
 
