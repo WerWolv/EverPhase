@@ -4,6 +4,7 @@ import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class ShaderWater extends Shader {
 	private int loc_moveFactor;
 	private int loc_cameraPos;
 	private int loc_normalMap;
-	private int loc_lightPos[], loc_lightColor[];
+	private int loc_lightPos[], loc_lightColor[], loc_attenuation[];
 	private int loc_depthMap;
 	private int loc_nearPlane, loc_farPlane;
 
@@ -50,10 +51,12 @@ public class ShaderWater extends Shader {
 
 		loc_lightPos = new int[16];
 		loc_lightColor = new int[16];
+		loc_attenuation = new int[16];
 
 		for(int i = 0; i < 16; i++) {
 			loc_lightPos[i] = getUniformLocation("lightPos[" + i + "]");
 			loc_lightColor[i] = getUniformLocation("lightColor[" + i + "]");
+			loc_attenuation[i] = getUniformLocation("attenuation[" + i + "]");
 		}
 	}
 
@@ -66,9 +69,16 @@ public class ShaderWater extends Shader {
 	}
 
 	public void loadLight(List<EntityLight> lights) {
-		for(int i = 0; i < lights.size(); i++) {
-			super.loadVector(loc_lightColor[i], lights.get(i).getColor());
-			super.loadVector(loc_lightPos[i], lights.get(i).getPosition());
+		for(int i = 0; i < 16; i++) {
+			if(i < lights.size()) {
+				super.loadVector(loc_lightPos[i], lights.get(i).getPosition());
+				super.loadVector(loc_lightColor[i], lights.get(i).getColor());
+				super.loadVector(loc_attenuation[i], lights.get(i).getAttenuation());
+			} else {
+				super.loadVector(loc_lightPos[i], new Vector3f(0.0F, 0.0F, 0.0F));
+				super.loadVector(loc_lightColor[i], new Vector3f(0.0F, 0.0F, 0.0F));
+				super.loadVector(loc_attenuation[i], new Vector3f(0.0F, 0.0F, 0.0F));
+			}
 		}
 	}
 
