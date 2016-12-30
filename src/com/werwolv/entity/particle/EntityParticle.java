@@ -2,16 +2,9 @@ package com.werwolv.entity.particle;
 
 import com.werwolv.entity.Entity;
 import com.werwolv.main.Main;
-import com.werwolv.render.RendererParticle;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EntityParticle {
-
-    private static List<EntityParticle> particles = new ArrayList<>();
-    private static RendererParticle rendererParticle;
 
     private Vector3f position;
     private Vector3f velocity;
@@ -29,6 +22,8 @@ public class EntityParticle {
         this.lifeLength = lifeLength;
         this.rotation = rotation;
         this.scale = scale;
+
+        ParticleManager.addParticle(this);
     }
 
     public Vector3f getPosition() {
@@ -44,10 +39,10 @@ public class EntityParticle {
     }
 
     protected boolean update() {
-        velocity.y += Entity.GRAVITY * Main.getFrameTimeSeconds();
+        velocity.y += Entity.GRAVITY * gravityEffect * Main.getFrameTimeSeconds();
         Vector3f velocityChange = new Vector3f(velocity);
-        velocityChange.mul((float)Main.getFrameTimeSeconds());
-        velocityChange.add(position);
+        velocityChange.mul(Main.getFrameTimeSeconds());
+        position.add(velocityChange);
         elapsedTime += Main.getFrameTimeSeconds();
 
         return elapsedTime < lifeLength;

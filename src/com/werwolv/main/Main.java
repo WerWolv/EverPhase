@@ -7,6 +7,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.entity.particle.EntityParticle;
+import com.werwolv.entity.particle.ParticleManager;
 import com.werwolv.fbo.FrameBufferMinimap;
 import com.werwolv.fbo.FrameBufferObject;
 import com.werwolv.fbo.FrameBufferWater;
@@ -32,6 +34,7 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import org.lwjglx.Sys;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -134,6 +137,8 @@ public class Main {
         renderer = new RendererMaster(loader);
         guiRenderer = new RendererGui(loader);
 
+        ParticleManager.init(loader, renderer.getProjectionMatrix());
+
         fboMiniMap = new FrameBufferMinimap();
         fboWater = renderer.getFboWater();
     }
@@ -179,9 +184,9 @@ public class Main {
 
         Random random = new Random();
 
-        for(int i = 0; i < 1024; i++) {
-            int x = random.nextInt(500);
-            int z = random.nextInt(500);
+        for(int i = 0; i < 128; i++) {
+            int x = random.nextInt(50);
+            int z = random.nextInt(50);
             entityPine[i] = new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, -z), -z), new Vector3f(0, 0, 0), 1);
             entities.add(entityPine[i]);
         }
@@ -229,9 +234,9 @@ public class Main {
         handleInput();
         player.move(terrain);
 
-        long currFrameTime = getCurrentTime();
-        delta = (currFrameTime - lastFrameTime) / 1000.0F;
-        lastFrameTime = currFrameTime;
+        if(keyCallback.isKeyPressed(GLFW_KEY_Y)) new EntityParticle(new Vector3f(0, 1, 0), new Vector3f(0, 5, 0), 4, 4, 0, 1);
+
+        ParticleManager.updateParticles();
     }
 
     private void render() {
@@ -244,6 +249,7 @@ public class Main {
         renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
         renderer.getRendererWater().render(waters, lights, player);
 
+        ParticleManager.renderParticles(player);
 
         guiRenderer.render(guis);
 
@@ -264,7 +270,6 @@ public class Main {
 
             long currFrameTime = getCurrentTime();
             delta = (currFrameTime - lastFrameTime) / 1000.0F;
-            System.out.println(delta);
             lastFrameTime = currFrameTime;
 
             if(glfwWindowShouldClose(window)) {
@@ -277,6 +282,7 @@ public class Main {
         guiRenderer.clean();
         keyCallback.free();
         loader.clean();
+        ParticleManager.clean();
     }
 
     public static int[] getWindowSize() {
@@ -289,11 +295,11 @@ public class Main {
     }
 
     private static long getCurrentTime() {
-        return (long)(GLFW.glfwGetTime() * 1000.0F);
+        return (long) (GLFW.glfwGetTime() * 1000);
     }
 
     public static float getFrameTimeSeconds() {
-        return (float)delta;
+        return delta;
     }
 
     public static EntityPlayer getPlayer() {

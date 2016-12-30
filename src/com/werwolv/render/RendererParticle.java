@@ -20,7 +20,7 @@ public class RendererParticle {
 	private ModelRaw quad;
 	private ShaderParticle shader;
 	
-	protected RendererParticle(ModelLoader loader, Matrix4f projectionMatrix){
+	public RendererParticle(ModelLoader loader, Matrix4f projectionMatrix){
 		quad = loader.loadToVAO(VERTICES, 2);
 		shader = new ShaderParticle();
 
@@ -28,8 +28,8 @@ public class RendererParticle {
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
 	}
-	
-	protected void render(List<EntityParticle> particles, EntityPlayer player){
+
+	public void render(List<EntityParticle> particles, EntityPlayer player){
 		Matrix4f viewMatrix = Maths.createViewMatrix(player);
 		prepare();
 
@@ -43,24 +43,16 @@ public class RendererParticle {
 
 	private void updateModelViewMatrix(Vector3f position, float rotation, float scale, Matrix4f viewMatrix) {
 		Matrix4f modelMatrix = new Matrix4f();
-		viewMatrix.translate(position);
+		modelMatrix.transpose3x3();
 
-		modelMatrix.m00(viewMatrix.m00());
-		modelMatrix.m01(viewMatrix.m10());
-		modelMatrix.m02(viewMatrix.m20());
-		modelMatrix.m10(viewMatrix.m01());
-		modelMatrix.m11(viewMatrix.m11());
-		modelMatrix.m12(viewMatrix.m21());
-		modelMatrix.m20(viewMatrix.m02());
-		modelMatrix.m21(viewMatrix.m12());
-		modelMatrix.m22(viewMatrix.m22());
+		modelMatrix.translate(position);
 
 		modelMatrix.rotate((float) Math.toRadians(rotation), new Vector3f(0, 0, 1));
 		modelMatrix.scale(new Vector3f(scale, scale, scale));
 		shader.loadModelViewMatrix(viewMatrix.mul(modelMatrix));
 	}
 
-	protected void clean(){
+	public void clean(){
 		shader.clean();
 	}
 	

@@ -187,6 +187,8 @@ public class RendererMaster {
 
     /* Getter */
 
+    public Matrix4f getProjectionMatrix() { return projectionMatrix; }
+
     public RendererEntity getRendererEntity() {
         return rendererEntity;
     }
