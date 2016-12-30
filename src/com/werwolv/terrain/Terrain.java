@@ -66,7 +66,8 @@ public class Terrain {
                 Vector3f normal = calculateNormal(j, i, image);
                 normals[vertexPointer * 3] = normal.x;
                 normals[vertexPointer * 3 + 1] = normal.y;
-                normals[vertexPointer * 3 + 2] = normal.z;                textureCoords[vertexPointer * 2] = (float) j /((float) vertexCnt - 1);
+                normals[vertexPointer * 3 + 2] = normal.z;
+                textureCoords[vertexPointer * 2] = (float) j /((float) vertexCnt - 1);
                 textureCoords[vertexPointer * 2 + 1] = (float) i /((float) vertexCnt - 1);
                 vertexPointer++;
             }

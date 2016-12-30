@@ -36,6 +36,7 @@ import org.lwjgl.opengl.GL30;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Main {
 
@@ -61,6 +62,7 @@ public class Main {
     private RendererGui guiRenderer;
 
     private Entity entity;
+    private Entity entityPine[] = new Entity[1024];
 
     private Labyrinth labyrinth = new Labyrinth(loader, 0, 0, 0);
 
@@ -164,15 +166,25 @@ public class Main {
         lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
         lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
 
-        //entities.add(entity);
+        entities.add(entity);
 
-        labyrinth.process();
+        //labyrinth.process();
 
-        entities.addAll(labyrinth.RenderLabyrinth());
+        //entities.addAll(labyrinth.RenderLabyrinth());
 
         terrains.add(terrain);
 
         waters.add(new TileWater(75, -75, 0));
+
+
+        Random random = new Random();
+
+        for(int i = 0; i < 1024; i++) {
+            int x = random.nextInt(500);
+            int z = random.nextInt(500);
+            entityPine[i] = new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, -z), -z), new Vector3f(0, 0, 0), 1);
+            entities.add(entityPine[i]);
+        }
     }
 
     private void renderMinimap() {
@@ -244,20 +256,17 @@ public class Main {
     }
 
     private void run() {
-        int loops;
-        double nextGameTick = System.currentTimeMillis();
-
         init();
         addContent();
         while(running) {
-            loops = 0;
-            while(System.currentTimeMillis() > nextGameTick && loops < MAX_FRAMESKIP) {
-                update();
-                render();
+            update();
+            render();
 
-                nextGameTick += SKIP_TICKS;
-                loops++;
-            }
+            long currFrameTime = getCurrentTime();
+            delta = (currFrameTime - lastFrameTime) / 1000.0F;
+            System.out.println(delta);
+            lastFrameTime = currFrameTime;
+
             if(glfwWindowShouldClose(window)) {
                 running = false;
             }
@@ -284,7 +293,7 @@ public class Main {
     }
 
     public static float getFrameTimeSeconds() {
-        return delta;
+        return (float)delta;
     }
 
     public static EntityPlayer getPlayer() {
