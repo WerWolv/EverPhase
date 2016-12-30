@@ -45,10 +45,10 @@ public class RendererWater {
 		setUpVAO(loader);
 	}
 
-	public void render(List<TileWater> water, List<EntityLight> lights, EntityPlayer player) {
+	public void render(List<TileWater> waters, List<EntityLight> lights, EntityPlayer player) {
 		shader.start();
 		prepareRender(player, lights);
-		renderWithoutEffects(water);
+		renderWithoutEffects(waters);
 		unbind();
 	}
 

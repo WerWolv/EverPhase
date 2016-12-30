@@ -46,6 +46,9 @@ public class RendererGui {
             shader.loadTransformationMatrix(matrix);                        //...load it to the shader
 
             GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());  //...and draw the quad onto the screen
+
+            gui.render();
+
         }
         GL11.glEnable(GL11.GL_DEPTH_TEST);                                  //Enable the depth test again
         GL11.glDisable(GL11.GL_BLEND);                                      //Disable transparency

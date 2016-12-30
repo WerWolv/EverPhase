@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class Terrain {
 
-    private static final float SIZE = 800;
+    public static final float SIZE = 1024;
     private static final int VERTEX_CNT = 128;
     private static final float MAX_HEIGHT = 40.0F;
     private static final float MIN_HEIGHT = -40.0F;
@@ -29,9 +29,9 @@ public class Terrain {
     private float[][] heights;
 
 
-    public Terrain(int gridX, int gridZ, ModelLoader loader, TextureTerrainPack texturePack, TextureTerrain blendMap, String heightMap) {
+    public Terrain(int gridX, int gridZ, ModelLoader loader, TextureTerrainPack texturePack, String heightMap) {
         this.texturePack = texturePack;
-        this.blendMap = blendMap;
+        this.blendMap = texturePack.getBlendMap();
         this.x = gridX * SIZE;
         this.z = gridZ * SIZE;
 

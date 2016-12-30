@@ -42,6 +42,7 @@ public class RendererMaster {
     private RendererTerrain rendererTerrain;            //The renderer to render the terrain
     private RendererSkybox  rendererSkybox;             //The renderer to render the skybox
     private RendererWater   rendererWater;              //The renderer to render all water planes
+    private RendererGui     rendererGui;
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
     private List<Terrain> terrains = new ArrayList<>(); //A list of all terrains in the game
@@ -57,6 +58,7 @@ public class RendererMaster {
         rendererTerrain = new RendererTerrain(shaderTerrain, projectionMatrix);
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
         rendererWater = new RendererWater(loader, projectionMatrix, fboWater, NEAR_PLANE, FAR_PLANE);
+        rendererGui = new RendererGui(loader);
     }
 
 
@@ -203,6 +205,10 @@ public class RendererMaster {
 
     public RendererWater getRendererWater() {
         return rendererWater;
+    }
+
+    public RendererGui getRendererGui() {
+        return rendererGui;
     }
 
     public FrameBufferWater getFboWater() {

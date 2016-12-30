@@ -1,103 +1,44 @@
 package com.werwolv.main;
 
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.*;
-
 import com.werwolv.entity.EntityPlayer;
-import com.werwolv.entity.Entity;
-import com.werwolv.entity.EntityLight;
-import com.werwolv.entity.particle.EntityParticle;
 import com.werwolv.entity.particle.ParticleManager;
-import com.werwolv.fbo.FrameBufferMinimap;
-import com.werwolv.fbo.FrameBufferObject;
-import com.werwolv.fbo.FrameBufferWater;
-import com.werwolv.gui.Gui;
 import com.werwolv.input.CursorListener;
 import com.werwolv.input.KeyListener;
 import com.werwolv.input.MouseListener;
-import com.werwolv.render.RendererGui;
-import com.werwolv.render.RendererMaster;
-import com.werwolv.render.ModelLoader;
-import com.werwolv.resource.TextureModel;
-import com.werwolv.resource.TextureTerrain;
-import com.werwolv.resource.TextureTerrainPack;
-import com.werwolv.structure.Labyrinth;
-import com.werwolv.structure.RoomRectangle;
-import com.werwolv.terrain.Terrain;
-import com.werwolv.terrain.TileWater;
-import org.joml.Vector2f;
+import com.werwolv.level.Level;
+import com.werwolv.level.LevelOverworld;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.*;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
-import org.lwjglx.Sys;
 
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
 
     private static long lastFrameTime;
     private static float delta;
 
-    private final int TICKS_PER_SECOND = 50;
-    private final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-    private final int MAX_FRAMESKIP = 5;
-
-    private Thread thread;
-    private boolean running = false;
+    private boolean running = true;
 
     private static long window;
 
-    private KeyListener keyCallback;
-    private MouseListener mouseButtonCallback;
-    private CursorListener cursorPosCallback;
+    public static KeyListener keyCallback;
+    public static MouseListener mouseButtonCallback;
+    public static CursorListener cursorPosCallback;
 
-    private ModelLoader loader = new ModelLoader();
-
-    private RendererMaster renderer;
-    private RendererGui guiRenderer;
-
-    private Entity entity;
-    private Entity entityPine[] = new Entity[1024];
-
-    private Labyrinth labyrinth = new Labyrinth(loader, 0, 0, 0);
-
-    private List<Entity> entities = new ArrayList<>();
-    private List<Terrain> terrains = new ArrayList<>();
-    private List<TileWater> waters = new ArrayList<>();
-    private List<EntityLight> lights = new ArrayList<>();
     private static EntityPlayer player;
 
-    private Terrain terrain;
-
-    private TextureTerrain bgTexture;
-    private TextureTerrain rTexture;
-    private TextureTerrain gTexture;
-    private TextureTerrain bTexture;
-    private TextureTerrain blendMap;
-
-    private TextureTerrainPack textureTerrainPack;
-
-    private List<Gui> guis = new ArrayList<>();
-
-    private FrameBufferObject fboMiniMap, fboWater;
+    public static Level currentLevel;
 
     public static void main(String[] args) {
         Main game = new Main();
-        game.start();
-    }
-
-    private void start() {
-        running = true;
-        thread = new Thread(this::run, "GameRunner");
-        thread.start();
+        game.run();
     }
 
     private void init() {
@@ -133,140 +74,21 @@ public class Main {
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
 
         lastFrameTime = getCurrentTime();
-
-        renderer = new RendererMaster(loader);
-        guiRenderer = new RendererGui(loader);
-
-        ParticleManager.init(loader, renderer.getProjectionMatrix());
-
-        fboMiniMap = new FrameBufferMinimap();
-        fboWater = renderer.getFboWater();
-    }
-
-    private void addContent() {
-
-        TextureModel texture = new TextureModel(loader.loadTexture("white"));
-        texture.setShineDamper(10);
-        texture.setReflectivity(1);
-        entity = new Entity(loader,"dragon", "white", new Vector3f(0, 0, -10), new Vector3f(0, 60, 0), 1);
-
-        player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
-
-        bgTexture = new TextureTerrain(loader.loadTexture("grassy"));
-        rTexture = new TextureTerrain(loader.loadTexture("dirt"));
-        gTexture = new TextureTerrain(loader.loadTexture("path"));
-        bTexture = new TextureTerrain(loader.loadTexture("pinkFlowers"));
-
-        textureTerrainPack = new TextureTerrainPack(bgTexture, rTexture, gTexture, bTexture);
-        blendMap = new TextureTerrain(loader.loadTexture("blendMap"));
-
-        terrain = new Terrain(0, -1, loader, textureTerrainPack, blendMap, "heightmap");
-
-        Gui minmapGui = new Gui(((FrameBufferMinimap) fboMiniMap).getMiniMapTexture(),  new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
-        guis.add(minmapGui);
-
-        lights.add(new EntityLight(new Vector3f(-100, 100, -100), new Vector3f(1, 0.9F, 0.9F)));
-        lights.add(new EntityLight(new Vector3f(-50, 10, -100), new Vector3f(0, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
-        lights.add(new EntityLight(new Vector3f(-20, 10, -75), new Vector3f(0, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
-        lights.add(new EntityLight(new Vector3f(50, 10, -100), new Vector3f(1, 1, 0), new Vector3f(1, 0.01F, 0.002F)));
-        lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
-
-        entities.add(entity);
-
-        //labyrinth.process();
-
-        //entities.addAll(labyrinth.RenderLabyrinth());
-
-        terrains.add(terrain);
-
-        waters.add(new TileWater(75, -75, 0));
-
-
-        Random random = new Random();
-
-        for(int i = 0; i < 128; i++) {
-            int x = random.nextInt(50);
-            int z = random.nextInt(50);
-            entityPine[i] = new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, -z), -z), new Vector3f(0, 0, 0), 1);
-            entities.add(entityPine[i]);
-        }
-    }
-
-    private void renderMinimap() {
-        ((FrameBufferMinimap) fboMiniMap).bindMinimapFrameBuffer();
-
-        float lastPitch = player.getPitch();
-        Vector3f playerPos = player.getPosition();
-        player.setPitch(90.0F);
-        player.setPosition(new Vector3f(playerPos.x, terrain.getHeightOfTerrain(playerPos.x, playerPos.z) + 100.0F, playerPos.z));
-        renderer.getRendererWater().renderWithoutEffects(waters);
-        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 1000));
-        player.setPosition(playerPos);
-        player.setPitch(lastPitch);
-
-        fboMiniMap.unbindCurrentFrameBuffer();
-    }
-
-    private void renderWaterEffects() {
-        glEnable(GL30.GL_CLIP_DISTANCE0);
-
-        ((FrameBufferWater) fboWater).bindReflectionFrameBuffer();
-
-        float distance = 2 * (player.getPosition().y - waters.get(0).getHeight());
-        player.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y - distance, player.getPosition().z));
-        player.setPitch(-player.getPitch());
-
-        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, 1, 0, -waters.get(0).getHeight() + 1.0F));
-
-        player.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y + distance, player.getPosition().z));
-        player.setPitch(-player.getPitch());
-
-        ((FrameBufferWater) fboWater).bindRefractionFrameBuffer();
-        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, waters.get(0).getHeight() + 1.0F));
-        GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-
-        fboWater.unbindCurrentFrameBuffer();
-
-    }
-
-    private void update() {
-        glfwPollEvents();
-        handleInput();
-        player.move(terrain);
-
-        if(keyCallback.isKeyPressed(GLFW_KEY_Y)) new EntityParticle(new Vector3f(0, 1, 0), new Vector3f(0, 5, 0), 4, 4, 0, 1);
-
-        ParticleManager.updateParticles();
-    }
-
-    private void render() {
-        glfwSwapBuffers(window);
-        entity.increaseRotation(0, 0.5F, 0);
-
-        renderWaterEffects();
-        renderMinimap();
-
-        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
-        renderer.getRendererWater().render(waters, lights, player);
-
-        ParticleManager.renderParticles(player);
-
-        guiRenderer.render(guis);
-
-    }
-
-    private void handleInput() {
-
-
-        if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
     }
 
     private void run() {
         init();
-        addContent();
+        player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
+
+        currentLevel = new LevelOverworld(player);
+
+        currentLevel.initLevel();
         while(running) {
-            update();
-            render();
+            glfwSwapBuffers(window);
+
+            currentLevel.updateLevel();
+            currentLevel.renderLevel();
+            currentLevel.renderGUI();
 
             long currFrameTime = getCurrentTime();
             delta = (currFrameTime - lastFrameTime) / 1000.0F;
@@ -277,11 +99,10 @@ public class Main {
             }
         }
 
-
-        renderer.clean();
-        guiRenderer.clean();
+        currentLevel.clean();
         keyCallback.free();
-        loader.clean();
+        mouseButtonCallback.free();
+        cursorPosCallback.free();
         ParticleManager.clean();
     }
 
