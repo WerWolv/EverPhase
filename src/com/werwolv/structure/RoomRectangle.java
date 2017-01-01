@@ -1,8 +1,7 @@
 package com.werwolv.structure;
 
 import com.werwolv.entity.Entity;
-import com.werwolv.render.ModelLoader;
-import com.werwolv.render.RendererMaster;
+import com.werwolv.modelloader.ModelLoader;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -37,12 +36,12 @@ public class RoomRectangle {
     public void process(){
         for(int x=0; x<length; x++){
             for(int z=0; z<width; z++) {
-                blocks.add(new Entity(loader, "block", "white", new Vector3f(x+this.x, this.y, -z+this.z), new Vector3f(0, 0, 0), 0.025F));
+                blocks.add(new Entity(loader, "block", "white", new Vector3f(x + this.x, this.y, -z + this.z), new Vector3f(0, 0, 0), 0.025F, false));
                 //blocks.add(new Entity(loader, "block", "white", new Vector3f(x+this.x, height+this.y, -z+this.z), new Vector3f(0, 0, 0), 0.025F));
                 if(x==0||x==length-1||z==0||z==width-1){
                     for(int y=1; y<height; y++) {
                         if((!(north&&x>2&&x<7&&z==0))&&(!(west&&z>2&&z<7&&x==length-1))&&(!(south&&x>2&&x<7&&z==width-1))&&(!(east&&z>2&&z<7&&x==0))) {
-                            blocks.add(new Entity(loader, "block", "white", new Vector3f(x + this.x, y + this.y, -z + this.z), new Vector3f(0, 0, 0), 0.025F));
+                            blocks.add(new Entity(loader, "block", "white", new Vector3f(x + this.x, y + this.y, -z + this.z), new Vector3f(0, 0, 0), 0.025F, false));
                         }
                     }
                 }

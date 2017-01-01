@@ -3,6 +3,7 @@ package com.werwolv.resource;
 public class TextureModel {
 
     private int textureID;
+    private int normalMapID;
 
     private float shineDamper = 1;
     private float reflectivity = 0;
@@ -18,6 +19,14 @@ public class TextureModel {
 
     public int getTextureID() {
         return textureID;
+    }
+
+    public int getNormalMapID() {
+        return normalMapID;
+    }
+
+    public void setNormalMapID(int normalMapID) {
+        this.normalMapID = normalMapID;
     }
 
     public float getShineDamper() {

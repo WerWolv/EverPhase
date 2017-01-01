@@ -1,29 +1,23 @@
 package com.werwolv.structure;
 
 import com.werwolv.entity.Entity;
-import com.werwolv.render.ModelLoader;
+import com.werwolv.modelloader.ModelLoader;
 
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Labyrinth {
+    private Random random = new Random();
     //Settings
     private int room_length = 10, room_width = 10, room_height = 2;
-
     //Defines
     private ModelLoader loader;
-
     private List<RoomRectangle> rooms = new ArrayList<>();
     private List<Entity> blocks = new ArrayList<>();
-
     private int[][] labyrinth = new int[30][30];
-
     private boolean test = true;
     private int old_index = 0;
-
-    Random random = new Random();
-
     private int pos_x;
     private int pos_y;
     private int pos_z;
@@ -36,7 +30,7 @@ public class Labyrinth {
     }
 
     public void process(){
-        int old_direction = 0;
+        int old_direction;
         int x = random.nextInt(1);
         int z = random.nextInt(1);
         room(x, z);
@@ -49,7 +43,7 @@ public class Labyrinth {
                 test = false;
                 old_index = index;
             }
-            int direction = 1;
+            int direction;
             for(int a = 0; a < 7; a++){
                 direction = (random.nextInt(4) + 1);
                 /*while(true){

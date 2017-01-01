@@ -2,6 +2,7 @@ package com.werwolv.render;
 
 import com.werwolv.gui.Gui;
 import com.werwolv.model.ModelRaw;
+import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.shader.ShaderGui;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;

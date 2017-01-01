@@ -1,6 +1,6 @@
 package com.werwolv.resource;
 
-import com.werwolv.render.ModelLoader;
+import com.werwolv.modelloader.ModelLoader;
 
 public class TextureTerrainPack {
 

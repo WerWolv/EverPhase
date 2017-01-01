@@ -8,7 +8,6 @@ import com.werwolv.entity.particle.ParticleManager;
 import com.werwolv.gui.Gui;
 import com.werwolv.gui.GuiMinimap;
 import com.werwolv.input.KeyListener;
-import com.werwolv.main.Main;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.structure.Labyrinth;
 import com.werwolv.terrain.Terrain;
@@ -17,13 +16,11 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class LevelOverworld extends Level {
 
-    private Entity entity;
+    private Entity entity, entityNm;
     private TextureTerrainPack textureTerrainPack;
     private Terrain terrain;
 
@@ -37,7 +34,12 @@ public class LevelOverworld extends Level {
 
     @Override
     public void initLevel() {
-        entity = new Entity(loader,"dragon", "white", new Vector3f(0, 0, -10), new Vector3f(0, 60, 0), 1);
+        entity = new Entity(loader, "dragon", "white", new Vector3f(0, 0, -10), new Vector3f(0, 60, 0), 1, false);
+        entityNm = new Entity(loader, "crate", "crate", new Vector3f(20, 20, -10), new Vector3f(0, 60, 0), 0.03F, true);
+
+        entityNm.getModel().getTexture().setReflectivity(0.5F);
+        entityNm.getModel().getTexture().setShineDamper(10);
+        entityNm.getModel().getTexture().setNormalMapID(loader.loadTexture("crateNormal"));
 
         textureTerrainPack = new TextureTerrainPack(loader,"grassy", "dirt", "path", "pinkFlowers", "blendMap");
 
@@ -52,6 +54,7 @@ public class LevelOverworld extends Level {
         lights.add(new EntityLight(new Vector3f(30, 10, 30), new Vector3f(1, 0, 1), new Vector3f(1, 0.01F, 0.002F)));
 
         entities.add(entity);
+        entitiesNM.add(entityNm);
 
         labyrinth.process();
         entities.addAll(labyrinth.RenderLabyrinth());
@@ -83,7 +86,7 @@ public class LevelOverworld extends Level {
        for(TileWater water : waters)
            water.renderWaterEffects();
 
-        renderer.renderScene(entities, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
+        renderer.renderScene(entities, entitiesNM, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
         renderer.getRendererWater().render(waters, lights, player);
 
         ParticleManager.renderParticles(player);

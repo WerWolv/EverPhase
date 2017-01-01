@@ -1,4 +1,4 @@
-package com.werwolv.render;
+package com.werwolv.modelloader;
 
 import com.werwolv.model.ModelRaw;
 import com.werwolv.resource.Texture;
@@ -38,6 +38,26 @@ public class ModelLoader {
 
         return new ModelRaw(vaoID, data.getIndices().length);           //Return a new Model with the id of the model and the amount of indices
     }
+
+    /*
+     * Create a new Model that can be rendered to the screen using the data
+     * from the loaded obj file
+     *
+     * @param data  The model data returned by the OBJModelLoader class
+     * @return      The model usable for rendering
+     */
+    public ModelRaw loadToVAO(ModelDataNM data) {
+        int vaoID = createVAO();                            //Create a new Vertex Array Object
+        bindIndicesBuffer(data.getIndices());               //Bind the indices to the indices buffer
+        storeDataInAttrList(0, 3, data.getVertices());  //Bind the vertices to the first VBO
+        storeDataInAttrList(1, 2, data.getTextureCoords()); //Bind the texture coordinates to the second VBO
+        storeDataInAttrList(2, 3, data.getNormals());   //Bind the normals to the third  VBO
+        storeDataInAttrList(3, 3, data.getTangents());
+        unbindVAO();                                                    //Unbind the VAO
+
+        return new ModelRaw(vaoID, data.getIndices().length);           //Return a new Model with the id of the model and the amount of indices
+    }
+
 
     /*
      * Create a new Model that can be rendered to the screen using the

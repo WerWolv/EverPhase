@@ -1,4 +1,4 @@
-package com.werwolv.render;
+package com.werwolv.modelloader;
 
 public class ModelData {
 

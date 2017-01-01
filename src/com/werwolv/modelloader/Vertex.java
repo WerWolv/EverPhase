@@ -1,4 +1,4 @@
-package com.werwolv.render;
+package com.werwolv.modelloader;
 
 import org.joml.Vector3f;
 
@@ -35,14 +35,6 @@ public class Vertex {
         return textureIndexOther==textureIndex && normalIndexOther==normalIndex;
     }
 
-    public void setTextureIndex(int textureIndex){
-        this.textureIndex = textureIndex;
-    }
-
-    public void setNormalIndex(int normalIndex){
-        this.normalIndex = normalIndex;
-    }
-
     public Vector3f getPosition() {
         return position;
     }
@@ -51,8 +43,16 @@ public class Vertex {
         return textureIndex;
     }
 
+    public void setTextureIndex(int textureIndex) {
+        this.textureIndex = textureIndex;
+    }
+
     public int getNormalIndex() {
         return normalIndex;
+    }
+
+    public void setNormalIndex(int normalIndex) {
+        this.normalIndex = normalIndex;
     }
 
     public Vertex getDuplicateVertex() {

@@ -1,16 +1,15 @@
 package com.werwolv.render;
 
 import com.werwolv.entity.Entity;
-import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.entity.EntityPlayer;
 import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
+import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.shader.ShaderEntity;
 import com.werwolv.shader.ShaderTerrain;
-import com.werwolv.shader.ShaderWater;
 import com.werwolv.terrain.Terrain;
-import com.werwolv.terrain.TileWater;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -25,12 +24,10 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class RendererMaster {
 
+    public static final Vector3f SKY_COLOR = new Vector3f(0.5F, 0.5F, 0.5F);   //The color of the sky
     private static final float FOV = 70;                //The field of view
     private static final float NEAR_PLANE = 0.1F;       //The plane to start rendering
     private static final float FAR_PLANE = 1000.0F;     //The plane to stop rendering
-
-    private static final Vector3f SKY_COLOR = new Vector3f(0.5F, 0.5F, 0.5F);   //The color of the sky
-
     private Matrix4f projectionMatrix;                  //The projection matrix
 
     private ShaderEntity shaderEntity = new ShaderEntity();     //The shader to use for rendering entities
@@ -39,12 +36,15 @@ public class RendererMaster {
     private FrameBufferWater fboWater = new FrameBufferWater();
 
     private RendererEntity  rendererEntity;             //The renderer to render entities
+    private RendererNormalMapping rendererNM;
     private RendererTerrain rendererTerrain;            //The renderer to render the terrain
     private RendererSkybox  rendererSkybox;             //The renderer to render the skybox
     private RendererWater   rendererWater;              //The renderer to render all water planes
     private RendererGui     rendererGui;
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
+    private Map<ModelTextured, List<Entity>> entitiesNM = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
+
     private List<Terrain> terrains = new ArrayList<>(); //A list of all terrains in the game
 
     public RendererMaster(ModelLoader loader) {
@@ -55,12 +55,27 @@ public class RendererMaster {
         //Renderer initializing
 
         rendererEntity = new RendererEntity(shaderEntity, projectionMatrix);
+        rendererNM = new RendererNormalMapping(projectionMatrix);
         rendererTerrain = new RendererTerrain(shaderTerrain, projectionMatrix);
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
         rendererWater = new RendererWater(loader, projectionMatrix, fboWater, NEAR_PLANE, FAR_PLANE);
         rendererGui = new RendererGui(loader);
     }
 
+    /*
+     * Disables rendering of not seen triangles
+     */
+    public static void enableCulling() {
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
+    }
+
+    /*
+     * Enables rendering og not seen triangles
+     */
+    public static void disableCulling() {
+        GL11.glDisable(GL11.GL_CULL_FACE);
+    }
 
     /*
      * Helper function that renders everything in the game.
@@ -72,9 +87,10 @@ public class RendererMaster {
      * @param player    The player to render the camera in the right place
      * @param clipPlane The plane where everything above stops rendering
      */
-    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<EntityLight> lights, EntityPlayer player, Vector4f clipPlane) {
+    public void renderScene(List<Entity> entities, List<Entity> entitiesNM, List<Terrain> terrains, List<EntityLight> lights, EntityPlayer player, Vector4f clipPlane) {
         for(Terrain terrain : terrains) processTerrains(terrain);
         for(Entity entity : entities) processEntity(entity);
+        for (Entity entity : entitiesNM) processEntityNM(entity);
 
         this.render(player, lights, clipPlane);
     }
@@ -97,6 +113,8 @@ public class RendererMaster {
 
         shaderEntity.stop();
 
+        rendererNM.render(entitiesNM, clipPlane, lights, player);
+
         shaderTerrain.start();
         shaderTerrain.loadClipPlane(clipPlane);
         shaderTerrain.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
@@ -107,6 +125,7 @@ public class RendererMaster {
 
         rendererSkybox.render(player, SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         entities.clear();
+        entitiesNM.clear();
         terrains.clear();
     }
 
@@ -164,18 +183,20 @@ public class RendererMaster {
     }
 
     /*
-     * Disables rendering of not seen triangles
-     */
-    public static void enableCulling() {
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_BACK);
-    }
+ * Add the passed entity to the list of entities and link it to
+ * other entities with the same model
+ */
+    private void processEntityNM(Entity entity) {
+        ModelTextured entityModel = entity.getModel();      //Get the model of the entity
+        List<Entity> batch = entitiesNM.get(entityModel);     //Get the list of entities linked to that model
 
-    /*
-     * Enables rendering og not seen triangles
-     */
-    public static void disableCulling() {
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        if (batch != null)                                   //If there are already some entities in that list...
+            batch.add(entity);                              //...add the passed entity to them
+        else {                                              //...otherwise...
+            List<Entity> newBatch = new ArrayList<>();      //...create a new list...
+            newBatch.add(entity);                           //...add the passed entity to this list...
+            entitiesNM.put(entityModel, newBatch);            //...and link the newly created list to the new model
+        }
     }
 
     /*

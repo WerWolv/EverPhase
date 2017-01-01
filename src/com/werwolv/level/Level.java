@@ -4,7 +4,7 @@ import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.gui.Gui;
-import com.werwolv.render.ModelLoader;
+import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.render.RendererMaster;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
@@ -19,6 +19,7 @@ public abstract class Level {
     protected RendererMaster renderer = new RendererMaster(loader);
 
     protected List<Entity> entities = new ArrayList<>();
+    protected List<Entity> entitiesNM = new ArrayList<>();
     protected List<Terrain> terrains = new ArrayList<>();
     protected List<EntityLight> lights = new ArrayList<>();
     protected List<TileWater> waters = new ArrayList<>();
@@ -56,6 +57,10 @@ public abstract class Level {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public List<Entity> getEntitiesNM() {
+        return entitiesNM;
     }
 
     public List<Terrain> getTerrains() {

@@ -1,7 +1,7 @@
 package com.werwolv.entity.particle;
 
 import com.werwolv.entity.EntityPlayer;
-import com.werwolv.render.ModelLoader;
+import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.render.RendererParticle;
 import org.joml.Matrix4f;
 

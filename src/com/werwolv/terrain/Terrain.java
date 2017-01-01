@@ -1,8 +1,8 @@
 package com.werwolv.terrain;
 
 import com.werwolv.model.ModelRaw;
-import com.werwolv.render.ModelData;
-import com.werwolv.render.ModelLoader;
+import com.werwolv.modelloader.ModelData;
+import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.resource.TextureTerrain;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.toolbox.Maths;

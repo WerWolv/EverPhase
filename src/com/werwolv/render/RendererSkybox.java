@@ -3,6 +3,7 @@ package com.werwolv.render;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
+import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.shader.ShaderSkybox;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;

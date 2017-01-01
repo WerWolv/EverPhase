@@ -1,25 +1,30 @@
 package com.werwolv.entity;
 
 import com.werwolv.model.ModelTextured;
-import com.werwolv.render.ModelLoader;
-import com.werwolv.render.OBJModelLoader;
+import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.NormalMappedObjLoader;
+import com.werwolv.modelloader.OBJModelLoader;
 import com.werwolv.resource.TextureModel;
 import org.joml.Vector3f;
 
 public class Entity {
 
     public static final float GRAVITY = -1;        //Gravity constance. Used for jumping in the moment
-
-    private ModelTextured model;    //Model and texture of the entity
     protected Vector3f position;      //Position of the entity in the world
+    private ModelTextured model;    //Model and texture of the entity
     private float rotX, rotY, rotZ; //Rotation of the entity
     private float scale;            //Size of the entity
 
     private int textureIndex = 0;   //Address of the texture stored in memory
 
-    public Entity(ModelLoader loader, String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale) {
-        if(!(modelPath.equals("") || texturePath.equals("")))
-            this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
+    public Entity(ModelLoader loader, String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
+        if (!(modelPath.equals("") || texturePath.equals(""))) {
+            if (hasNormalMap)
+                this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath, loader), new TextureModel(loader.loadTexture(texturePath)));
+            else
+                this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
+        }
+
         this.position = position;
         this.rotX = rotation.x;
         this.rotY = rotation.y;
@@ -27,10 +32,15 @@ public class Entity {
         this.scale = scale;
     }
 
-    public Entity(ModelLoader loader, String modelPath, String texturePath, int index, Vector3f position, Vector3f rotation, float scale) {
+    public Entity(ModelLoader loader, String modelPath, String texturePath, int index, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
         this.textureIndex = index;
-        if(!(modelPath.equals("") || texturePath.equals("")))
-            this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
+        if (!(modelPath.equals("") || texturePath.equals(""))) {
+            if (hasNormalMap)
+                this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath, loader), new TextureModel(loader.loadTexture(texturePath)));
+            else
+                this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
+        }
+
         this.position = position;
         this.rotX = rotation.x;
         this.rotY = rotation.y;

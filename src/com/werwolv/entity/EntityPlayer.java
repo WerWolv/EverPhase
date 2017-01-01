@@ -20,7 +20,7 @@ public class EntityPlayer extends Entity{
     private float roll;     //The longitudinal angle of the camera
 
     public EntityPlayer(Vector3f position, Vector3f rotation, float scale) {
-        super(null, "", "", position, rotation, scale);
+        super(null, "", "", position, rotation, scale, false);
     }
 
 

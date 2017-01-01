@@ -40,13 +40,13 @@ public class TileWater {
 			level.getPlayer().setPosition(new Vector3f(level.getPlayer().getPosition().x, level.getPlayer().getPosition().y - distance, level.getPlayer().getPosition().z));
 			level.getPlayer().setPitch(-level.getPlayer().getPitch());
 
-			renderer.renderScene(level.getEntities(), level.getTerrains(), level.getLights(), level.getPlayer(), new Vector4f(0, 1, 0, -water.getHeight() + 1.0F));
+			renderer.renderScene(level.getEntities(), level.getEntitiesNM(), level.getTerrains(), level.getLights(), level.getPlayer(), new Vector4f(0, 1, 0, -water.getHeight() + 1.0F));
 
 			level.getPlayer().setPosition(new Vector3f(level.getPlayer().getPosition().x, level.getPlayer().getPosition().y + distance, level.getPlayer().getPosition().z));
 			level.getPlayer().setPitch(-level.getPlayer().getPitch());
 
 			fboWater.bindRefractionFrameBuffer();
-			renderer.renderScene(level.getEntities(), level.getTerrains(), level.getLights(), level.getPlayer(), new Vector4f(0, -1, 0, water.getHeight() + 1.0F));
+			renderer.renderScene(level.getEntities(), level.getEntitiesNM(), level.getTerrains(), level.getLights(), level.getPlayer(), new Vector4f(0, -1, 0, water.getHeight() + 1.0F));
 		}
 
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);

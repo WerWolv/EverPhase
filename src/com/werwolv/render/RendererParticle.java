@@ -1,10 +1,9 @@
 package com.werwolv.render;
 
-import java.util.List;
-
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.particle.EntityParticle;
 import com.werwolv.model.ModelRaw;
+import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.shader.ShaderParticle;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
@@ -12,6 +11,8 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
+import java.util.List;
 
 public class RendererParticle {
 	
