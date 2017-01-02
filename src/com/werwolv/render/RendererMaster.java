@@ -101,8 +101,6 @@ public class RendererMaster {
         for (Entity entity : entitiesNM) processEntityNM(entity);
 
         this.render(player, lights, clipPlane);
-
-        renderShadowMap(entities, entitiesNM, lights.get(0));
     }
 
     /*
@@ -142,8 +140,6 @@ public class RendererMaster {
     }
 
     public void renderShadowMap(List<Entity> entityList, List<Entity> entityListNm, EntityLight sun) {
-        init();
-
         for (Entity entity : entityList)
             processEntity(entity);
 
