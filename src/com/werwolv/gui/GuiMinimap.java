@@ -4,8 +4,6 @@ import com.werwolv.fbo.FrameBufferMinimap;
 import com.werwolv.level.Level;
 import com.werwolv.render.RendererMaster;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class GuiMinimap extends Gui{
 
@@ -16,14 +14,14 @@ public class GuiMinimap extends Gui{
     public GuiMinimap(RendererMaster renderer, Level level, Vector2f position, Vector2f scale) {
         super(renderer, 0, position, scale);
 
-        this.setTexture(fboMiniMap.getMiniMapTexture());
+        this.setTexture(renderer.getShadowMapTextureID());
 
         this.level = level;
     }
 
 
     public void render() {
-        fboMiniMap.bindMinimapFrameBuffer();
+        /*fboMiniMap.bindMinimapFrameBuffer();
 
         float lastPitch = level.getPlayer().getPitch();
         Vector3f playerPos = level.getPlayer().getPosition();
@@ -34,7 +32,7 @@ public class GuiMinimap extends Gui{
         level.getPlayer().setPosition(playerPos);
         level.getPlayer().setPitch(lastPitch);
 
-        fboMiniMap.unbindCurrentFrameBuffer();
+        fboMiniMap.unbindCurrentFrameBuffer();*/
     }
 
 }

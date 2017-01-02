@@ -1,7 +1,7 @@
 package com.werwolv.shader;
 
-import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.EntityLight;
+import com.werwolv.entity.EntityPlayer;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -19,6 +19,7 @@ public class ShaderTerrain extends Shader {
     private int loc_skyColor;
     private int loc_backgroundTexture, loc_rTexture, loc_gTexture, loc_bTexture, loc_blendMap;
     private int loc_plane;
+    private int loc_toShadowMapSpace, loc_shadowMap;
 
     public ShaderTerrain() {
         super("shaderTerrain", "shaderTerrain");
@@ -49,6 +50,8 @@ public class ShaderTerrain extends Shader {
         loc_blendMap = super.getUniformLocation("blendMap");
 
         loc_plane = super.getUniformLocation("plane");
+        loc_toShadowMapSpace = super.getUniformLocation("toShadowMapSpace");
+        loc_shadowMap = super.getUniformLocation("shadowMap");
 
         loc_lightPos = new int[MAX_LIGHTS];
         loc_lightColor = new int[MAX_LIGHTS];
@@ -101,6 +104,11 @@ public class ShaderTerrain extends Shader {
         super.loadInteger(loc_gTexture, 2);
         super.loadInteger(loc_bTexture, 3);
         super.loadInteger(loc_blendMap, 4);
+        super.loadInteger(loc_shadowMap, 5);
+    }
+
+    public void loadToShadowSpaceMatrix(Matrix4f matrix) {
+        super.loadMatrix(loc_toShadowMapSpace, matrix);
     }
 
     public void loadClipPlane(Vector4f plane) {

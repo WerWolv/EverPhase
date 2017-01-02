@@ -1,12 +1,10 @@
 package com.werwolv.render;
 
 import com.werwolv.model.ModelRaw;
-import com.werwolv.resource.TextureModel;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.toolbox.Maths;
-import com.werwolv.toolbox.ValueNoise;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
@@ -35,7 +33,10 @@ public class RendererTerrain {
      *
      * @param terrains  A list of all terrains to render
      */
-    public void render(List<Terrain> terrains) {
+    public void render(List<Terrain> terrains, Matrix4f toShadowSpace) {
+
+        shader.loadToShadowSpaceMatrix(toShadowSpace);
+
         for(Terrain terrain : terrains) {       //For each terrain...
             prepareTerrain(terrain);            //...prepare the terrain for rendering...
             loadModelMatrix(terrain);           //...upload the transformation matrix to the shader...

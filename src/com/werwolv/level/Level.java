@@ -16,7 +16,7 @@ public abstract class Level {
 
     protected ModelLoader loader = new ModelLoader();
 
-    protected RendererMaster renderer = new RendererMaster(loader);
+    protected RendererMaster renderer;
 
     protected List<Entity> entities = new ArrayList<>();
     protected List<Entity> entitiesNM = new ArrayList<>();
@@ -29,6 +29,7 @@ public abstract class Level {
 
     public Level(EntityPlayer player) {
         this.player = player;
+        this.renderer = new RendererMaster(loader, player);
     }
 
     public abstract void initLevel();

@@ -4,6 +4,7 @@ import com.werwolv.entity.EntityPlayer;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class Maths {
 
@@ -52,5 +53,9 @@ public class Maths {
         float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
         float l3 = 1.0f - l1 - l2;
         return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+    }
+
+    public static Vector3f toVector3f(Vector4f vector4f) {
+        return new Vector3f(vector4f.x, vector4f.y, vector4f.z);
     }
 }

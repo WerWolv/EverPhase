@@ -45,7 +45,7 @@ public class RendererNormalMapping {
         shader.stop();
     }
 
-    public void cleanUp() {
+    public void clean() {
         shader.clean();
     }
 

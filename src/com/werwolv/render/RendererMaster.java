@@ -7,6 +7,7 @@ import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
 import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.render.shadow.RendererShadowMapMaster;
 import com.werwolv.shader.ShaderEntity;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
@@ -14,6 +15,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +27,9 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 public class RendererMaster {
 
     public static final Vector3f SKY_COLOR = new Vector3f(0.5F, 0.5F, 0.5F);   //The color of the sky
-    private static final float FOV = 70;                //The field of view
-    private static final float NEAR_PLANE = 0.1F;       //The plane to start rendering
-    private static final float FAR_PLANE = 1000.0F;     //The plane to stop rendering
+    public static final float FOV = 70;                //The field of view
+    public static final float NEAR_PLANE = 0.1F;       //The plane to start rendering
+    public static final float FAR_PLANE = 1000.0F;     //The plane to stop rendering
     private Matrix4f projectionMatrix;                  //The projection matrix
 
     private ShaderEntity shaderEntity = new ShaderEntity();     //The shader to use for rendering entities
@@ -42,12 +44,16 @@ public class RendererMaster {
     private RendererWater   rendererWater;              //The renderer to render all water planes
     private RendererGui     rendererGui;
 
+    /* Shadow Renderer */
+
+    private RendererShadowMapMaster rendererShadowMap;
+
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
     private Map<ModelTextured, List<Entity>> entitiesNM = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
 
     private List<Terrain> terrains = new ArrayList<>(); //A list of all terrains in the game
 
-    public RendererMaster(ModelLoader loader) {
+    public RendererMaster(ModelLoader loader, EntityPlayer player) {
         enableCulling();                                //Enable culling. This disables the rendering of the not seen triangles
 
         createProjectionMatrix();                       //Create a new projection matrix
@@ -60,6 +66,8 @@ public class RendererMaster {
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
         rendererWater = new RendererWater(loader, projectionMatrix, fboWater, NEAR_PLANE, FAR_PLANE);
         rendererGui = new RendererGui(loader);
+
+        rendererShadowMap = new RendererShadowMapMaster(player);
     }
 
     /*
@@ -93,6 +101,8 @@ public class RendererMaster {
         for (Entity entity : entitiesNM) processEntityNM(entity);
 
         this.render(player, lights, clipPlane);
+
+        renderShadowMap(entities, entitiesNM, lights.get(0));
     }
 
     /*
@@ -120,13 +130,30 @@ public class RendererMaster {
         shaderTerrain.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         shaderTerrain.loadLights(lights);
         shaderTerrain.loadViewMatrix(player);
-        rendererTerrain.render(terrains);
+        rendererTerrain.render(terrains, rendererShadowMap.getToShadowMapSpaceMatrix());
         shaderTerrain.stop();
 
         rendererSkybox.render(player, SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
+
+
         entities.clear();
         entitiesNM.clear();
         terrains.clear();
+    }
+
+    public void renderShadowMap(List<Entity> entityList, List<Entity> entityListNm, EntityLight sun) {
+        init();
+
+        for (Entity entity : entityList)
+            processEntity(entity);
+
+        for (Entity entity : entityListNm)
+            processEntityNM(entity);
+
+        rendererShadowMap.render(entities, sun);
+        rendererShadowMap.render(entitiesNM, sun);
+        entities.clear();
+        entitiesNM.clear();
     }
 
     /*
@@ -134,27 +161,27 @@ public class RendererMaster {
      */
     private void init() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);                                          //Enable the depthtest to stop rendering triangles that are behind others
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);    //Reset the color buffer- and depth buffer bit
         glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0F);            //Clears the screen to the sky color
-
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);    //Reset the color buffer- and depth buffer bit
+        GL13.glActiveTexture(GL13.GL_TEXTURE5);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, getShadowMapTextureID());
     }
 
     /*
      * Create a new projection matrix
      */
     private void createProjectionMatrix() {
-        float aspectRatio = (float) Main.getWindowSize()[0] / (float) Main.getWindowSize()[1];  //The ratio between the width and the height of the screen
-        float yScale = (float) ((1.0F / Math.tan(Math.toRadians(FOV / 2.0F))) * aspectRatio);   //The horizontal camera lens opening angle
-        float xScale = yScale / aspectRatio;                                                    //The vertical camera lens opening angle
-        float frustumLength = FAR_PLANE - NEAR_PLANE;                                           //The distance between the minimal draw distance and the maximum draw distance
-
-        //Load the parameters to the matrix
         projectionMatrix = new Matrix4f();
-        projectionMatrix.m00(xScale);
-        projectionMatrix.m11(yScale);
-        projectionMatrix.m22(-((FAR_PLANE + NEAR_PLANE) / frustumLength));
+        float aspectRatio = (float) Main.getWindowSize()[0] / (float) Main.getWindowSize()[1];
+        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
+        float x_scale = y_scale / aspectRatio;
+        float frustum_length = FAR_PLANE - NEAR_PLANE;
+
+        projectionMatrix.m00(x_scale);
+        projectionMatrix.m11(y_scale);
+        projectionMatrix.m22(-((FAR_PLANE + NEAR_PLANE) / frustum_length));
         projectionMatrix.m23(-1);
-        projectionMatrix.m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustumLength));
+        projectionMatrix.m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
         projectionMatrix.m33(0);
     }
 
@@ -206,6 +233,9 @@ public class RendererMaster {
         shaderEntity.clean();
         shaderTerrain.clean();
         rendererWater.clean();
+        rendererGui.clean();
+        rendererShadowMap.clean();
+        rendererNM.clean();
     }
 
     /* Getter */
@@ -234,5 +264,9 @@ public class RendererMaster {
 
     public FrameBufferWater getFboWater() {
         return fboWater;
+    }
+
+    public int getShadowMapTextureID() {
+        return rendererShadowMap.getShadowMap();
     }
 }
