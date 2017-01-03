@@ -6,15 +6,21 @@ import org.lwjgl.glfw.GLFWCursorPosCallback;
 
 public class CursorListener extends GLFWCursorPosCallback {
 
+    private static boolean enabled = true;
+
+    public static void enableCursorListener(boolean enabled) {
+        CursorListener.enabled = enabled;
+        GLFW.glfwSetCursorPos(Main.getWindow(), Main.getWindowSize()[0] / 2, Main.getWindowSize()[1] / 2);        //Holds the cursor on a fixed position on the screen
+    }
 
     @Override
     public void invoke(long window, double xpos, double ypos) {
-        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT_ALT)) return;
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT_ALT) || !enabled) return;
 
-        GLFW.glfwSetCursorPos(window, 300, 300);        //Holds the cursor on a fixed position on the screen
+        GLFW.glfwSetCursorPos(window, Main.getWindowSize()[0] / 2, Main.getWindowSize()[1] / 2);        //Holds the cursor on a fixed position on the screen
 
-        Main.getPlayer().setPitch(Main.getPlayer().getPitch() + (float)(ypos - 300) / 10);    //Transfer the vertical cursor movement to the camera
-        Main.getPlayer().setYaw(Main.getPlayer().getYaw() + (float)(xpos - 300) / 10);        //Transfer the horizontal cursor movement to the camera
+        Main.getPlayer().setPitch(Main.getPlayer().getPitch() + (float) (ypos - Main.getWindowSize()[1] / 2) / 10);    //Transfer the vertical cursor movement to the camera
+        Main.getPlayer().setYaw(Main.getPlayer().getYaw() + (float) (xpos - Main.getWindowSize()[0] / 2) / 10);        //Transfer the horizontal cursor movement to the camera
 
         if(Main.getPlayer().getPitch() > 90.0F)  Main.getPlayer().setPitch(90.0F);            //Caps the vertical view angle to max. 90°...
         if(Main.getPlayer().getPitch() < -90.0F) Main.getPlayer().setPitch(-90.0F);           //...and to -90°

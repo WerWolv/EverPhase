@@ -1,5 +1,6 @@
 package com.werwolv.entity;
 
+import com.werwolv.gui.Gui;
 import com.werwolv.input.KeyListener;
 import com.werwolv.main.Main;
 import com.werwolv.terrain.Terrain;
@@ -18,6 +19,8 @@ public class EntityPlayer extends Entity{
     private float pitch;    //The horizontal angle of the camera
     private float yaw;      //The vertical angle of the camera
     private float roll;     //The longitudinal angle of the camera
+
+    private Gui currentGui;
 
     public EntityPlayer(Vector3f position, Vector3f rotation, float scale) {
         super(null, "", "", position, rotation, scale, false);
@@ -83,5 +86,13 @@ public class EntityPlayer extends Entity{
 
     public void setRoll(float roll) {
         this.roll = roll;
+    }
+
+    public Gui getCurrentGui() {
+        return currentGui;
+    }
+
+    public void setCurrentGui(Gui currentGui) {
+        this.currentGui = currentGui;
     }
 }

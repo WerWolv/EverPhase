@@ -48,6 +48,8 @@ public class RendererMaster {
 
     private RendererShadowMapMaster rendererShadowMap;
 
+    private ModelLoader loader;
+
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
     private Map<ModelTextured, List<Entity>> entitiesNM = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
 
@@ -57,6 +59,8 @@ public class RendererMaster {
         enableCulling();                                //Enable culling. This disables the rendering of the not seen triangles
 
         createProjectionMatrix();                       //Create a new projection matrix
+
+        this.loader = loader;
 
         //Renderer initializing
 
@@ -264,5 +268,9 @@ public class RendererMaster {
 
     public int getShadowMapTextureID() {
         return rendererShadowMap.getShadowMap();
+    }
+
+    public ModelLoader getModelLoader() {
+        return loader;
     }
 }

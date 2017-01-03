@@ -21,24 +21,48 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
 
-    private static long lastFrameTime;
-    private static float delta;
-
-    private boolean running = true;
-
-    private static long window;
-
     public static KeyListener keyCallback;
     public static MouseListener mouseButtonCallback;
     public static CursorListener cursorPosCallback;
-
-    private static EntityPlayer player;
-
     public static Level currentLevel;
+    private static long lastFrameTime;
+    private static float delta;
+    private static long window;
+    private static EntityPlayer player;
+    private boolean running = true;
 
     public static void main(String[] args) {
         Main game = new Main();
         game.run();
+    }
+
+    public static void setCursorVisibility(boolean visible) {
+        glfwSetInputMode(window, GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+    }
+
+    public static long getWindow() {
+        return window;
+    }
+
+    public static int[] getWindowSize() {
+        IntBuffer w = BufferUtils.createIntBuffer(4);
+        IntBuffer h = BufferUtils.createIntBuffer(4);
+
+        glfwGetWindowSize(window, w, h);
+
+        return new int[]{w.get(0), h.get(0)};
+    }
+
+    private static long getCurrentTime() {
+        return (long) (GLFW.glfwGetTime() * 1000);
+    }
+
+    public static float getFrameTimeSeconds() {
+        return delta;
+    }
+
+    public static EntityPlayer getPlayer() {
+        return player;
     }
 
     private void init() {
@@ -74,6 +98,7 @@ public class Main {
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
 
         lastFrameTime = getCurrentTime();
+        setCursorVisibility(false);
     }
 
     private void run() {
@@ -104,26 +129,5 @@ public class Main {
         mouseButtonCallback.free();
         cursorPosCallback.free();
         ParticleManager.clean();
-    }
-
-    public static int[] getWindowSize() {
-        IntBuffer w = BufferUtils.createIntBuffer(4);
-        IntBuffer h = BufferUtils.createIntBuffer(4);
-
-        glfwGetWindowSize(window, w, h);
-
-        return new int[] { w.get(0), h.get(0) };
-    }
-
-    private static long getCurrentTime() {
-        return (long) (GLFW.glfwGetTime() * 1000);
-    }
-
-    public static float getFrameTimeSeconds() {
-        return delta;
-    }
-
-    public static EntityPlayer getPlayer() {
-        return player;
     }
 }
