@@ -18,6 +18,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import com.werwolv.structure.Labyrinth;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -30,7 +32,7 @@ public class LevelOverworld extends Level {
     private TextureTerrainPack textureTerrainPack;
     private Terrain terrain;
 
-    //private Labyrinth labyrinth;
+    private Labyrinth labyrinth;
 
     private Gui guiMinimap, guiIngame;
 
@@ -57,31 +59,31 @@ public class LevelOverworld extends Level {
 
         terrain = new Terrain(0, -1, loader, textureTerrainPack, "heightmap");
 
-        // labyrinth = new Labyrinth(loader, 0, 0, 0);
+        labyrinth = new Labyrinth(loader, 0, 0, 0, 3, 10);
 
         lights.add(entitySun);
 
-        entities.add(entity);
-        entitiesNM.add(entityNm);
+        //entities.add(entity);
+        //entitiesNM.add(entityNm);
 
-        Random random = new Random();
+        /*Random random = new Random();
         for (int i = 0; i < 512; i++) {
             int x = random.nextInt(250);
             int z = -random.nextInt(250);
             entities.add(new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, z), z), new Vector3f(0, 0, 0), 1, false));
-        }
+        }*/
 
-        //labyrinth.process();
-        //entities.addAll(labyrinth.RenderLabyrinth());
+        labyrinth.process();
+        entities.addAll(labyrinth.RenderLabyrinth());
 
         terrains.add(terrain);
 
         waters.add(new TileWater(renderer, this, 75, -75, 0));
 
         guiMinimap = new GuiMinimap(renderer, this, new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
-        guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
+        //guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
         guis.add(guiMinimap);
-        guis.add(guiIngame);
+        //guis.add(guiIngame);
 
         currentGui.add(null);
 

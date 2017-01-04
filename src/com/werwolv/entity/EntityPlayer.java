@@ -35,15 +35,15 @@ public class EntityPlayer extends Entity{
         //Keybindings to move the player in different directions based of the pressed buttons and the direction of the camera
         if (KeyCallback.isKeyPressed(GLFW_KEY_W)) {
             speedX += 40F * (float) Math.sin(Math.toRadians(getYaw()));
-            speedZ += -40F * (float) Math.cos(Math.toRadians(getYaw()));
+            speedZ -= 40F * (float) Math.cos(Math.toRadians(getYaw()));
         }
         if (KeyCallback.isKeyPressed(GLFW_KEY_S)) {
-            speedX += -40F * (float) Math.sin(Math.toRadians(getYaw()));
+            speedX -= 40F * (float) Math.sin(Math.toRadians(getYaw()));
             speedZ += 40F * (float) Math.cos(Math.toRadians(getYaw()));
         }
         if (KeyCallback.isKeyPressed(GLFW_KEY_A)) {
-            speedX += -40F * (float) Math.cos(Math.toRadians(getYaw()));
-            speedZ += -40F * (float) Math.sin(Math.toRadians(getYaw()));
+            speedX -= 40F * (float) Math.cos(Math.toRadians(getYaw()));
+            speedZ -= 40F * (float) Math.sin(Math.toRadians(getYaw()));
         }
         if (KeyCallback.isKeyPressed(GLFW_KEY_D)) {
             speedX += 40F * (float) Math.cos(Math.toRadians(getYaw()));

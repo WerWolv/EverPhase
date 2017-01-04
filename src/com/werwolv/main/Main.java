@@ -92,7 +92,7 @@ public class Main {
         glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
         glfwSetCursorPosCallback(window, cursorPosCallback = new CursorPositionCallback());
 
-        glfwSetWindowPos(window, 100, 100);
+        glfwSetWindowPos(window, 0, 0);
         glfwMakeContextCurrent(window);
 
         glfwShowWindow(window);

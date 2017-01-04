@@ -10,7 +10,7 @@ import java.util.Random;
 public class Labyrinth {
     private Random random = new Random();
     //Settings
-    private int room_length = 10, room_width = 10, room_height = 2;
+    private int room_length = 18, room_width = 18, room_height = 2;
     //Defines
     private ModelLoader loader;
     private List<RoomRectangle> rooms = new ArrayList<>();
@@ -21,12 +21,16 @@ public class Labyrinth {
     private int pos_x;
     private int pos_y;
     private int pos_z;
+    private int length;
+    private int branch;
 
-    public Labyrinth(ModelLoader loader, int x, int y, int z){
+    public Labyrinth(ModelLoader loader, int x, int y, int z, int branch, int length){
         this.loader = loader;
         this.pos_x = x;
         this.pos_y = y;
         this.pos_z = z;
+        this.length = length;
+        this.branch = branch;
     }
 
     public void process(){
@@ -34,7 +38,7 @@ public class Labyrinth {
         int x = random.nextInt(1);
         int z = random.nextInt(1);
         room(x, z);
-        for(int b = 0; b < 3; b++){
+        for(int b = 0; b < branch; b++){
             int index = random.nextInt(rooms.size());
             x = (int)rooms.get(index).get_x() / room_length;
             z = (int)rooms.get(index).get_z() / room_width;
@@ -44,15 +48,15 @@ public class Labyrinth {
                 old_index = index;
             }
             int direction;
-            for(int a = 0; a < 7; a++){
+            for(int a = 0; a < length; a++){
                 direction = (random.nextInt(4) + 1);
-                /*while(true){
-                    if((z == 0)&&(direction == 1)) direction = (random.nextInt(4) + 1);
-                    else if((x == 0)&&(direction == 2)) direction = (random.nextInt(4) + 1);
-                    else if((z ==  pos_y)&&(direction == 4)) direction = (random.nextInt(4) + 1);
-                    else if((x ==  pos_x)&&(direction == 3))direction = (random.nextInt(4) + 1);
+                while(true){
+                    if((z == -15)&&(direction == 1)) direction = (random.nextInt(4) + 1);
+                    else if((x == -15)&&(direction == 2)) direction = (random.nextInt(4) + 1);
+                    else if((z ==  14)&&(direction == 4)) direction = (random.nextInt(4) + 1);
+                    else if((x ==  14)&&(direction == 3))direction = (random.nextInt(4) + 1);
                     else break;
-                }*/
+                }
                 switch (direction) {
                     case 1:
                         z -= 1;
@@ -105,7 +109,6 @@ public class Labyrinth {
     private void room(int x, int z) {
         rooms.add(new RoomRectangle(loader, x*(room_length), 0, z*(room_width), room_length, room_width, room_height));
         labyrinth[x+15][z+15] = rooms.size();
-        System.out.println(rooms.size());
     }
 
     private void door(int old_d, int new_d, int index){
