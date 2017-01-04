@@ -16,7 +16,7 @@ public class GuiIngame extends Gui {
 
     @Override
     public void render() {
-        renderer.getRendererGui().drawTexture(0, 0, 0.5F, new Vector4f(0, 0, 256, 24), textureGuiIngame);
+        renderer.getRendererGui().drawTexture(0.5F, -1.75F, 0.5F, new Vector4f(0, 0, 256, 24), textureGuiIngame);
 
         /*renderer.getRendererGui().drawTexture(-0.5F, 0.2F, 0.5F, new Vector4f(0, 195, 256, 122), textureGuiIngame);
 
