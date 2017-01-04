@@ -1,21 +1,21 @@
-package com.werwolv.input;
+package com.werwolv.callback;
 
 import com.werwolv.main.Main;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 
-public class CursorListener extends GLFWCursorPosCallback {
+public class CursorPositionCallback extends GLFWCursorPosCallback {
 
     private static boolean enabled = true;
 
     public static void enableCursorListener(boolean enabled) {
-        CursorListener.enabled = enabled;
+        CursorPositionCallback.enabled = enabled;
         GLFW.glfwSetCursorPos(Main.getWindow(), Main.getWindowSize()[0] / 2, Main.getWindowSize()[1] / 2);        //Holds the cursor on a fixed position on the screen
     }
 
     @Override
     public void invoke(long window, double xpos, double ypos) {
-        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT_ALT) || !enabled) return;
+        if (KeyCallback.isKeyPressed(GLFW.GLFW_KEY_LEFT_ALT) || !enabled) return;
 
         GLFW.glfwSetCursorPos(window, Main.getWindowSize()[0] / 2, Main.getWindowSize()[1] / 2);        //Holds the cursor on a fixed position on the screen
 

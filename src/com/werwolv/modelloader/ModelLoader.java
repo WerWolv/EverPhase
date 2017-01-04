@@ -1,5 +1,6 @@
 package com.werwolv.modelloader;
 
+import com.werwolv.gui.GuiTextureUnit;
 import com.werwolv.model.ModelRaw;
 import com.werwolv.resource.Texture;
 import com.werwolv.resource.TextureData;
@@ -20,6 +21,7 @@ public class ModelLoader {
     private List<Integer> vaos = new ArrayList<>();         //All Vertex Array Objects for cleanup
     private List<Integer> vbos = new ArrayList<>();         //All Vertex Buffer Objects for cleanup
     private List<Integer> textures = new ArrayList<>();     //All Textures for cleanup
+    private List<Integer> texturesSize = new ArrayList<>();
 
     /*
      * Create a new Model that can be rendered to the screen using the data
@@ -144,6 +146,7 @@ public class ModelLoader {
         Texture texture = Texture.loadTexture("res/" + fileName + ".png");                      //Load the texture
 
         textures.add(texture.getTextureId());                                                   //Add the texture to the list of textures for cleanup
+        texturesSize.add(texture.getWidth());
 
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);   //Set the mipmap detail level to decrease linearly
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
@@ -151,6 +154,20 @@ public class ModelLoader {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 
         return texture.getTextureId();
+    }
+
+    public GuiTextureUnit loadGuiTexture(String fileName) {
+        Texture texture = Texture.loadTexture("res/" + fileName + ".png");                      //Load the texture
+
+        textures.add(texture.getTextureId());                                                   //Add the texture to the list of textures for cleanup
+        texturesSize.add(texture.getWidth());
+
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);   //Set the mipmap detail level to decrease linearly
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);       //Set the texture to repeat itself if it gets drawn on a bigger surface
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+
+        return new GuiTextureUnit(0, 0, 1, texture.getWidth(), texture.getTextureId());
     }
 
     /*

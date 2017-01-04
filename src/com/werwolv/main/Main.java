@@ -1,10 +1,10 @@
 package com.werwolv.main;
 
+import com.werwolv.callback.CursorPositionCallback;
+import com.werwolv.callback.KeyCallback;
+import com.werwolv.callback.MouseButtonCallback;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.particle.ParticleManager;
-import com.werwolv.input.CursorListener;
-import com.werwolv.input.KeyListener;
-import com.werwolv.input.MouseListener;
 import com.werwolv.level.Level;
 import com.werwolv.level.LevelOverworld;
 import org.joml.Vector3f;
@@ -21,9 +21,10 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
 
-    public static KeyListener keyCallback;
-    public static MouseListener mouseButtonCallback;
-    public static CursorListener cursorPosCallback;
+    public static KeyCallback keyCallback;
+    public static MouseButtonCallback mouseButtonCallback;
+    public static CursorPositionCallback cursorPosCallback;
+
     public static Level currentLevel;
     private static long lastFrameTime;
     private static float delta;
@@ -53,6 +54,11 @@ public class Main {
         return new int[]{w.get(0), h.get(0)};
     }
 
+    public static float getAspectRatio() {
+        return (float) getWindowSize()[0] / (float) getWindowSize()[1];
+    }
+
+
     private static long getCurrentTime() {
         return (long) (GLFW.glfwGetTime() * 1000);
     }
@@ -65,7 +71,7 @@ public class Main {
         return player;
     }
 
-    private void init() {
+    public static void init() {
         if(!glfwInit()){
             System.err.println("GLFW initialization failed!");
         }
@@ -74,16 +80,17 @@ public class Main {
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-        window = glfwCreateWindow(vidmode.width(), vidmode.height(), "GameRunner", glfwGetPrimaryMonitor(), NULL);
+
+        window = glfwCreateWindow(vidmode.width(), vidmode.height(), "GameRunner", NULL, NULL);
 
 
         if(window == NULL) {
             System.err.println("Could not create window!");
         }
 
-        glfwSetKeyCallback(window, keyCallback = new KeyListener());
-        glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseListener());
-        glfwSetCursorPosCallback(window, cursorPosCallback = new CursorListener());
+        glfwSetKeyCallback(window, keyCallback = new KeyCallback());
+        glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
+        glfwSetCursorPosCallback(window, cursorPosCallback = new CursorPositionCallback());
 
         glfwSetWindowPos(window, 100, 100);
         glfwMakeContextCurrent(window);

@@ -1,15 +1,15 @@
 package com.werwolv.level;
 
+import com.werwolv.callback.CursorPositionCallback;
+import com.werwolv.callback.KeyCallback;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.particle.EntityParticle;
 import com.werwolv.entity.particle.ParticleManager;
 import com.werwolv.gui.Gui;
-import com.werwolv.gui.GuiInventory;
+import com.werwolv.gui.GuiIngame;
 import com.werwolv.gui.GuiMinimap;
-import com.werwolv.input.CursorListener;
-import com.werwolv.input.KeyListener;
 import com.werwolv.main.Main;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.terrain.Terrain;
@@ -32,7 +32,7 @@ public class LevelOverworld extends Level {
 
     //private Labyrinth labyrinth;
 
-    private Gui guiMinimap, guiInventory;
+    private Gui guiMinimap, guiIngame;
 
     private EntityLight entitySun = new EntityLight(new Vector3f(1000000, 1500000, -1000000), new Vector3f(1, 0.9F, 0.9F));
 
@@ -79,8 +79,9 @@ public class LevelOverworld extends Level {
         waters.add(new TileWater(renderer, this, 75, -75, 0));
 
         guiMinimap = new GuiMinimap(renderer, this, new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
-        guiInventory = new GuiInventory(renderer, loader.loadTexture("barrel"), new Vector2f(0.85F, 0.5F), new Vector2f(0.3F, 0.3F));
+        guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
         guis.add(guiMinimap);
+        guis.add(guiIngame);
 
         currentGui.add(null);
 
@@ -92,7 +93,8 @@ public class LevelOverworld extends Level {
         glfwPollEvents();
         handleInput();
 
-        if(KeyListener.isKeyPressed(GLFW_KEY_Y)) new EntityParticle(new Vector3f(0, 1, 0), new Vector3f(0, 5, 0), 4, 4, 0, 1);
+        if (KeyCallback.isKeyPressed(GLFW_KEY_Y))
+            new EntityParticle(new Vector3f(0, 1, 0), new Vector3f(0, 5, 0), 4, 4, 0, 1);
 
         ParticleManager.updateParticles();
     }
@@ -115,7 +117,9 @@ public class LevelOverworld extends Level {
 
     @Override
     public void renderGUI() {
-        renderer.getRendererGui().render(guis);
+
+        for (Gui gui : guis)
+            renderer.getRendererGui().render(gui);
 
         if (player.getCurrentGui() != null) {
             renderer.getRendererGui().render(player.getCurrentGui());
@@ -123,25 +127,22 @@ public class LevelOverworld extends Level {
     }
 
     private void handleInput() {
-        boolean currentE = KeyListener.isKeyPressed(GLFW_KEY_E);
-        if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
+        if (KeyCallback.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
 
-        if (currentE && !lastPressedE) {
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_E)) {
             if (player.getCurrentGui() != null) {
                 player.setCurrentGui(null);
                 Main.setCursorVisibility(false);
-                CursorListener.enableCursorListener(true);
+                CursorPositionCallback.enableCursorListener(true);
             } else {
-                player.setCurrentGui(guiInventory);
+                player.setCurrentGui(null);
                 Main.setCursorVisibility(true);
-                CursorListener.enableCursorListener(false);
+                CursorPositionCallback.enableCursorListener(false);
             }
         }
 
         if (player.getCurrentGui() == null)
             player.move(terrain);
-
-        lastPressedE = currentE;
     }
 
 }

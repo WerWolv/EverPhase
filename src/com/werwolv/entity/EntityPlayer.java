@@ -1,7 +1,7 @@
 package com.werwolv.entity;
 
+import com.werwolv.callback.KeyCallback;
 import com.werwolv.gui.Gui;
-import com.werwolv.input.KeyListener;
 import com.werwolv.main.Main;
 import com.werwolv.terrain.Terrain;
 import org.joml.Vector3f;
@@ -33,13 +33,25 @@ public class EntityPlayer extends Entity{
         //speedY += GRAVITY;      //Add gravity to the player to keep it on the ground
 
         //Keybindings to move the player in different directions based of the pressed buttons and the direction of the camera
-        if(KeyListener.isKeyPressed(GLFW_KEY_W)) { speedX += 40F * (float)Math.sin(Math.toRadians(getYaw())); speedZ += -40F * (float)Math.cos(Math.toRadians(getYaw())); }
-        if(KeyListener.isKeyPressed(GLFW_KEY_S)) { speedX += -40F * (float)Math.sin(Math.toRadians(getYaw())); speedZ += 40F * (float)Math.cos(Math.toRadians(getYaw())); }
-        if(KeyListener.isKeyPressed(GLFW_KEY_A)) { speedX += -40F * (float)Math.cos(Math.toRadians(getYaw())); speedZ += -40F * (float)Math.sin(Math.toRadians(getYaw())); }
-        if(KeyListener.isKeyPressed(GLFW_KEY_D)) { speedX += 40F * (float)Math.cos(Math.toRadians(getYaw())); speedZ += 40F * (float)Math.sin(Math.toRadians(getYaw())); }
+        if (KeyCallback.isKeyPressed(GLFW_KEY_W)) {
+            speedX += 40F * (float) Math.sin(Math.toRadians(getYaw()));
+            speedZ += -40F * (float) Math.cos(Math.toRadians(getYaw()));
+        }
+        if (KeyCallback.isKeyPressed(GLFW_KEY_S)) {
+            speedX += -40F * (float) Math.sin(Math.toRadians(getYaw()));
+            speedZ += 40F * (float) Math.cos(Math.toRadians(getYaw()));
+        }
+        if (KeyCallback.isKeyPressed(GLFW_KEY_A)) {
+            speedX += -40F * (float) Math.cos(Math.toRadians(getYaw()));
+            speedZ += -40F * (float) Math.sin(Math.toRadians(getYaw()));
+        }
+        if (KeyCallback.isKeyPressed(GLFW_KEY_D)) {
+            speedX += 40F * (float) Math.cos(Math.toRadians(getYaw()));
+            speedZ += 40F * (float) Math.sin(Math.toRadians(getYaw()));
+        }
 
-        if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) addPosition(0, 0.4F, 0);
-        if(KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) addPosition(0, -0.4F, 0);
+        if (KeyCallback.isKeyPressed(GLFW_KEY_SPACE)) addPosition(0, 0.4F, 0);
+        if (KeyCallback.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) addPosition(0, -0.4F, 0);
 
         /*if(KeyListener.isKeyPressed(GLFW_KEY_SPACE) && !isInAir) {
             speedY = 0.5F;      //Add vertical speed to the player

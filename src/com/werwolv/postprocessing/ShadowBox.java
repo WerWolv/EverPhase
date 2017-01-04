@@ -213,15 +213,12 @@ public class ShadowBox {
         farWidth = (float) (SHADOW_DISTANCE * Math.tan(Math.toRadians(RendererMaster.FOV)));
         nearWidth = (float) (RendererMaster.NEAR_PLANE
                 * Math.tan(Math.toRadians(RendererMaster.FOV)));
-        farHeight = farWidth / getAspectRatio();
-        nearHeight = nearWidth / getAspectRatio();
+        farHeight = farWidth / Main.getAspectRatio();
+        nearHeight = nearWidth / Main.getAspectRatio();
     }
 
     /**
      * @return The aspect ratio of the display (width:height ratio).
      */
-    private float getAspectRatio() {
-        return (float) Main.getWindowSize()[0] / (float) Main.getWindowSize()[1];
-    }
 
 }
