@@ -9,7 +9,8 @@ uniform vec4 size;
 
 void main(void){
 
-	if((textureCoords.x < size.x || textureCoords.y < size.y || textureCoords.x > size.z || textureCoords.y > size.w)) discard;
+	if(!(textureCoords.x < size.x || textureCoords.y < size.y || textureCoords.x > size.z || textureCoords.y > size.w)) {
 	    out_Color = texture(guiTexture,textureCoords);
+	}
 
 }

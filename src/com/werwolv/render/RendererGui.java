@@ -36,6 +36,7 @@ public class RendererGui {
 
     public void render(Gui gui) {
         shader.start();                                                     //Start the shader
+        RendererMaster.disableCulling();
         GL30.glBindVertexArray(quad.getVaoID());                            //Bind the VAO of the quad to memory
         GL20.glEnableVertexAttribArray(0);                            //Enable the vertices buffer
         GL11.glEnable(GL11.GL_BLEND);                                       //Enable transparency
@@ -58,6 +59,7 @@ public class RendererGui {
         GL20.glDisableVertexAttribArray(0);                          //Disable the vertices buffer
         GL30.glBindVertexArray(0);                           //Unbind the VAO
         shader.loadSize(0.0F, 0.0F, 1.0F, 1.0F);
+        RendererMaster.enableCulling();
         shader.stop();                                                      //Stop the shader
 
         textureUnits.clear();
@@ -66,8 +68,8 @@ public class RendererGui {
     public void drawTexture(float posX, float posY, float scale, Vector4f size, GuiTextureUnit texture) {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
-        shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f(posX, posY), new Vector2f(scale, scale * Main.getAspectRatio())));
-        shader.loadSize(size.x / texture.getSize(), size.y / texture.getSize(), size.z / texture.getSize() * Main.getAspectRatio(), size.w / texture.getSize() * Main.getAspectRatio());
+        shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f((posX + 1) / 2, (posY + 1) / 2), new Vector2f(scale, -scale * Main.getAspectRatio())));
+        shader.loadSize(size.x / texture.getSize(), size.y / texture.getSize(), size.z / texture.getSize(), size.w / texture.getSize());
         GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
     }
 

@@ -12,17 +12,15 @@ import com.werwolv.gui.GuiIngame;
 import com.werwolv.gui.GuiMinimap;
 import com.werwolv.main.Main;
 import com.werwolv.resource.TextureTerrainPack;
+import com.werwolv.structure.Labyrinth;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import com.werwolv.structure.Labyrinth;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -81,9 +79,9 @@ public class LevelOverworld extends Level {
         waters.add(new TileWater(renderer, this, 75, -75, 0));
 
         guiMinimap = new GuiMinimap(renderer, this, new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
-        //guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
+        guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
         guis.add(guiMinimap);
-        //guis.add(guiIngame);
+        guis.add(guiIngame);
 
         currentGui.add(null);
 
