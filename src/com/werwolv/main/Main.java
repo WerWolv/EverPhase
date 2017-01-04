@@ -12,6 +12,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 import java.nio.IntBuffer;
 
@@ -81,7 +82,7 @@ public class Main {
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
 
-        window = glfwCreateWindow(vidmode.width(), vidmode.height(), "GameRunner", NULL, NULL);
+        window = glfwCreateWindow(800, 600, "GameRunner", NULL, NULL);
 
 
         if(window == NULL) {
@@ -91,6 +92,12 @@ public class Main {
         glfwSetKeyCallback(window, keyCallback = new KeyCallback());
         glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
         glfwSetCursorPosCallback(window, cursorPosCallback = new CursorPositionCallback());
+
+        glfwSetWindowSizeCallback(window, (window, width, height) -> {
+            GL11.glViewport(0, 0, width, height);
+            glfwSetWindowSize(window, width, height);
+            currentLevel.reInitRenderer();
+        });
 
         glfwSetWindowPos(window, 0, 0);
         glfwMakeContextCurrent(window);

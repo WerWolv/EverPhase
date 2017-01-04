@@ -32,6 +32,10 @@ public abstract class Level {
         this.renderer = new RendererMaster(loader, player);
     }
 
+    public void reInitRenderer() {
+        this.renderer = new RendererMaster(loader, player);
+    }
+
     public abstract void initLevel();
 
     public abstract void updateLevel();
