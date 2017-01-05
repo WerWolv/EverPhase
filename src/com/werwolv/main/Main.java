@@ -31,11 +31,61 @@ public class Main {
     private static float delta;
     private static long window;
     private static EntityPlayer player;
+    private static boolean fullscreen = false;
     private boolean running = true;
 
     public static void main(String[] args) {
+        for (String arg : args) {
+            System.out.println(arg);
+            switch (arg) {
+                case "fullscreen":
+                    fullscreen = true;
+                    break;
+            }
+        }
+
         Main game = new Main();
         game.run();
+    }
+
+    public static void init() {
+        if(!glfwInit()){
+            System.err.println("GLFW initialization failed!");
+        }
+
+        glfwDestroyWindow(window);
+
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+
+        window = glfwCreateWindow(fullscreen ? vidmode.width() : 720, fullscreen ? vidmode.height() : 480, "GameRunner", fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+
+
+        if(window == NULL) {
+            System.err.println("Could not create window!");
+        }
+
+        glfwSetKeyCallback(window, keyCallback = new KeyCallback());
+        glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
+        glfwSetCursorPosCallback(window, cursorPosCallback = new CursorPositionCallback());
+
+        glfwSetWindowSizeCallback(window, (window, width, height) -> {
+            GL11.glViewport(0, 0, width, height);
+            glfwSetWindowSize(window, width, height);
+            currentLevel.reInitRenderer();
+        });
+
+        glfwSetWindowPos(window, 100, 100);
+        glfwMakeContextCurrent(window);
+
+        glfwShowWindow(window);
+
+        GL.createCapabilities();
+        glClearColor(0.56F, 0.258F, 0.425F, 1.0F);
+
+        glEnable(GL_DEPTH_TEST);
     }
 
     public static void setCursorVisibility(boolean visible) {
@@ -59,7 +109,6 @@ public class Main {
         return (float) getWindowSize()[0] / (float) getWindowSize()[1];
     }
 
-
     private static long getCurrentTime() {
         return (long) (GLFW.glfwGetTime() * 1000);
     }
@@ -72,51 +121,14 @@ public class Main {
         return player;
     }
 
-    public static void init() {
-        if(!glfwInit()){
-            System.err.println("GLFW initialization failed!");
-        }
-
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-
-        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-
-        window = glfwCreateWindow(800, 600, "GameRunner", NULL, NULL);
-
-
-        if(window == NULL) {
-            System.err.println("Could not create window!");
-        }
-
-        glfwSetKeyCallback(window, keyCallback = new KeyCallback());
-        glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
-        glfwSetCursorPosCallback(window, cursorPosCallback = new CursorPositionCallback());
-
-        glfwSetWindowSizeCallback(window, (window, width, height) -> {
-            GL11.glViewport(0, 0, width, height);
-            glfwSetWindowSize(window, width, height);
-            currentLevel.reInitRenderer();
-        });
-
-        glfwSetWindowPos(window, 0, 0);
-        glfwMakeContextCurrent(window);
-
-        glfwShowWindow(window);
-
-        GL.createCapabilities();
-        glClearColor(0.56F, 0.258F, 0.425F, 1.0F);
-
-        glEnable(GL_DEPTH_TEST);
+    private void run() {
+        init();
 
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
 
         lastFrameTime = getCurrentTime();
         setCursorVisibility(false);
-    }
 
-    private void run() {
-        init();
         player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
 
         currentLevel = new LevelOverworld(player);
