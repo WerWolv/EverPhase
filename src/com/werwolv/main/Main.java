@@ -83,9 +83,13 @@ public class Main {
         glfwShowWindow(window);
 
         GL.createCapabilities();
-        glClearColor(0.56F, 0.258F, 0.425F, 1.0F);
 
         glEnable(GL_DEPTH_TEST);
+
+        lastFrameTime = getCurrentTime();
+        setCursorVisibility(false);
+
+        System.out.println("OpenGL: " + glGetString(GL_VERSION));
     }
 
     public static void setCursorVisibility(boolean visible) {
@@ -123,11 +127,6 @@ public class Main {
 
     private void run() {
         init();
-
-        System.out.println("OpenGL: " + glGetString(GL_VERSION));
-
-        lastFrameTime = getCurrentTime();
-        setCursorVisibility(false);
 
         player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
 

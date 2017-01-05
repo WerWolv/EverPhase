@@ -61,10 +61,10 @@ public class LevelOverworld extends Level {
 
         lights.add(entitySun);
 
-        //entities.add(entity);
-        //entitiesNM.add(entityNm);
+        /*entities.add(entity);
+        entitiesNM.add(entityNm);
 
-        /*Random random = new Random();
+        Random random = new Random();
         for (int i = 0; i < 512; i++) {
             int x = random.nextInt(250);
             int z = -random.nextInt(250);
