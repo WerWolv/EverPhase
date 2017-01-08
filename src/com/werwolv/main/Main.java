@@ -1,5 +1,6 @@
 package com.werwolv.main;
 
+import com.werwolv.api.event.EventHandler;
 import com.werwolv.callback.CursorPositionCallback;
 import com.werwolv.callback.KeyCallback;
 import com.werwolv.callback.MouseButtonCallback;
@@ -7,6 +8,7 @@ import com.werwolv.entity.EntityPlayer;
 import com.werwolv.entity.particle.ParticleManager;
 import com.werwolv.level.Level;
 import com.werwolv.level.LevelOverworld;
+import com.werwolv.modelloader.ModelLoader;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -22,17 +24,20 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
 
-    public static KeyCallback keyCallback;
-    public static MouseButtonCallback mouseButtonCallback;
-    public static CursorPositionCallback cursorPosCallback;
+    private static KeyCallback keyCallback;
+    private static MouseButtonCallback mouseButtonCallback;
+    private static CursorPositionCallback cursorPosCallback;
 
-    public static Level currentLevel;
+    private static Level currentLevel;
     private static long lastFrameTime;
     private static float delta;
     private static long window;
     private static EntityPlayer player;
     private static boolean fullscreen = false;
     private boolean running = true;
+
+    private ModelLoader loader = new ModelLoader();
+    private EventHandler eventHandler = new EventHandler();
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -128,14 +133,15 @@ public class Main {
     private void run() {
         init();
 
-        player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
+        player = new EntityPlayer(loader, new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
 
-        currentLevel = new LevelOverworld(player);
+        currentLevel = new LevelOverworld(loader, player);
 
         currentLevel.initLevel();
         while(running) {
             glfwSwapBuffers(window);
 
+            eventHandler.processEvents();
             currentLevel.updateLevel();
             currentLevel.renderLevel();
             currentLevel.renderGUI();
