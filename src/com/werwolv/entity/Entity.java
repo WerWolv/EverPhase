@@ -16,6 +16,7 @@ public class Entity {
     private float scale;            //Size of the entity
 
     private int textureIndex = 0;   //Address of the texture stored in memory
+    private ModelLoader loader;
 
     public Entity(ModelLoader loader, String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
         if (!(modelPath.equals("") || texturePath.equals(""))) {
@@ -25,6 +26,7 @@ public class Entity {
                 this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
         }
 
+        this.loader = loader;
         this.position = position;
         this.rotX = rotation.x;
         this.rotY = rotation.y;
@@ -41,6 +43,7 @@ public class Entity {
                 this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
         }
 
+        this.loader = loader;
         this.position = position;
         this.rotX = rotation.x;
         this.rotY = rotation.y;
@@ -144,5 +147,9 @@ public class Entity {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public ModelLoader getLoader() {
+        return loader;
     }
 }

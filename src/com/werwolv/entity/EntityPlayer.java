@@ -3,8 +3,14 @@ package com.werwolv.entity;
 import com.werwolv.callback.KeyCallback;
 import com.werwolv.gui.Gui;
 import com.werwolv.main.Main;
+import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.skill.Skill;
+import com.werwolv.skill.SkillAttack;
 import com.werwolv.terrain.Terrain;
 import org.joml.Vector3f;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -22,10 +28,26 @@ public class EntityPlayer extends Entity{
 
     private Gui currentGui;
 
-    public EntityPlayer(Vector3f position, Vector3f rotation, float scale) {
-        super(null, "", "", position, rotation, scale, false);
+    private List<Skill> skills = new ArrayList<>();
+
+    public EntityPlayer(ModelLoader loader, Vector3f position, Vector3f rotation, float scale) {
+        super(loader, "", "", position, rotation, scale, false);
+
+        skills.add(new SkillAttack("Attack", loader.loadGuiTexture("gui/skills").getTextureID(), 99));
     }
 
+    public void update() {
+
+    }
+
+    public void onXPEarned() {
+        for (Skill skill : skills) {
+            if (skill.getCurrentXP() >= skill.getXPToNextLevel(skill.getCurrentLevel())) {
+                skill.levelUp();
+                skill.onLevelUp();
+            }
+        }
+    }
 
     public void move(Terrain terrain) {
         speedX = speedZ = 0;    //Reset the speed of the player
@@ -106,5 +128,12 @@ public class EntityPlayer extends Entity{
 
     public void setCurrentGui(Gui currentGui) {
         this.currentGui = currentGui;
+    }
+
+    public Skill getSkill(Class skillClass) {
+        for (Skill skill : skills)
+            if (skillClass.isInstance(skill))
+                return skill;
+        return null;
     }
 }
