@@ -39,8 +39,6 @@ public class LevelOverworld extends Level {
 
     private List<Gui> currentGui = new ArrayList<>();
 
-    private boolean lastPressedE = false;
-
     public LevelOverworld(EntityPlayer player) {
         super(player);
     }
