@@ -1,1 +1,6 @@
+# Build directories
+bin/
+out/
+
+# IDE generated user files
 .idea
