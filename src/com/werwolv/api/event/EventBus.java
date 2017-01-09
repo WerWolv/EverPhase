@@ -1,5 +1,7 @@
 package com.werwolv.api.event;
 
+import org.reflections.Reflections;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,13 +10,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-public class EventHandler {
+public class EventBus {
 
     private static Stack<Event> eventStack = new Stack<>();
     private static List<Class<?>> eventHandlers = new ArrayList<>();
 
-    public static void registerEventHandler(Class<?> eventHandlerClazz) {
-        eventHandlers.add(eventHandlerClazz);
+    public static void registerEventHandlers() {
+        Reflections reflections = new Reflections("");
+
+        for(Class<?> clazz : reflections.getTypesAnnotatedWith(EventBusSubscriber.class))
+            eventHandlers.add(clazz);
     }
 
     public static void postEvent(Event event) {
@@ -27,7 +32,7 @@ public class EventHandler {
             Event currEvent = iterator.next();
 
             for (Class eventHandler : eventHandlers)
-                runAllAnnotatedWith(SubscribeEvent.class, eventHandler, currEvent);
+                    runAllAnnotatedWith(SubscribeEvent.class, eventHandler, currEvent);
 
             iterator.remove();
         }

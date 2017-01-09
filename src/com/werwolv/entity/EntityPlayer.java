@@ -1,5 +1,7 @@
 package com.werwolv.entity;
 
+import com.werwolv.api.event.EventBus;
+import com.werwolv.api.event.player.PlayerMoveEvent;
 import com.werwolv.callback.KeyCallback;
 import com.werwolv.gui.Gui;
 import com.werwolv.main.Main;
@@ -85,7 +87,7 @@ public class EntityPlayer extends Entity{
             }
         }
 
-        addPosition(speedX * Main.getFrameTimeSeconds(), speedY * Main.getFrameTimeSeconds(), speedZ * Main.getFrameTimeSeconds());    //Add the speeds calculated above to the player
+        EventBus.postEvent(new PlayerMoveEvent(this, position, new Vector3f(speedX, speedY, speedZ), new Vector3f(pitch, yaw, roll)));
 
         float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z) + PLAYER_HEIGHT;   //Get the height of the terrain at the current position of the player
         if(position.y < terrainHeight) {        //If the player is under the terrain plane...
@@ -98,9 +100,9 @@ public class EntityPlayer extends Entity{
     /* Getters and Setters */
 
     public void addPosition(float x, float y, float z) {
-        position.x += x;
-        position.y += y;
-        position.z += z;
+        position.x += x * Main.getFrameTimeSeconds();
+        position.y += y * Main.getFrameTimeSeconds();
+        position.z += z * Main.getFrameTimeSeconds();
     }
 
     public float getPitch() {
