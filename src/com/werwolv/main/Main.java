@@ -1,6 +1,6 @@
 package com.werwolv.main;
 
-import com.werwolv.api.event.EventHandler;
+import com.werwolv.api.event.EventBus;
 import com.werwolv.callback.CursorPositionCallback;
 import com.werwolv.callback.KeyCallback;
 import com.werwolv.callback.MouseButtonCallback;
@@ -37,7 +37,6 @@ public class Main {
     private boolean running = true;
 
     private ModelLoader loader = new ModelLoader();
-    private EventHandler eventHandler = new EventHandler();
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -93,6 +92,7 @@ public class Main {
 
         lastFrameTime = getCurrentTime();
         setCursorVisibility(false);
+        EventBus.registerEventHandlers();
 
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
     }
@@ -141,7 +141,7 @@ public class Main {
         while(running) {
             glfwSwapBuffers(window);
 
-            eventHandler.processEvents();
+            EventBus.processEvents();
             currentLevel.updateLevel();
             currentLevel.renderLevel();
             currentLevel.renderGUI();

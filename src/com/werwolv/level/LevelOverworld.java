@@ -1,5 +1,7 @@
 package com.werwolv.level;
 
+import com.werwolv.api.event.EventBus;
+import com.werwolv.api.event.player.OpenGuiEvent;
 import com.werwolv.callback.CursorPositionCallback;
 import com.werwolv.callback.KeyCallback;
 import com.werwolv.entity.Entity;
@@ -9,6 +11,7 @@ import com.werwolv.entity.particle.EntityParticle;
 import com.werwolv.entity.particle.ParticleManager;
 import com.werwolv.gui.Gui;
 import com.werwolv.gui.GuiIngame;
+import com.werwolv.gui.GuiInventory;
 import com.werwolv.gui.GuiMinimap;
 import com.werwolv.main.Main;
 import com.werwolv.resource.TextureTerrainPack;
@@ -19,7 +22,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class LevelOverworld extends Level {
 
     private Labyrinth labyrinth;
 
-    private Gui guiMinimap, guiIngame;
+    private Gui guiMinimap, guiIngame, guiInventory;
 
     private EntityLight entitySun = new EntityLight(new Vector3f(1000000, 1500000, -1000000), new Vector3f(1, 0.9F, 0.9F));
 
@@ -79,6 +81,8 @@ public class LevelOverworld extends Level {
 
         guiMinimap = new GuiMinimap(renderer, this, new Vector2f(0.85F, 0.75F), new Vector2f(0.30F, 0.30F));
         guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
+        guiInventory = new GuiInventory(renderer, 0, new Vector2f(0, 0), new Vector2f(1, 1));
+
         guis.add(guiMinimap);
         guis.add(guiIngame);
 
@@ -134,7 +138,7 @@ public class LevelOverworld extends Level {
                 Main.setCursorVisibility(false);
                 CursorPositionCallback.enableCursorListener(true);
             } else {
-                player.setCurrentGui(null);
+                EventBus.postEvent(new OpenGuiEvent(player, guiInventory));
                 Main.setCursorVisibility(true);
                 CursorPositionCallback.enableCursorListener(false);
             }
