@@ -21,7 +21,7 @@ public class EventHandler {
         eventStack.push(event);
     }
 
-    public void processEvents() {
+    public static void processEvents() {
 
         for (Iterator<Event> iterator = eventStack.iterator(); iterator.hasNext(); ) {
             Event currEvent = iterator.next();
@@ -33,7 +33,7 @@ public class EventHandler {
         }
     }
 
-    private void runAllAnnotatedWith(Class<? extends Annotation> annotation, Class<?> eventListener, Event event) {
+    private static void runAllAnnotatedWith(Class<? extends Annotation> annotation, Class<?> eventListener, Event event) {
         Method[] methods = eventListener.getMethods();
 
         for (Method method : methods) {
