@@ -17,10 +17,11 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class EntityPlayer extends Entity{
 
-    private static final float PLAYER_HEIGHT = 4.0F;    //Height of the player to render the camera above the ground.
+    private static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
 
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
     private boolean isInAir = false;                    //Is the player currently in the air?
+    private boolean canFly = false;
 
     private float pitch;    //The horizontal angle of the camera
     private float yaw;      //The vertical angle of the camera
@@ -52,7 +53,7 @@ public class EntityPlayer extends Entity{
     public void move(Terrain terrain) {
         speedX = speedZ = 0;    //Reset the speed of the player
 
-        //speedY += GRAVITY;      //Add gravity to the player to keep it on the ground
+        speedY += canFly ? -speedY : GRAVITY;      //Add gravity to the player to keep it on the ground
 
         //Keybindings to move the player in different directions based of the pressed buttons and the direction of the camera
         if (KeyCallback.isKeyPressed(GLFW_KEY_W)) {
@@ -71,14 +72,18 @@ public class EntityPlayer extends Entity{
             speedX += 40F * (float) Math.cos(Math.toRadians(getYaw()));
             speedZ += 40F * (float) Math.sin(Math.toRadians(getYaw()));
         }
+        if(canFly) {
+            if(KeyCallback.isKeyPressed(GLFW_KEY_SPACE))
+                speedY += 40F;
 
-        if (KeyCallback.isKeyPressed(GLFW_KEY_SPACE)) addPosition(0, 0.4F, 0);
-        if (KeyCallback.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) addPosition(0, -0.4F, 0);
-
-        /*if(KeyListener.isKeyPressed(GLFW_KEY_SPACE) && !isInAir) {
-            speedY = 0.5F;      //Add vertical speed to the player
-            isInAir = true;     //The player is now in the air
-        }*/
+            if (KeyCallback.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
+                speedY -= 40F;
+        } else {
+            if (KeyCallback.isKeyPressed(GLFW_KEY_SPACE) && !isInAir) {
+                speedY += 30F;
+                isInAir = true;
+            }
+        }
 
         addPosition(speedX * Main.getFrameTimeSeconds(), speedY * Main.getFrameTimeSeconds(), speedZ * Main.getFrameTimeSeconds());    //Add the speeds calculated above to the player
 
@@ -135,5 +140,9 @@ public class EntityPlayer extends Entity{
             if (skillClass.isInstance(skill))
                 return skill;
         return null;
+    }
+
+    public void toggleFlight() {
+        this.canFly = !canFly;
     }
 }

@@ -135,7 +135,7 @@ public class Main {
 
         player = new EntityPlayer(loader, new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
 
-        currentLevel = new LevelOverworld(loader, player);
+        currentLevel = new LevelOverworld(player);
 
         currentLevel.initLevel();
         while(running) {

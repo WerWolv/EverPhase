@@ -19,6 +19,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +141,9 @@ public class LevelOverworld extends Level {
                 CursorPositionCallback.enableCursorListener(false);
             }
         }
+
+        if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F))
+            player.toggleFlight();
 
         if (player.getCurrentGui() == null)
             player.move(terrain);
