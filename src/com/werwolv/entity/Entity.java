@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 
 public class Entity {
 
-    public static final float GRAVITY = -1;        //Gravity constance. Used for jumping in the moment
+    public static final float GRAVITY = -60.0F;        //Gravity constance. Used for jumping in the moment
     protected Vector3f position;      //Position of the entity in the world
     private ModelTextured model;    //Model and texture of the entity
     private float rotX, rotY, rotZ; //Rotation of the entity

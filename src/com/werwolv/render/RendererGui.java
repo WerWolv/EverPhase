@@ -14,7 +14,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.newdawn.slick.TrueTypeFont;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

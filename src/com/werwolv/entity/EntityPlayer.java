@@ -55,7 +55,7 @@ public class EntityPlayer extends Entity{
     public void move(Terrain terrain) {
         speedX = speedZ = 0;    //Reset the speed of the player
 
-        speedY += canFly ? -speedY : GRAVITY;      //Add gravity to the player to keep it on the ground
+        speedY += canFly ? -speedY : GRAVITY * Main.getFrameTimeSeconds();      //Add gravity to the player to keep it on the ground
 
         //Keybindings to move the player in different directions based of the pressed buttons and the direction of the camera
         if (KeyCallback.isKeyPressed(GLFW_KEY_W)) {

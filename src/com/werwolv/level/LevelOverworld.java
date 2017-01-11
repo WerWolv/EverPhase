@@ -24,6 +24,7 @@ import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -37,7 +38,7 @@ public class LevelOverworld extends Level {
 
     private Gui guiMinimap, guiIngame, guiInventory;
 
-    private EntityLight entitySun = new EntityLight(new Vector3f(1000000, 1500000, -1000000), new Vector3f(1, 0.9F, 0.9F));
+    private EntityLight entitySun = new EntityLight(new Vector3f(10, 12, -10), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
 
     private List<Gui> currentGui = new ArrayList<>();
 
@@ -49,6 +50,9 @@ public class LevelOverworld extends Level {
     public void initLevel() {
         entity = new Entity(loader, "dragon", "white", new Vector3f(10, 0, -10), new Vector3f(0, 60, 0), 1, false);
         entityNm = new Entity(loader, "crate", "crate", new Vector3f(20, 20, -10), new Vector3f(0, 60, 0), 0.03F, true);
+
+        entity.getModel().getTexture().setReflectivity(1.0F);
+        entity.getModel().getTexture().setShineDamper(3);
 
         entityNm.getModel().getTexture().setReflectivity(0.5F);
         entityNm.getModel().getTexture().setShineDamper(10);
@@ -62,15 +66,15 @@ public class LevelOverworld extends Level {
 
         lights.add(entitySun);
 
-        /*entities.add(entity);
+        entities.add(entity);
         entitiesNM.add(entityNm);
 
         Random random = new Random();
-        for (int i = 0; i < 512; i++) {
+        for (int i = 0; i < 127; i++) {
             int x = random.nextInt(250);
             int z = -random.nextInt(250);
             entities.add(new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, z), z), new Vector3f(0, 0, 0), 1, false));
-        }*/
+        }
 
         labyrinth.process();
         entities.addAll(labyrinth.RenderLabyrinth());

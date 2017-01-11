@@ -1,5 +1,8 @@
 # VoxelGame
 
+This is the repository for a WIP MMORPG Game based on LWJGL using Java.
+There are currently four people working on this project.
+
 ## To-Do:
 
 ✓ -> Done
@@ -17,3 +20,6 @@
 |Magic (Teleports, etc.)|-|✗|
 |Tinkering / Invention|-|✗|
 |Quests|-|✗|
+|Achievements|-|✗|
+|Fonts|-|✗|
+

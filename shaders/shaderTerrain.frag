@@ -30,7 +30,7 @@ void main(void) {
     float lightFactor = 1.0;
 
     if(shadowCoords.z > objectNearestLight) {
-        lightFactor = 0.2;
+        lightFactor = 0.8;
     }
 
     vec4 blendMapColor = texture(blendMap, pass_textureCoords);
