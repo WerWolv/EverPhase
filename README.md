@@ -1,25 +1,42 @@
-# VoxelGame
+# VoxelGame Client
 
-This is the repository for a WIP MMORPG Game based on LWJGL using Java.
-There are currently four people working on this project.
+A MMORPG based on LWJGL using Java.
+
+This project is by far not complete, thus expect some bugs and crashes while playing this game.
+Feel free to test the game and report or help us to fix the problems.
+
+License: BSD 3-Clause (see LICENSE.txt)
 
 ## To-Do:
 
 ✓ -> Done
 
-◔ -> Working on it
+◔ -> WIP
 
-✗ -> Not Started Yet
+✗ -> Not started yet
 
-|Objective|Who works on it|State|
-|---------|----------------|-----|
+|Objective|Developer(s)|State|
+|---------|------------|-----|
 |Render Engine|Nik|◔|
-|Skilltree|-|✗|
-|Skills|-|✗|
+|Fonts|-|✗|
+|CMake Build|SmallJoker|◔|
+|Achievements|-|✗|
 |Random Dungeons (Rogue Like)|Mrasam|◔|
 |Magic (Teleports, etc.)|-|✗|
-|Tinkering / Invention|-|✗|
 |Quests|-|✗|
-|Achievements|-|✗|
-|Fonts|-|✗|
+|Skills|-|✗|
+|Skilltree|-|✗|
+|Tinkering / Invention|-|✗|
+
+
+## Build Requirements
+
+Any Java IDE or only the JDK, in case you do not want to install yet another IDE:
+
+- [Eclipse for Java developers](http://www.eclipse.org/downloads/packages/release/Oxygen/M4)
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/?fromMenu#chooseYourEdition), used by the developers
+- [NetBeans](http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html)
+- [Java SDK / JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html), Warning: tricky to build projects!
+
+Please note that the CMake support is not done yet. You will need to bundle the jar libraries manually.
 
