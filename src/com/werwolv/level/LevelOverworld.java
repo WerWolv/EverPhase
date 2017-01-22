@@ -12,7 +12,7 @@ import com.werwolv.gui.Gui;
 import com.werwolv.gui.GuiIngame;
 import com.werwolv.gui.GuiInventory;
 import com.werwolv.main.Main;
-import com.werwolv.render.postProcessing.PostProcessing;
+import com.werwolv.render.postProcessing.*;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.structure.Labyrinth;
 import com.werwolv.terrain.Terrain;
@@ -41,7 +41,8 @@ public class LevelOverworld extends Level {
 
     private List<Gui> currentGui = new ArrayList<>();
 
-    FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_RENDER_BUFFER);
+    private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
+    private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -91,8 +92,6 @@ public class LevelOverworld extends Level {
         guis.add(guiIngame);
 
         currentGui.add(null);
-
-        PostProcessing.init(loader);
     }
 
     @Override
@@ -114,7 +113,9 @@ public class LevelOverworld extends Level {
         renderer.getRendererWater().render(waters, lights, player);
 
         postProcessing.unbindFrameBuffer();
-        PostProcessing.doPostProcessing(postProcessing.getColourTexture());
+
+        postProcessing.resolveToFBO(outputFBO);
+        PostProcessing.doPostProcessing(outputFBO.getColourTexture());
     }
 
     @Override
@@ -152,4 +153,18 @@ public class LevelOverworld extends Level {
         }
     }
 
+    @Override
+    public void applyPostProcessingEffects() {
+        super.applyPostProcessingEffects();
+
+        PostProcessing.applyEffect(new PPContrast(0.3F));
+    }
+
+    public void clean() {
+        super.clean();
+
+        postProcessing.clean();
+        outputFBO.clean();
+        PostProcessing.clean();
+    }
 }

@@ -11,7 +11,9 @@ public class RendererImage {
 		this.fbo = new FrameBufferObject(width, height, FrameBufferObject.NONE);
 	}
 
-	public RendererImage() {}
+	public RendererImage() {
+
+	}
 
 	public void renderQuad() {
 		if (fbo != null) {
@@ -28,9 +30,9 @@ public class RendererImage {
 		return fbo.getColourTexture();
 	}
 
-	public void cleanUp() {
+	public void clean() {
 		if (fbo != null) {
-			fbo.cleanUp();
+			fbo.clean();
 		}
 	}
 

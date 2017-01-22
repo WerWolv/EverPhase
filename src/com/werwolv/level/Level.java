@@ -6,6 +6,7 @@ import com.werwolv.entity.EntityPlayer;
 import com.werwolv.gui.Gui;
 import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.render.RendererMaster;
+import com.werwolv.render.postProcessing.PostProcessing;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
 
@@ -43,6 +44,10 @@ public abstract class Level {
     public abstract void renderLevel();
 
     public abstract void renderGUI();
+
+    public void applyPostProcessingEffects() {
+        PostProcessing.init(loader);
+    }
 
     public void clean() {
         entities.clear();

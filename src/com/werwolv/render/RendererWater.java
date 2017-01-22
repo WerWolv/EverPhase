@@ -24,7 +24,6 @@ public class RendererWater {
 
 	private ModelRaw quad;
 	private ShaderWater shader;
-	//private FrameBufferWater fboWater;
 	private FrameBufferObject fboReflection;
 	private FrameBufferObject fboRefraction;
 	private float moveFactor = 0;
@@ -33,8 +32,8 @@ public class RendererWater {
 
 	public RendererWater(ResourceLoader loader, Matrix4f projectionMatrix, float nearPlane, float farPlane) {
 		this.shader = new ShaderWater();
-		fboReflection = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE | FrameBufferObject.DEPTH_RENDER_BUFFER);
-		fboRefraction = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE | FrameBufferObject.DEPTH_RENDER_BUFFER);
+		fboReflection = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE);
+		fboRefraction = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE);
 
 		textureIdDuDvMap = loader.loadTexture("dudvMapWater");
 		textureIdNormalMap = loader.loadTexture("normalMap");

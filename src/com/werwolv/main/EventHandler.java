@@ -31,5 +31,4 @@ public class EventHandler {
 
         System.out.println(Main.getPlayer().getSelectedItem());
     }
-
 }

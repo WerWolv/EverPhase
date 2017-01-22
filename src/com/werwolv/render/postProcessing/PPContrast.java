@@ -1,31 +1,23 @@
 package com.werwolv.render.postProcessing;
 
-import com.werwolv.render.RendererImage;
 import com.werwolv.shader.ShaderContrast;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 
-public class PPContrast {
+public class PPContrast extends PostProcessEffect<ShaderContrast> {
 
-    private RendererImage renderer;
-    private ShaderContrast shader;
+    private float contrast;
 
-    public PPContrast() {
-        this.renderer = new RendererImage();
-        this.shader = new ShaderContrast();
+    public PPContrast(float contrast) {
+        super(new ShaderContrast());
+
+        this.contrast = contrast;
     }
 
+    @Override
     public void render(int texture) {
-        shader.start();
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-        renderer.renderQuad();
-        shader.stop();
-    }
+        super.render(texture);
 
-    public void clean() {
-        renderer.cleanUp();
-        shader.clean();
+        this.getShader().start();
+        this.getShader().loadContrast(contrast);
+        this.getShader().stop();
     }
-
 }

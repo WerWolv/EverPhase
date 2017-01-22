@@ -15,6 +15,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import java.nio.IntBuffer;
 
@@ -61,7 +62,6 @@ public class Main {
         glfwDestroyWindow(window);
 
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-        glfwWindowHint(GLFW_SAMPLES, 8);
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
@@ -90,8 +90,8 @@ public class Main {
         glfwShowWindow(window);
 
         GL.createCapabilities();
-
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL13.GL_MULTISAMPLE);
 
         lastFrameTime = getCurrentTime();
         setCursorVisibility(false);
@@ -141,6 +141,8 @@ public class Main {
         currentLevel = new LevelOverworld(player);
 
         currentLevel.initLevel();
+
+        currentLevel.applyPostProcessingEffects();
         while(running) {
             glfwSwapBuffers(window);
 

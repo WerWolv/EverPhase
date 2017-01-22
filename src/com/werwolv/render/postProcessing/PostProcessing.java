@@ -6,25 +6,35 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PostProcessing {
 	
 	private static final float[] POSITIONS = { -1, 1, -1, -1, 1, 1, 1, -1 };	
 	private static ModelRaw quad;
-	private static PPContrast ppContrast;
+
+	private static List<PostProcessEffect> postProcessEffects = new ArrayList<>();
 
 	public static void init(ResourceLoader loader){
 		quad = loader.loadToVAO(POSITIONS, 2);
-		ppContrast = new PPContrast();
 	}
-	
-	public static void doPostProcessing(int colourTexture){
+
+	public static void doPostProcessing(int colorTexture){
 		start();
-		ppContrast.render(colourTexture);
+		postProcessEffects.get(0).render(colorTexture);
+
+		for(int effect = 1; effect < postProcessEffects.size(); effect++)
+			postProcessEffects.get(effect).render(postProcessEffects.get(effect - 1).getOutputTexture());
+
 		end();
 	}
 	
-	public static void cleanUp(){
-		ppContrast.clean();
+	public static void clean(){
+		for(PostProcessEffect effect : postProcessEffects)
+			effect.clean();
+
+		postProcessEffects.clear();
 	}
 	
 	private static void start(){
@@ -39,5 +49,8 @@ public class PostProcessing {
 		GL30.glBindVertexArray(0);
 	}
 
+	public static void applyEffect(PostProcessEffect effect) {
+		postProcessEffects.add(effect);
+	}
 
 }
