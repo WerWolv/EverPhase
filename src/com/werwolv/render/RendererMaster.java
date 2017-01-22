@@ -7,7 +7,6 @@ import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
 import com.werwolv.modelloader.ModelLoader;
-import com.werwolv.render.shadow.RendererShadowMapMaster;
 import com.werwolv.shader.ShaderEntity;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
@@ -46,8 +45,6 @@ public class RendererMaster {
 
     /* Shadow Renderer */
 
-    private RendererShadowMapMaster rendererShadowMap;
-
     private ModelLoader loader;
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
@@ -70,8 +67,6 @@ public class RendererMaster {
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
         rendererWater = new RendererWater(loader, projectionMatrix, fboWater, NEAR_PLANE, FAR_PLANE);
         rendererGui = new RendererGui(loader);
-
-        rendererShadowMap = new RendererShadowMapMaster(player);
     }
 
     /*
@@ -132,7 +127,7 @@ public class RendererMaster {
         shaderTerrain.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         shaderTerrain.loadLights(lights);
         shaderTerrain.loadViewMatrix(player);
-        rendererTerrain.render(terrains, rendererShadowMap.getToShadowMapSpaceMatrix());
+        rendererTerrain.render(terrains);
         shaderTerrain.stop();
 
         rendererSkybox.render(player, SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
@@ -143,19 +138,6 @@ public class RendererMaster {
         terrains.clear();
     }
 
-    public void renderShadowMap(List<Entity> entityList, List<Entity> entityListNm, EntityLight sun) {
-        for (Entity entity : entityList)
-            processEntity(entity);
-
-        for (Entity entity : entityListNm)
-            processEntityNM(entity);
-
-        rendererShadowMap.render(entities, sun);
-        rendererShadowMap.render(entitiesNM, sun);
-        entities.clear();
-        entitiesNM.clear();
-    }
-
     /*
      * Reset everything to start a new frame
      */
@@ -164,7 +146,6 @@ public class RendererMaster {
         glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0F);            //Clears the screen to the sky color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);    //Reset the color buffer- and depth buffer bit
         GL13.glActiveTexture(GL13.GL_TEXTURE5);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, getShadowMapTextureID());
     }
 
     /*
@@ -234,7 +215,6 @@ public class RendererMaster {
         shaderTerrain.clean();
         rendererWater.clean();
         rendererGui.clean();
-        rendererShadowMap.clean();
         rendererNM.clean();
     }
 
@@ -266,9 +246,6 @@ public class RendererMaster {
         return fboWater;
     }
 
-    public int getShadowMapTextureID() {
-        return rendererShadowMap.getShadowMap();
-    }
 
     public ModelLoader getModelLoader() {
         return loader;

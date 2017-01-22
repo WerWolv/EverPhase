@@ -5,7 +5,6 @@ import com.werwolv.callback.CursorPositionCallback;
 import com.werwolv.callback.KeyCallback;
 import com.werwolv.callback.MouseButtonCallback;
 import com.werwolv.entity.EntityPlayer;
-import com.werwolv.entity.particle.ParticleManager;
 import com.werwolv.level.Level;
 import com.werwolv.level.LevelOverworld;
 import com.werwolv.modelloader.ModelLoader;
@@ -160,6 +159,5 @@ public class Main {
         keyCallback.free();
         mouseButtonCallback.free();
         cursorPosCallback.free();
-        ParticleManager.clean();
     }
 }
