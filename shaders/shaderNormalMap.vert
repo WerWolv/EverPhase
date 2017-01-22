@@ -1,11 +1,11 @@
 #version 400 core
 
 in vec3 position;
-in vec2 textureCoordinates;
+in vec2 textureCoords;
 in vec3 normal;
 in vec3 tangent;
 
-out vec2 pass_textureCoordinates;
+out vec2 pass_textureCoords;
 out vec3 toLightVector[4];
 out vec3 toCameraVector;
 out float visibility;
@@ -31,7 +31,7 @@ void main(void){
 	vec4 positionRelativeToCam = modelViewMatrix * vec4(position,1.0);
 	gl_Position = projectionMatrix * positionRelativeToCam;
 	
-	pass_textureCoordinates = (textureCoordinates/numberOfRows) + offset;
+	pass_textureCoords = (textureCoords/numberOfRows) + offset;
 	
 	vec3 surfaceNormal = (modelViewMatrix * vec4(normal,0.0)).xyz;
 

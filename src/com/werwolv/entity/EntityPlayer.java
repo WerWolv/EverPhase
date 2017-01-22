@@ -1,9 +1,12 @@
 package com.werwolv.entity;
 
 import com.werwolv.api.event.EventBus;
+import com.werwolv.api.event.player.PlayerItemUseEvent;
 import com.werwolv.api.event.player.PlayerMoveEvent;
 import com.werwolv.callback.KeyCallback;
+import com.werwolv.callback.MouseButtonCallback;
 import com.werwolv.gui.Gui;
+import com.werwolv.item.ItemStack;
 import com.werwolv.main.Main;
 import com.werwolv.modelloader.ModelLoader;
 import com.werwolv.skill.Skill;
@@ -21,6 +24,8 @@ public class EntityPlayer extends Entity{
 
     private static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
 
+    private int selectedItem = 0;
+
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
     private boolean isInAir = false;                    //Is the player currently in the air?
     private boolean canFly = false;
@@ -30,6 +35,8 @@ public class EntityPlayer extends Entity{
     private float roll;     //The longitudinal angle of the camera
 
     private Gui currentGui;
+
+    private ItemStack heldItem;
 
     private List<Skill> skills = new ArrayList<>();
 
@@ -52,7 +59,7 @@ public class EntityPlayer extends Entity{
         }
     }
 
-    public void move(Terrain terrain) {
+    public void onMove(Terrain terrain) {
         speedX = speedZ = 0;    //Reset the speed of the player
 
         speedY += canFly ? -speedY : GRAVITY * Main.getFrameTimeSeconds();      //Add gravity to the player to keep it on the ground
@@ -95,6 +102,23 @@ public class EntityPlayer extends Entity{
             isInAir = false;                    //...set the player not in the air anymore
             position.y = terrainHeight;         //...and set the y position of the player to the height of the the terrain
         }
+    }
+
+    public void onInteract() {
+        PlayerItemUseEvent.Action currAction = PlayerItemUseEvent.Action.NONE;
+        if(MouseButtonCallback.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+            if(KeyCallback.isKeyPressed(GLFW_MOD_SHIFT)) currAction = PlayerItemUseEvent.Action.SHIFT_LEFT_CLICK;
+            else if(KeyCallback.isKeyPressed(GLFW_MOD_CONTROL)) currAction = PlayerItemUseEvent.Action.CTRL_LEFT_CLICK;
+            else currAction = PlayerItemUseEvent.Action.LEFT_CLICK;
+        } else if(MouseButtonCallback.isButtonPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
+            if(KeyCallback.isKeyPressed(GLFW_MOD_SHIFT)) currAction = PlayerItemUseEvent.Action.SHIFT_RIGHT_CLICK;
+            else if(KeyCallback.isKeyPressed(GLFW_MOD_CONTROL)) currAction = PlayerItemUseEvent.Action.CTRL_RIGHT_CLICK;
+            else currAction = PlayerItemUseEvent.Action.RIGHT_CLICK;
+        }
+
+        if(this.getHeldItem() != null && currAction != PlayerItemUseEvent.Action.NONE)
+            this.heldItem = this.getHeldItem().getItem().onItemClick(this.getHeldItem(), this, currAction);
+
     }
 
     /* Getters and Setters */
@@ -142,6 +166,18 @@ public class EntityPlayer extends Entity{
             if (skillClass.isInstance(skill))
                 return skill;
         return null;
+    }
+
+    public ItemStack getHeldItem() {
+        return this.heldItem;
+    }
+
+    public int getSelectedItem(){
+        return selectedItem;
+    }
+
+    public void setSelectedItem(int index) {
+        this.selectedItem = index;
     }
 
     public void toggleFlight() {

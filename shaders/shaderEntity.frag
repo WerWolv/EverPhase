@@ -9,6 +9,9 @@ in float visibility;
 out vec4 out_color;
 
 uniform sampler2D textureSampler;
+uniform sampler2D extraInfoMapSampler;
+
+uniform float usesExtraInfoMap;
 uniform vec3 lightColor[16];
 uniform vec3 attenuation[16];
 
@@ -50,6 +53,14 @@ void main(void) {
 
     if(textureColor.a < 0.5)
         discard;
+
+    if(usesExtraInfoMap > 0.5) {
+        vec4 specularMapInfo = texture(extraInfoMapSampler, pass_textureCoords);
+        totalSpecular *= specularMapInfo.r;
+
+        if(specularMapInfo.g > 0.5)
+            totalDiffuse = vec3(1.0, 1.0, 1.0);
+    }
 
     out_color = vec4(totalDiffuse, 1.0) * textureColor + vec4(totalSpecular, 1.0);
     out_color = mix(vec4(skyColor, 1.0), out_color, visibility);

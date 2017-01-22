@@ -4,6 +4,7 @@ import com.werwolv.api.event.EventBus;
 import com.werwolv.callback.CursorPositionCallback;
 import com.werwolv.callback.KeyCallback;
 import com.werwolv.callback.MouseButtonCallback;
+import com.werwolv.callback.ScrollCallback;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.level.Level;
 import com.werwolv.level.LevelOverworld;
@@ -26,6 +27,7 @@ public class Main {
     private static KeyCallback keyCallback;
     private static MouseButtonCallback mouseButtonCallback;
     private static CursorPositionCallback cursorPosCallback;
+    private static ScrollCallback scrollCallback;
 
     private static Level currentLevel;
     private static long lastFrameTime;
@@ -74,6 +76,7 @@ public class Main {
         glfwSetKeyCallback(window, keyCallback = new KeyCallback());
         glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
         glfwSetCursorPosCallback(window, cursorPosCallback = new CursorPositionCallback());
+        glfwSetScrollCallback(window, scrollCallback = new ScrollCallback());
 
         glfwSetWindowSizeCallback(window, (window, width, height) -> {
             GL11.glViewport(0, 0, width, height);
