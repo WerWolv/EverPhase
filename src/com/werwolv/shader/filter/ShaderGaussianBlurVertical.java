@@ -1,11 +1,13 @@
-package com.werwolv.shader;
+package com.werwolv.shader.filter;
 
-public class ShaderGaussianBlurVertical extends Shader{
+import com.werwolv.shader.Shader;
+
+public class ShaderGaussianBlurVertical extends Shader {
 	
 	private int location_targetHeight;
 
 	public ShaderGaussianBlurVertical() {
-		super("postProcessing/ppGaussianBlurVertical", "postProcessing/ppGaussianBlur");
+		super("filter/filterGaussianBlurVertical", "filter/filterGaussianBlur");
 	}
 
 	public void loadTargetHeight(float height){

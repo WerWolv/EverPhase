@@ -1,11 +1,13 @@
-package com.werwolv.shader;
+package com.werwolv.shader.filter;
+
+import com.werwolv.shader.Shader;
 
 public class ShaderContrast extends Shader {
 
 	private int loc_contrast;
 
 	public ShaderContrast() {
-		super("postProcessing/ppContrast", "postProcessing/ppContrast");
+		super("filter/filterContrast", "filter/filterContrast");
 	}
 
 	@Override

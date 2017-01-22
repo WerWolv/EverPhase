@@ -157,7 +157,11 @@ public class LevelOverworld extends Level {
     public void applyPostProcessingEffects() {
         super.applyPostProcessingEffects();
 
-        PostProcessing.applyEffect(new PPContrast(0.3F));
+        PostProcessing.applyEffect(new FilterBright());
+        PostProcessing.applyEffect(new FilterGaussianBlurHorizontal());
+        PostProcessing.applyEffect(new FilterGaussianBlurVertical());
+        PostProcessing.applyEffect(new FilterBloom());
+        PostProcessing.applyEffect(new FilterContrast(0.3F));
     }
 
     public void clean() {

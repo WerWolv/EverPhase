@@ -1,11 +1,13 @@
-package com.werwolv.shader;
+package com.werwolv.shader.filter;
+
+import com.werwolv.shader.Shader;
 
 public class ShaderGaussianBlurHorizontal extends Shader {
 
 	private int location_targetWidth;
 
 	public ShaderGaussianBlurHorizontal() {
-		super("postProcessing/ppGaussianBlurHorizontal", "postProcessing/ppGaussianBlur");
+		super("filter/filterGaussianBlurHorizontal", "filter/filterGaussianBlur");
 	}
 
 	public void loadTargetWidth(float width){

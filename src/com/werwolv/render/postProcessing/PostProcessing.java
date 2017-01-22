@@ -22,10 +22,10 @@ public class PostProcessing {
 
 	public static void doPostProcessing(int colorTexture){
 		start();
-		postProcessEffects.get(0).render(colorTexture);
+		postProcessEffects.get(0).render(colorTexture, 0);
 
 		for(int effect = 1; effect < postProcessEffects.size(); effect++)
-			postProcessEffects.get(effect).render(postProcessEffects.get(effect - 1).getOutputTexture());
+			postProcessEffects.get(effect).render(postProcessEffects.get(effect - 1).getOutputTexture(), colorTexture);
 
 		end();
 	}

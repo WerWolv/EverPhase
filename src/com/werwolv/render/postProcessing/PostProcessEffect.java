@@ -20,10 +20,10 @@ public class PostProcessEffect<T extends Shader> {
         this.shader = shader;
     }
 
-    public void render(int texture) {
+    public void render(int colorTexture, int colorTexture2) {
         shader.start();
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, colorTexture);
         renderer.renderQuad();
         shader.stop();
     }
