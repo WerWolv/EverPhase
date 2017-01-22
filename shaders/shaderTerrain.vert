@@ -1,4 +1,4 @@
-#version 150
+#version 400 core
 
 in vec3 position;
 in vec2 textureCoords;
@@ -21,7 +21,7 @@ uniform mat4 toShadowMapSpace;
 
 const float density = 0.0035;
 const float gradient = 5.0;
-const float shadowDistance = 150;
+const float shadowDistance = 300;
 const float transitionDistance = 10;
 
 

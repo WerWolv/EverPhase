@@ -1,4 +1,4 @@
-#version 150
+#version 400 core
 
 in vec2 pass_textureCoords;
 in vec3 surfaceNormal;
@@ -24,7 +24,7 @@ uniform float reflectivity;
 
 uniform vec3 skyColor;
 
-const int pcfCnt = 2;
+const int pcfCnt = 3;
 const float totalTexels = (pcfCnt * 2.0 + 1.0) * (pcfCnt * 2.0 + 1.0);
 
 void main(void) {
@@ -79,7 +79,7 @@ void main(void) {
         totalSpecular += (dampedFactor * reflectivity * lightColor[i]) / attFactor;
     }
 
-    totalDiffuse = max(totalDiffuse * lightFactor, 0.4) * lightFactor;
+    totalDiffuse = max(totalDiffuse * lightFactor, 0.3);
 
     out_color = vec4(totalDiffuse, 1.0) * totalColor + vec4(totalSpecular, 1.0);
     out_color = mix(vec4(skyColor, 1.0), out_color, visibility);
