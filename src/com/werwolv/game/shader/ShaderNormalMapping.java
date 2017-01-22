@@ -18,11 +18,11 @@ public class ShaderNormalMapping extends Shader {
     private int loc_projectionMatrix;
     private int loc_viewMatrix;
     private int loc_lightPositionEyeSpace[];
-    private int loc_lightColour[];
+    private int loc_lightColor[];
     private int loc_attenuation[];
     private int loc_shineDamper;
     private int loc_reflectivity;
-    private int loc_skyColour;
+    private int loc_skyColor;
     private int loc_numberOfRows;
     private int loc_offset;
     private int loc_plane;
@@ -50,7 +50,7 @@ public class ShaderNormalMapping extends Shader {
         loc_viewMatrix = super.getUniformLocation("viewMatrix");
         loc_shineDamper = super.getUniformLocation("shineDamper");
         loc_reflectivity = super.getUniformLocation("reflectivity");
-        loc_skyColour = super.getUniformLocation("skyColour");
+        loc_skyColor = super.getUniformLocation("skyColor");
         loc_numberOfRows = super.getUniformLocation("numberOfRows");
         loc_offset = super.getUniformLocation("offset");
         loc_plane = super.getUniformLocation("plane");
@@ -60,11 +60,11 @@ public class ShaderNormalMapping extends Shader {
         loc_usesExtraInfoMap = super.getUniformLocation("usesExtraInfoMap");
 
         loc_lightPositionEyeSpace = new int[MAX_LIGHTS];
-        loc_lightColour = new int[MAX_LIGHTS];
+        loc_lightColor = new int[MAX_LIGHTS];
         loc_attenuation = new int[MAX_LIGHTS];
         for (int i = 0; i < MAX_LIGHTS; i++) {
             loc_lightPositionEyeSpace[i] = super.getUniformLocation("lightPositionEyeSpace[" + i + "]");
-            loc_lightColour[i] = super.getUniformLocation("lightColour[" + i + "]");
+            loc_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
             loc_attenuation[i] = super.getUniformLocation("attenuation[" + i + "]");
         }
     }
@@ -91,8 +91,8 @@ public class ShaderNormalMapping extends Shader {
         super.loadVector(loc_offset, new Vector2f(x, y));
     }
 
-    public void loadSkyColour(Vector3f color) {
-        super.loadVector(loc_skyColour, color);
+    public void loadSkyColor(Vector3f color) {
+        super.loadVector(loc_skyColor, color);
     }
 
     public void loadShineVariables(float damper, float reflectivity) {
@@ -108,11 +108,11 @@ public class ShaderNormalMapping extends Shader {
         for (int i = 0; i < MAX_LIGHTS; i++) {
             if (i < lights.size()) {
                 super.loadVector(loc_lightPositionEyeSpace[i], getEyeSpacePosition(lights.get(i), viewMatrix));
-                super.loadVector(loc_lightColour[i], lights.get(i).getColor());
+                super.loadVector(loc_lightColor[i], lights.get(i).getColor());
                 super.loadVector(loc_attenuation[i], lights.get(i).getAttenuation());
             } else {
                 super.loadVector(loc_lightPositionEyeSpace[i], new Vector3f(0, 0, 0));
-                super.loadVector(loc_lightColour[i], new Vector3f(0, 0, 0));
+                super.loadVector(loc_lightColor[i], new Vector3f(0, 0, 0));
                 super.loadVector(loc_attenuation[i], new Vector3f(1, 0, 0));
             }
         }

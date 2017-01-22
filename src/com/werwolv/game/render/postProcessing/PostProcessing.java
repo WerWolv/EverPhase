@@ -14,7 +14,7 @@ public class PostProcessing {
 	private static final float[] POSITIONS = { -1, 1, -1, -1, 1, 1, 1, -1 };	
 	private static ModelRaw quad;
 
-	private static List<PostProcessEffect> postProcessEffects = new ArrayList<>();
+	private static List<Filter> postProcessEffects = new ArrayList<>();
 
 	public static void init(ResourceLoader loader){
 		quad = loader.loadToVAO(POSITIONS, 2);
@@ -31,7 +31,7 @@ public class PostProcessing {
 	}
 	
 	public static void clean(){
-		for(PostProcessEffect effect : postProcessEffects)
+		for(Filter effect : postProcessEffects)
 			effect.clean();
 
 		postProcessEffects.clear();
@@ -49,7 +49,7 @@ public class PostProcessing {
 		GL30.glBindVertexArray(0);
 	}
 
-	public static void applyEffect(PostProcessEffect effect) {
+	public static void applyEffect(Filter effect) {
 		postProcessEffects.add(effect);
 	}
 

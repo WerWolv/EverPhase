@@ -3,7 +3,7 @@ package com.werwolv.game.render.postProcessing;
 import com.werwolv.game.main.Main;
 import com.werwolv.game.shader.filter.ShaderGaussianBlurVertical;
 
-public class FilterGaussianBlurVertical extends PostProcessEffect<ShaderGaussianBlurVertical> {
+public class FilterGaussianBlurVertical extends Filter<ShaderGaussianBlurVertical> {
 
 	public FilterGaussianBlurVertical(){
 		super(new ShaderGaussianBlurVertical(), Main.getWindowSize()[0] / 5, Main.getWindowSize()[1] / 5);

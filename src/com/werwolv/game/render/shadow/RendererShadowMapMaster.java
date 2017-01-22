@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL11;
  * @author Karl
  *
  */
-public class ShadowMapMasterRenderer {
+public class RendererShadowMapMaster {
 
 	private static final int SHADOW_MAP_SIZE = 8192;
 
@@ -36,7 +36,7 @@ public class ShadowMapMasterRenderer {
 	private Matrix4f projectionViewMatrix = new Matrix4f();
 	private Matrix4f offset = createOffset();
 
-	private ShadowMapEntityRenderer entityRenderer;
+	private RendererShadowMapEntity entityRenderer;
 
 	/**
 	 * Creates instances of the important objects needed for rendering the scene
@@ -49,11 +49,11 @@ public class ShadowMapMasterRenderer {
 	 * @param player
 	 *            - the camera being used in the scene.
 	 */
-	public ShadowMapMasterRenderer(EntityPlayer player) {
+	public RendererShadowMapMaster(EntityPlayer player) {
 		shader = new ShaderShadow();
 		shadowBox = new ShadowBox(lightViewMatrix, player);
 		shadowFbo = new ShadowFrameBuffer(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
-		entityRenderer = new ShadowMapEntityRenderer(shader, projectionViewMatrix);
+		entityRenderer = new RendererShadowMapEntity(shader, projectionViewMatrix);
 	}
 
 	/**

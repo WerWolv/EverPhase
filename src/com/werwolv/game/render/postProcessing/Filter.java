@@ -5,17 +5,17 @@ import com.werwolv.game.shader.Shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-public class PostProcessEffect<T extends Shader> {
+public class Filter<T extends Shader> {
 
     private RendererImage renderer;
     private T shader;
 
-    public PostProcessEffect(T shader, int width, int height) {
+    public Filter(T shader, int width, int height) {
         renderer = new RendererImage(width, height);
         this.shader = shader;
     }
 
-    public PostProcessEffect(T shader) {
+    public Filter(T shader) {
         renderer = new RendererImage();
         this.shader = shader;
     }

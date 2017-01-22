@@ -2,7 +2,7 @@ package com.werwolv.game.render.postProcessing;
 
 import com.werwolv.game.shader.filter.ShaderContrast;
 
-public class FilterContrast extends PostProcessEffect<ShaderContrast> {
+public class FilterContrast extends Filter<ShaderContrast> {
 
     private float contrast;
 

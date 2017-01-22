@@ -4,7 +4,7 @@ import com.werwolv.game.shader.Shader;
 
 public class ShaderBloom extends Shader {
 
-	private int loc_colourTexture;
+	private int loc_colorTexture;
 	private int loc_highlightTexture;
 	
 	public ShaderBloom() {
@@ -13,12 +13,12 @@ public class ShaderBloom extends Shader {
 	
 	@Override
 	protected void getAllUniformLocations() {
-		loc_colourTexture = super.getUniformLocation("colourTexture");
+		loc_colorTexture = super.getUniformLocation("colorTexture");
 		loc_highlightTexture = super.getUniformLocation("highlightTexture");
 	}
 	
 	public void connectTextureUnits(){
-		super.loadInteger(loc_colourTexture, 0);
+		super.loadInteger(loc_colorTexture, 0);
 		super.loadInteger(loc_highlightTexture, 1);
 	}
 

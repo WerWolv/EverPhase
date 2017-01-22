@@ -9,7 +9,7 @@ import com.werwolv.game.terrain.Terrain;
 import com.werwolv.game.main.Main;
 import com.werwolv.game.model.ModelTextured;
 import com.werwolv.game.modelloader.ResourceLoader;
-import com.werwolv.game.render.shadow.ShadowMapMasterRenderer;
+import com.werwolv.game.render.shadow.RendererShadowMapMaster;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -41,7 +41,7 @@ public class RendererMaster {
     private RendererSkybox  rendererSkybox;             //The renderer to render the skybox
     private RendererWater   rendererWater;              //The renderer to render all water planes
     private RendererGui     rendererGui;
-    private ShadowMapMasterRenderer shadowMapMasterRenderer;
+    private RendererShadowMapMaster shadowMapMasterRenderer;
 
     /* Shadow Renderer */
 
@@ -68,7 +68,7 @@ public class RendererMaster {
         rendererWater = new RendererWater(loader, projectionMatrix, NEAR_PLANE, FAR_PLANE);
         rendererGui = new RendererGui(loader);
 
-        shadowMapMasterRenderer = new ShadowMapMasterRenderer(player);
+        shadowMapMasterRenderer = new RendererShadowMapMaster(player);
     }
 
     /*

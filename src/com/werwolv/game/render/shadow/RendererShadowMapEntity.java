@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-public class ShadowMapEntityRenderer {
+public class RendererShadowMapEntity {
 
 	private Matrix4f projectionViewMatrix;
 	private ShaderShadow shader;
@@ -28,7 +28,7 @@ public class ShadowMapEntityRenderer {
 	 *            - the orthographic projection matrix multiplied by the light's
 	 *            "view" matrix.
 	 */
-	protected ShadowMapEntityRenderer(ShaderShadow shader, Matrix4f projectionViewMatrix) {
+	protected RendererShadowMapEntity(ShaderShadow shader, Matrix4f projectionViewMatrix) {
 		this.shader = shader;
 		this.projectionViewMatrix = projectionViewMatrix;
 	}

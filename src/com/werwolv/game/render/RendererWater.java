@@ -72,9 +72,9 @@ public class RendererWater {
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboReflection.getColourTexture());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboReflection.getColorTexture());
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboRefraction.getColourTexture());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboRefraction.getColorTexture());
 		GL13.glActiveTexture(GL13.GL_TEXTURE2);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdDuDvMap);
 		GL13.glActiveTexture(GL13.GL_TEXTURE3);

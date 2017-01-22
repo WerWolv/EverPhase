@@ -1,10 +1,10 @@
 #version 400 core
 
-out vec4 out_colour;
+out vec4 out_color;
 
 
 void main(void){
 
-	out_colour = vec4(1.0);
+	out_color = vec4(1.0);
 
 }

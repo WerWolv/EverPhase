@@ -80,8 +80,8 @@ public class LevelOverworld extends Level {
             entities.add(new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, z), z), new Vector3f(0, 0, 0), 1, false));
         }
 
-        /*labyrinth.process();
-        entities.addAll(labyrinth.RenderLabyrinth());*/
+        labyrinth.process();
+        entities.addAll(labyrinth.RenderLabyrinth());
 
         terrains.add(terrain);
 
@@ -116,7 +116,7 @@ public class LevelOverworld extends Level {
         postProcessing.unbindFrameBuffer();
 
         postProcessing.resolveToFBO(outputFBO);
-        PostProcessing.doPostProcessing(outputFBO.getColourTexture());
+        PostProcessing.doPostProcessing(outputFBO.getColorTexture());
 
     }
 
