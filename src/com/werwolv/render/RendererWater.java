@@ -5,7 +5,7 @@ import com.werwolv.entity.EntityPlayer;
 import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.shader.ShaderWater;
 import com.werwolv.terrain.TileWater;
 import com.werwolv.toolbox.Maths;
@@ -30,7 +30,7 @@ public class RendererWater {
 
 	private int textureIdDuDvMap, textureIdNormalMap;
 
-	public RendererWater(ModelLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater, float nearPlane, float farPlane) {
+	public RendererWater(ResourceLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater, float nearPlane, float farPlane) {
 		this.shader = new ShaderWater();
 		this.fboWater = fboWater;
 
@@ -92,7 +92,7 @@ public class RendererWater {
 		shader.stop();
 	}
 
-	private void setUpVAO(ModelLoader loader) {
+	private void setUpVAO(ResourceLoader loader) {
 		float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
 		quad = loader.loadToVAO(vertices, 2);
 	}

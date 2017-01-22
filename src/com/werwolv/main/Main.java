@@ -8,7 +8,7 @@ import com.werwolv.callback.ScrollCallback;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.level.Level;
 import com.werwolv.level.LevelOverworld;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -37,7 +37,7 @@ public class Main {
     private static boolean fullscreen = false;
     private boolean running = true;
 
-    private ModelLoader loader = new ModelLoader();
+    private ResourceLoader loader = new ResourceLoader();
 
     public static void main(String[] args) {
         for (String arg : args) {

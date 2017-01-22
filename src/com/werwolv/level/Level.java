@@ -4,7 +4,7 @@ import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
 import com.werwolv.gui.Gui;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.render.RendererMaster;
 import com.werwolv.terrain.Terrain;
 import com.werwolv.terrain.TileWater;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class Level {
 
-    protected ModelLoader loader = new ModelLoader();
+    protected ResourceLoader loader = new ResourceLoader();
 
     protected RendererMaster renderer;
 
@@ -52,7 +52,7 @@ public abstract class Level {
         guis.clear();
     }
 
-    public ModelLoader getLoader() {
+    public ResourceLoader getLoader() {
         return loader;
     }
 

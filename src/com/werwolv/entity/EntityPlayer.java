@@ -8,7 +8,7 @@ import com.werwolv.callback.MouseButtonCallback;
 import com.werwolv.gui.Gui;
 import com.werwolv.item.ItemStack;
 import com.werwolv.main.Main;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.skill.Skill;
 import com.werwolv.skill.SkillAttack;
 import com.werwolv.terrain.Terrain;
@@ -40,7 +40,7 @@ public class EntityPlayer extends Entity{
 
     private List<Skill> skills = new ArrayList<>();
 
-    public EntityPlayer(ModelLoader loader, Vector3f position, Vector3f rotation, float scale) {
+    public EntityPlayer(ResourceLoader loader, Vector3f position, Vector3f rotation, float scale) {
         super(loader, "", "", position, rotation, scale, false);
 
         skills.add(new SkillAttack("Attack", loader.loadGuiTexture("gui/skills").getTextureID(), 99));

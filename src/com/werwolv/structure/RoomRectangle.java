@@ -1,7 +1,7 @@
 package com.werwolv.structure;
 
 import com.werwolv.entity.Entity;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 public class RoomRectangle {
     private List<Entity> blocks = new ArrayList<>();
 
-    private ModelLoader loader;
+    private ResourceLoader loader;
 
     private int length;
     private int width;
@@ -23,7 +23,7 @@ public class RoomRectangle {
 
     private boolean north=false,  south=false,  west=false,  east=false;
 
-    public RoomRectangle(ModelLoader loader, int x, int y, int z, int length, int width, int height){
+    public RoomRectangle(ResourceLoader loader, int x, int y, int z, int length, int width, int height){
         this.loader = loader;
         this.length = length;
         this.width = width;

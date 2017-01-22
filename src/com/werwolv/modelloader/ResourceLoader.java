@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ModelLoader {
+public class ResourceLoader {
 
     private List<Integer> vaos = new ArrayList<>();         //All Vertex Array Objects for cleanup
     private List<Integer> vbos = new ArrayList<>();         //All Vertex Buffer Objects for cleanup

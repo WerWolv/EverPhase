@@ -1,7 +1,7 @@
 package com.werwolv.entity;
 
 import com.werwolv.model.ModelTextured;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.modelloader.NormalMappedObjLoader;
 import com.werwolv.modelloader.OBJModelLoader;
 import com.werwolv.resource.TextureModel;
@@ -16,9 +16,9 @@ public class Entity {
     private float scale;            //Size of the entity
 
     private int textureIndex = 0;   //Address of the texture stored in memory
-    private ModelLoader loader;
+    private ResourceLoader loader;
 
-    public Entity(ModelLoader loader, String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
+    public Entity(ResourceLoader loader, String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
         if (!(modelPath.equals("") || texturePath.equals(""))) {
             if (hasNormalMap)
                 this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath, loader), new TextureModel(loader.loadTexture(texturePath)));
@@ -34,7 +34,7 @@ public class Entity {
         this.scale = scale;
     }
 
-    public Entity(ModelLoader loader, String modelPath, String texturePath, int index, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
+    public Entity(ResourceLoader loader, String modelPath, String texturePath, int index, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
         this.textureIndex = index;
         if (!(modelPath.equals("") || texturePath.equals(""))) {
             if (hasNormalMap)
@@ -149,7 +149,7 @@ public class Entity {
         this.scale = scale;
     }
 
-    public ModelLoader getLoader() {
+    public ResourceLoader getLoader() {
         return loader;
     }
 }

@@ -2,7 +2,7 @@ package com.werwolv.terrain;
 
 import com.werwolv.model.ModelRaw;
 import com.werwolv.modelloader.ModelData;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.resource.TextureTerrain;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.toolbox.Maths;
@@ -29,7 +29,7 @@ public class Terrain {
     private float[][] heights;
 
 
-    public Terrain(int gridX, int gridZ, ModelLoader loader, TextureTerrainPack texturePack, String heightMap) {
+    public Terrain(int gridX, int gridZ, ResourceLoader loader, TextureTerrainPack texturePack, String heightMap) {
         this.texturePack = texturePack;
         this.blendMap = texturePack.getBlendMap();
         this.x = gridX * SIZE;
@@ -38,7 +38,7 @@ public class Terrain {
        this.model = generateTerrain(loader, heightMap);
     }
 
-    private ModelRaw generateTerrain(ModelLoader loader, String heightMap){
+    private ModelRaw generateTerrain(ResourceLoader loader, String heightMap){
 
         BufferedImage image = null;
 

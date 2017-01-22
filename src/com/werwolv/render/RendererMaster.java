@@ -6,7 +6,7 @@ import com.werwolv.entity.EntityPlayer;
 import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.shader.ShaderEntity;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
@@ -45,14 +45,14 @@ public class RendererMaster {
 
     /* Shadow Renderer */
 
-    private ModelLoader loader;
+    private ResourceLoader loader;
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
     private Map<ModelTextured, List<Entity>> entitiesNM = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
 
     private List<Terrain> terrains = new ArrayList<>(); //A list of all terrains in the game
 
-    public RendererMaster(ModelLoader loader, EntityPlayer player) {
+    public RendererMaster(ResourceLoader loader, EntityPlayer player) {
         enableCulling();                                //Enable culling. This disables the rendering of the not seen triangles
 
         createProjectionMatrix();                       //Create a new projection matrix
@@ -247,7 +247,7 @@ public class RendererMaster {
     }
 
 
-    public ModelLoader getModelLoader() {
+    public ResourceLoader getModelLoader() {
         return loader;
     }
 }

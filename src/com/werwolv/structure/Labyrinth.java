@@ -1,7 +1,7 @@
 package com.werwolv.structure;
 
 import com.werwolv.entity.Entity;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class Labyrinth {
     //Settings
     private int room_length = 18, room_width = 18, room_height = 2;
     //Defines
-    private ModelLoader loader;
+    private ResourceLoader loader;
     private List<RoomRectangle> rooms = new ArrayList<>();
     private List<Entity> blocks = new ArrayList<>();
     private int[][] labyrinth = new int[30][30];
@@ -24,7 +24,7 @@ public class Labyrinth {
     private int length;
     private int branch;
 
-    public Labyrinth(ModelLoader loader, int x, int y, int z, int branch, int length){
+    public Labyrinth(ResourceLoader loader, int x, int y, int z, int branch, int length){
         this.loader = loader;
         this.pos_x = x;
         this.pos_y = y;

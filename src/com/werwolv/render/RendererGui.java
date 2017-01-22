@@ -4,7 +4,7 @@ import com.werwolv.gui.Gui;
 import com.werwolv.gui.GuiTextureUnit;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
-import com.werwolv.modelloader.ModelLoader;
+import com.werwolv.modelloader.ResourceLoader;
 import com.werwolv.shader.ShaderGui;
 import com.werwolv.toolbox.Maths;
 import org.joml.Matrix4f;
@@ -14,9 +14,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.newdawn.slick.TrueTypeFont;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +22,11 @@ public class RendererGui {
 
     private final ModelRaw quad;
     private ShaderGui shader;
-    private ModelLoader loader;
+    private ResourceLoader loader;
 
     private List<GuiTextureUnit> textureUnits = new ArrayList<>();
 
-    public RendererGui(ModelLoader loader) {
+    public RendererGui(ResourceLoader loader) {
         float[] positions = { -1, 1, -1, -1, 1, 1, 1, -1};  //The six indices of the quad
         quad = loader.loadToVAO(positions, 2);   //Create the quad out of the six vertices
 

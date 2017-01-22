@@ -12,13 +12,14 @@ public class NormalMappedObjLoader {
 
     private static final String RES_LOC = "res/models/";
 
-    public static ModelRaw loadOBJ(String objFileName, ModelLoader loader) {
-        FileReader isr = null;
+    public static ModelRaw loadOBJ(String objFileName, ResourceLoader loader) {
+        FileReader isr;
         File objFile = new File(RES_LOC + objFileName + ".obj");
         try {
             isr = new FileReader(objFile);
         } catch (FileNotFoundException e) {
             System.err.println("File not found in res; don't use any extention");
+            return null;
         }
         BufferedReader reader = new BufferedReader(isr);
         String line;
