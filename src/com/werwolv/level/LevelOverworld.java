@@ -7,10 +7,12 @@ import com.werwolv.callback.KeyCallback;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
+import com.werwolv.fbo.FrameBufferObject;
 import com.werwolv.gui.Gui;
 import com.werwolv.gui.GuiIngame;
 import com.werwolv.gui.GuiInventory;
 import com.werwolv.main.Main;
+import com.werwolv.render.postProcessing.PostProcessing;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.structure.Labyrinth;
 import com.werwolv.terrain.Terrain;
@@ -38,6 +40,8 @@ public class LevelOverworld extends Level {
     private EntityLight entitySun = new EntityLight(new Vector3f(10000, 12000, -10000), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
 
     private List<Gui> currentGui = new ArrayList<>();
+
+    FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_RENDER_BUFFER);
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -87,6 +91,8 @@ public class LevelOverworld extends Level {
         guis.add(guiIngame);
 
         currentGui.add(null);
+
+        PostProcessing.init(loader);
     }
 
     @Override
@@ -102,8 +108,13 @@ public class LevelOverworld extends Level {
         for (TileWater water : waters)
            water.renderWaterEffects();
 
+        postProcessing.bindFrameBuffer();
+
         renderer.renderScene(entities, entitiesNM, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
         renderer.getRendererWater().render(waters, lights, player);
+
+        postProcessing.unbindFrameBuffer();
+        PostProcessing.doPostProcessing(postProcessing.getColourTexture());
     }
 
     @Override

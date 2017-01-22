@@ -1,6 +1,8 @@
 package com.werwolv.callback;
 
 
+import com.werwolv.api.event.EventBus;
+import com.werwolv.api.event.input.MouseButtonPressEvent;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -32,5 +34,7 @@ public class MouseButtonCallback extends GLFWMouseButtonCallback {
     @Override
     public void invoke(long window, int button, int action, int mods) {
         buttons[button] = action != GLFW_RELEASE;
+
+        EventBus.postEvent(new MouseButtonPressEvent(button));
     }
 }

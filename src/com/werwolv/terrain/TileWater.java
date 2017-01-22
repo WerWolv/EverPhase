@@ -1,6 +1,6 @@
 package com.werwolv.terrain;
 
-import com.werwolv.fbo.FrameBufferWater;
+import com.werwolv.fbo.FrameBufferObject;
 import com.werwolv.level.Level;
 import com.werwolv.render.RendererMaster;
 import org.joml.Vector3f;
@@ -18,8 +18,9 @@ public class TileWater {
 	private float x,z;
 
 	private Level level;
-	private FrameBufferWater fboWater;
 	private RendererMaster renderer;
+
+	private FrameBufferObject fboReflection, fboRefraction;
 	
 	public TileWater(RendererMaster renderer, Level level, float centerX, float centerZ, float height){
 		this.renderer = renderer;
@@ -28,14 +29,15 @@ public class TileWater {
 		this.z = centerZ;
 		this.height = height;
 
-		fboWater = renderer.getFboWater();
+		fboReflection = renderer.getRendererWater().getFboReflection();
+		fboRefraction = renderer.getRendererWater().getFboRefraction();
 	}
 
 	public void renderWaterEffects() {
 		glEnable(GL30.GL_CLIP_DISTANCE0);
 
 		for(TileWater water : level.getWaters()) {
-			fboWater.bindReflectionFrameBuffer();
+			fboReflection.bindFrameBuffer();
 			float distance = 2 * (level.getPlayer().getPosition().y - water.getHeight());
 			level.getPlayer().setPosition(new Vector3f(level.getPlayer().getPosition().x, level.getPlayer().getPosition().y - distance, level.getPlayer().getPosition().z));
 			level.getPlayer().setPitch(-level.getPlayer().getPitch());
@@ -45,14 +47,13 @@ public class TileWater {
 			level.getPlayer().setPosition(new Vector3f(level.getPlayer().getPosition().x, level.getPlayer().getPosition().y + distance, level.getPlayer().getPosition().z));
 			level.getPlayer().setPitch(-level.getPlayer().getPitch());
 
-			fboWater.bindRefractionFrameBuffer();
+			fboReflection.unbindFrameBuffer();
+			fboRefraction.bindFrameBuffer();
 			renderer.renderScene(level.getEntities(), level.getEntitiesNM(), level.getTerrains(), level.getLights(), level.getPlayer(), new Vector4f(0, -1, 0, water.getHeight() + 1.0F));
 		}
+		fboRefraction.unbindFrameBuffer();
 
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-
-		fboWater.unbindCurrentFrameBuffer();
-
 	}
 
 	public float getHeight() {

@@ -1,5 +1,7 @@
 package com.werwolv.callback;
 
+import com.werwolv.api.event.EventBus;
+import com.werwolv.api.event.input.KeyPressEvent;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -45,6 +47,8 @@ public class KeyCallback extends GLFWKeyCallback {
         if (key < 0 || key >= 1024) return;    //Abort if the passed key is out of bounds
 
         keys[key] = action != GLFW_RELEASE;
+
+        EventBus.postEvent(new KeyPressEvent(key));
     }
 
 }

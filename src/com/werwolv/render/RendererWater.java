@@ -2,7 +2,7 @@ package com.werwolv.render;
 
 import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
-import com.werwolv.fbo.FrameBufferWater;
+import com.werwolv.fbo.FrameBufferObject;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelRaw;
 import com.werwolv.modelloader.ResourceLoader;
@@ -24,15 +24,17 @@ public class RendererWater {
 
 	private ModelRaw quad;
 	private ShaderWater shader;
-	private FrameBufferWater fboWater;
-
+	//private FrameBufferWater fboWater;
+	private FrameBufferObject fboReflection;
+	private FrameBufferObject fboRefraction;
 	private float moveFactor = 0;
 
 	private int textureIdDuDvMap, textureIdNormalMap;
 
-	public RendererWater(ResourceLoader loader, Matrix4f projectionMatrix, FrameBufferWater fboWater, float nearPlane, float farPlane) {
+	public RendererWater(ResourceLoader loader, Matrix4f projectionMatrix, float nearPlane, float farPlane) {
 		this.shader = new ShaderWater();
-		this.fboWater = fboWater;
+		fboReflection = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE | FrameBufferObject.DEPTH_RENDER_BUFFER);
+		fboRefraction = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE | FrameBufferObject.DEPTH_RENDER_BUFFER);
 
 		textureIdDuDvMap = loader.loadTexture("dudvMapWater");
 		textureIdNormalMap = loader.loadTexture("normalMap");
@@ -71,15 +73,15 @@ public class RendererWater {
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getReflectionTexture());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboReflection.getColourTexture());
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionTexture());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboRefraction.getColourTexture());
 		GL13.glActiveTexture(GL13.GL_TEXTURE2);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdDuDvMap);
 		GL13.glActiveTexture(GL13.GL_TEXTURE3);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureIdNormalMap);
 		GL13.glActiveTexture(GL13.GL_TEXTURE4);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboWater.getRefractionDepthTexture());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fboRefraction.getDepthTexture());
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -101,4 +103,11 @@ public class RendererWater {
 		shader.clean();
 	}
 
+	public FrameBufferObject getFboReflection() {
+		return fboReflection;
+	}
+
+	public FrameBufferObject getFboRefraction() {
+		return fboRefraction;
+	}
 }

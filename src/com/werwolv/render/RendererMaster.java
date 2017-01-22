@@ -34,8 +34,6 @@ public class RendererMaster {
     private ShaderEntity shaderEntity = new ShaderEntity();     //The shader to use for rendering entities
     private ShaderTerrain shaderTerrain = new ShaderTerrain();  //The shader to use for rendering the terrain
 
-    private FrameBufferWater fboWater = new FrameBufferWater();
-
     private RendererEntity  rendererEntity;             //The renderer to render entities
     private RendererNormalMapping rendererNM;
     private RendererTerrain rendererTerrain;            //The renderer to render the terrain
@@ -65,7 +63,7 @@ public class RendererMaster {
         rendererNM = new RendererNormalMapping(projectionMatrix);
         rendererTerrain = new RendererTerrain(shaderTerrain, projectionMatrix);
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
-        rendererWater = new RendererWater(loader, projectionMatrix, fboWater, NEAR_PLANE, FAR_PLANE);
+        rendererWater = new RendererWater(loader, projectionMatrix, NEAR_PLANE, FAR_PLANE);
         rendererGui = new RendererGui(loader);
     }
 
@@ -241,11 +239,6 @@ public class RendererMaster {
     public RendererGui getRendererGui() {
         return rendererGui;
     }
-
-    public FrameBufferWater getFboWater() {
-        return fboWater;
-    }
-
 
     public ResourceLoader getModelLoader() {
         return loader;

@@ -15,10 +15,10 @@ public class Item {
         this.itemID = itemID;
     }
 
-    public ItemStack onItemClick(ItemStack item, EntityPlayer player, PlayerItemUseEvent.Action action) {
+    public ItemStack onItemClick(ItemStack itemStack, EntityPlayer player, PlayerItemUseEvent.Action action) {
         EventBus.postEvent(new PlayerItemUseEvent(this, player, action));
 
-        return player.getHeldItem();
+        return itemStack;
     }
 
 }
