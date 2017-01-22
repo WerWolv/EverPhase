@@ -3,10 +3,10 @@ package com.werwolv.render;
 import com.werwolv.entity.Entity;
 import com.werwolv.entity.EntityLight;
 import com.werwolv.entity.EntityPlayer;
-import com.werwolv.fbo.FrameBufferWater;
 import com.werwolv.main.Main;
 import com.werwolv.model.ModelTextured;
 import com.werwolv.modelloader.ResourceLoader;
+import com.werwolv.render.shadow.ShadowMapMasterRenderer;
 import com.werwolv.shader.ShaderEntity;
 import com.werwolv.shader.ShaderTerrain;
 import com.werwolv.terrain.Terrain;
@@ -21,13 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class RendererMaster {
 
     public static final Vector3f SKY_COLOR = new Vector3f(0.5F, 0.5F, 0.5F);   //The color of the sky
     public static final float FOV = 70;                //The field of view
-    public static final float NEAR_PLANE = 0.1F;       //The plane to start rendering
+    public static final float NEAR_PLANE = 0.01F;       //The plane to start rendering
     public static final float FAR_PLANE = 1000.0F;     //The plane to stop rendering
     private Matrix4f projectionMatrix;                  //The projection matrix
 
@@ -40,6 +41,7 @@ public class RendererMaster {
     private RendererSkybox  rendererSkybox;             //The renderer to render the skybox
     private RendererWater   rendererWater;              //The renderer to render all water planes
     private RendererGui     rendererGui;
+    private ShadowMapMasterRenderer shadowMapMasterRenderer;
 
     /* Shadow Renderer */
 
@@ -65,6 +67,8 @@ public class RendererMaster {
         rendererSkybox = new RendererSkybox(loader, projectionMatrix);
         rendererWater = new RendererWater(loader, projectionMatrix, NEAR_PLANE, FAR_PLANE);
         rendererGui = new RendererGui(loader);
+
+        shadowMapMasterRenderer = new ShadowMapMasterRenderer(player);
     }
 
     /*
@@ -125,7 +129,7 @@ public class RendererMaster {
         shaderTerrain.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
         shaderTerrain.loadLights(lights);
         shaderTerrain.loadViewMatrix(player);
-        rendererTerrain.render(terrains);
+        rendererTerrain.render(terrains, shadowMapMasterRenderer.getToShadowMapSpaceMatrix());
         shaderTerrain.stop();
 
         rendererSkybox.render(player, SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
@@ -136,6 +140,12 @@ public class RendererMaster {
         terrains.clear();
     }
 
+    public void renderShadowMap(List<Entity> entities, List<Entity> entitiesNM, EntityLight sun) {
+        for(Entity entity : entities) processEntity(entity);
+
+        shadowMapMasterRenderer.render(this.entities, sun);
+    }
+
     /*
      * Reset everything to start a new frame
      */
@@ -144,14 +154,15 @@ public class RendererMaster {
         glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0F);            //Clears the screen to the sky color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);    //Reset the color buffer- and depth buffer bit
         GL13.glActiveTexture(GL13.GL_TEXTURE5);
+        GL11.glBindTexture(GL_TEXTURE_2D, getShadowMapTexture());
     }
 
     /*
      * Create a new projection matrix
      */
-    private void createProjectionMatrix() {
+    private void createProjectionMatrix(){
         projectionMatrix = new Matrix4f();
-        float aspectRatio = (float) Main.getWindowSize()[0] / (float) Main.getWindowSize()[1];
+        float aspectRatio = Main.getAspectRatio();
         float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
         float x_scale = y_scale / aspectRatio;
         float frustum_length = FAR_PLANE - NEAR_PLANE;
@@ -163,7 +174,6 @@ public class RendererMaster {
         projectionMatrix.m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
         projectionMatrix.m33(0);
     }
-
     /*
      * Add the passed terrain to the list of terrains
      */
@@ -214,6 +224,7 @@ public class RendererMaster {
         rendererWater.clean();
         rendererGui.clean();
         rendererNM.clean();
+        shadowMapMasterRenderer.cleanUp();
     }
 
     /* Getter */
@@ -242,5 +253,9 @@ public class RendererMaster {
 
     public ResourceLoader getModelLoader() {
         return loader;
+    }
+
+    public int getShadowMapTexture() {
+        return shadowMapMasterRenderer.getShadowMap();
     }
 }

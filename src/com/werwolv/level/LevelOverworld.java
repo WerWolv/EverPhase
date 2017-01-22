@@ -13,6 +13,7 @@ import com.werwolv.gui.GuiIngame;
 import com.werwolv.gui.GuiInventory;
 import com.werwolv.main.Main;
 import com.werwolv.render.postProcessing.*;
+import com.werwolv.render.shadow.ShadowMapMasterRenderer;
 import com.werwolv.resource.TextureTerrainPack;
 import com.werwolv.structure.Labyrinth;
 import com.werwolv.terrain.Terrain;
@@ -37,12 +38,13 @@ public class LevelOverworld extends Level {
 
     private Gui guiIngame, guiInventory;
 
-    private EntityLight entitySun = new EntityLight(new Vector3f(10000, 12000, -10000), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
+    private EntityLight entitySun = new EntityLight(new Vector3f(1000, 1000, -1000), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
 
     private List<Gui> currentGui = new ArrayList<>();
 
     private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
+
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -50,6 +52,7 @@ public class LevelOverworld extends Level {
 
     @Override
     public void initLevel() {
+        lights.add(entitySun);
         entity = new Entity(loader, "dragon", "white", new Vector3f(10, 0, -10), new Vector3f(0, 60, 0), 1, false);
         entityNm = new Entity(loader, "crate", "crate", new Vector3f(20, 20, -10), new Vector3f(0, 60, 0), 0.03F, true);
 
@@ -67,7 +70,6 @@ public class LevelOverworld extends Level {
 
         labyrinth = new Labyrinth(loader, 0, 0, 0, 3, 10);
 
-        lights.add(entitySun);
 
         entities.add(entity);
         entitiesNM.add(entityNm);
@@ -79,16 +81,15 @@ public class LevelOverworld extends Level {
             entities.add(new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, z), z), new Vector3f(0, 0, 0), 1, false));
         }
 
-        labyrinth.process();
-        entities.addAll(labyrinth.RenderLabyrinth());
+        /*labyrinth.process();
+        entities.addAll(labyrinth.RenderLabyrinth());*/
 
         terrains.add(terrain);
 
         waters.add(new TileWater(renderer, this, 75, -75, 0));
 
         guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
-        guiInventory = new GuiInventory(renderer, 0, new Vector2f(0, 0), new Vector2f(1, 1));
-
+        guiInventory = new GuiInventory(renderer, renderer.getShadowMapTexture(), new Vector2f(0, 0), new Vector2f(1, 1));
         guis.add(guiIngame);
 
         currentGui.add(null);
@@ -103,6 +104,7 @@ public class LevelOverworld extends Level {
     @Override
     public void renderLevel() {
         entity.increaseRotation(0, 0.5F, 0);
+        renderer.renderShadowMap(entities, entitiesNM, entitySun);
 
         for (TileWater water : waters)
            water.renderWaterEffects();
@@ -116,6 +118,7 @@ public class LevelOverworld extends Level {
 
         postProcessing.resolveToFBO(outputFBO);
         PostProcessing.doPostProcessing(outputFBO.getColourTexture());
+
     }
 
     @Override

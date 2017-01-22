@@ -1,4 +1,4 @@
-#version 400 core
+#version 150
 
 in vec3 position;
 in vec2 textureCoords;
@@ -21,6 +21,8 @@ uniform mat4 toShadowMapSpace;
 
 const float density = 0.0035;
 const float gradient = 5.0;
+const float shadowDistance = 150;
+const float transitionDistance = 10;
 
 
 void main(void) {
@@ -46,5 +48,9 @@ void main(void) {
     float distance = length(posRelToCam.xyz);
     visibility = exp(-pow((distance * density), gradient));
     visibility = clamp(visibility, 0.0, 1.0);
+
+    distance -= (shadowDistance - transitionDistance);
+    distance /= transitionDistance;
+    shadowCoords.w = clamp(1.0 - distance, 0.0, 1.0);
 
 }

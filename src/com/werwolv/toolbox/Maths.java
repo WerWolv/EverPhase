@@ -58,4 +58,8 @@ public class Maths {
     public static Vector3f toVector3f(Vector4f vector4f) {
         return new Vector3f(vector4f.x, vector4f.y, vector4f.z);
     }
+    public static Vector4f toVector4f(Vector3f vector3f) {
+        return new Vector4f(vector3f.x, vector3f.y, vector3f.z, 0.0F);
+    }
+
 }

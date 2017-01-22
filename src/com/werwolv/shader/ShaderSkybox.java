@@ -12,7 +12,7 @@ public class ShaderSkybox extends Shader {
     private int loc_fogColor;
     private int loc_cubeMap, loc_cubeMap2, loc_blendFactor;
 
-    private static final float ROTATION_SPEED = 0.01F;
+    private static final float ROTATION_SPEED = 0.00F;
 
     private float rotation;
 

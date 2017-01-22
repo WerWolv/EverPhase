@@ -208,4 +208,11 @@ public class FrameBufferObject {
 				depthBuffer);
 	}
 
+	public int getDepthBuffer() {
+		return depthBuffer;
+	}
+
+	public int getColourBuffer() {
+		return colourBuffer;
+	}
 }

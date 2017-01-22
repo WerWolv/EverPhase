@@ -23,8 +23,8 @@ public class RendererTerrain {
         this.shader = shader;
 
         shader.start();                                     //Start the terrain shader
-        shader.loadProjectionMatrix(projectionMatrix);      //Load up the projection matrix to the shader
         shader.connectTextureUnits();                       //Connect the 4 textures together in the way specified in the blend map
+        shader.loadProjectionMatrix(projectionMatrix);      //Load up the projection matrix to the shader
         shader.stop();                                      //Stop the terrain shader
     }
 
@@ -33,13 +33,14 @@ public class RendererTerrain {
      *
      * @param terrains  A list of all terrains to render
      */
-    public void render(List<Terrain> terrains) {
+    public void render(List<Terrain> terrains, Matrix4f toShadowSpace) {
 
         for(Terrain terrain : terrains) {       //For each terrain...
             prepareTerrain(terrain);            //...prepare the terrain for rendering...
             loadModelMatrix(terrain);           //...upload the transformation matrix to the shader...
             GL11.glDrawElements(GL11.GL_TRIANGLES, terrain.getModel().getVertexCnt(), GL11.GL_UNSIGNED_INT, 0); //...draw all triangles of the terrain...
             unbindModels();                     //...and unbind the model again
+            shader.loadToShadowSpaceMatrix(toShadowSpace);
         }
     }
 
