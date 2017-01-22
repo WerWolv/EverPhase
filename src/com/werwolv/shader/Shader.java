@@ -35,6 +35,10 @@ public abstract class Shader {
         getAllUniformLocations();
     }
 
+    public void connectTextureUnits() {
+
+    }
+
     protected abstract void bindAttributes();
 
     protected abstract void getAllUniformLocations();

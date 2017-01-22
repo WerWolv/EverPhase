@@ -35,7 +35,7 @@ public class LevelOverworld extends Level {
 
     private Gui guiIngame, guiInventory;
 
-    private EntityLight entitySun = new EntityLight(new Vector3f(10, 12, -10), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
+    private EntityLight entitySun = new EntityLight(new Vector3f(10000, 12000, -10000), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
 
     private List<Gui> currentGui = new ArrayList<>();
 
@@ -54,6 +54,7 @@ public class LevelOverworld extends Level {
         entityNm.getModel().getTexture().setReflectivity(0.5F);
         entityNm.getModel().getTexture().setShineDamper(10);
         entityNm.getModel().getTexture().setNormalMapID(loader.loadTexture("crateNormal"));
+        entityNm.getModel().getTexture().setExtraInfoMapID(loader.loadTexture("crateSpecular"));
 
         textureTerrainPack = new TextureTerrainPack(loader,"grassy", "dirt", "path", "pinkFlowers", "blendMap");
 
@@ -134,8 +135,10 @@ public class LevelOverworld extends Level {
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F))
             player.toggleFlight();
 
-        if (player.getCurrentGui() == null)
-            player.move(terrain);
+        if (player.getCurrentGui() == null) {
+            player.onMove(terrain);
+            player.onInteract();
+        }
     }
 
 }

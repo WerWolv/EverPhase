@@ -21,6 +21,8 @@ public class ShaderEntity extends Shader {
     private int loc_skyColor;
     private int loc_numOfRows, loc_offset;
     private int loc_plane;
+    private int loc_textureSampler, loc_extraInfoMapSampler;
+    private int loc_usesExtraInfoMap;
 
     public ShaderEntity() {
         super("shaderEntity", "shaderEntity");
@@ -39,8 +41,12 @@ public class ShaderEntity extends Shader {
         loc_projMatrix = super.getUniformLocation("projectionMatrix");
         loc_viewMatrix = super.getUniformLocation("viewMatrix");
 
+        loc_textureSampler = super.getUniformLocation("textureSampler");
+        loc_extraInfoMapSampler = super.getUniformLocation("extraInfoSampler");
+
         loc_shineDamper = super.getUniformLocation("shineDamper");
         loc_reflectivity = super.getUniformLocation("reflectivity");
+        loc_usesExtraInfoMap = super.getUniformLocation("usesExtraInfoMap");
         loc_useFakeLightning = super.getUniformLocation("useFakeLightning");
         loc_skyColor = super.getUniformLocation("skyColor");
 
@@ -58,6 +64,16 @@ public class ShaderEntity extends Shader {
             loc_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
             loc_attenuation[i] = super.getUniformLocation("attenuation[" + i + "]");
         }
+    }
+
+    public void connectTextureUnits() {
+        //ShaderMap
+        super.loadInteger(loc_textureSampler, 0);
+        super.loadInteger(loc_extraInfoMapSampler, 1);
+    }
+
+    public void loadUseExtraInfoMap(boolean useMap) {
+        super.loadBoolean(loc_usesExtraInfoMap, useMap);
     }
 
     public void loadNumOfRows(int numOfRows) {

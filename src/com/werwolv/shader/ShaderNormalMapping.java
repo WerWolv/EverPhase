@@ -26,8 +26,10 @@ public class ShaderNormalMapping extends Shader {
     private int loc_numberOfRows;
     private int loc_offset;
     private int loc_plane;
-    private int loc_modelTexture;
-    private int loc_normalMap;
+    private int loc_modelSampler;
+    private int loc_normalSampler;
+    private int loc_extraInfoMapSampler;
+    private int loc_usesExtraInfoMap;
 
     public ShaderNormalMapping() {
         super("shaderNormalMap", "shaderNormalMap");
@@ -36,7 +38,7 @@ public class ShaderNormalMapping extends Shader {
     @Override
     public void bindAttributes() {
         super.bindAttribute(0, "position");
-        super.bindAttribute(1, "textureCoordinates");
+        super.bindAttribute(1, "textureCoords");
         super.bindAttribute(2, "normal");
         super.bindAttribute(3, "tangent");
     }
@@ -52,8 +54,10 @@ public class ShaderNormalMapping extends Shader {
         loc_numberOfRows = super.getUniformLocation("numberOfRows");
         loc_offset = super.getUniformLocation("offset");
         loc_plane = super.getUniformLocation("plane");
-        loc_modelTexture = super.getUniformLocation("modelTexture");
-        loc_normalMap = super.getUniformLocation("normalMap");
+        loc_modelSampler = super.getUniformLocation("modelSampler");
+        loc_normalSampler = super.getUniformLocation("normalSampler");
+        loc_extraInfoMapSampler = super.getUniformLocation("extraInfoMapSampler");
+        loc_usesExtraInfoMap = super.getUniformLocation("usesExtraInfoMap");
 
         loc_lightPositionEyeSpace = new int[MAX_LIGHTS];
         loc_lightColour = new int[MAX_LIGHTS];
@@ -66,8 +70,13 @@ public class ShaderNormalMapping extends Shader {
     }
 
     public void connectTextureUnits() {
-        super.loadInteger(loc_modelTexture, 0);
-        super.loadInteger(loc_normalMap, 1);
+        super.loadInteger(loc_modelSampler, 0);
+        super.loadInteger(loc_normalSampler, 1);
+        super.loadInteger(loc_extraInfoMapSampler, 2);
+    }
+
+    public void loadUseExtraInfoMap(boolean useMap) {
+        super.loadBoolean(loc_usesExtraInfoMap, useMap);
     }
 
     public void loadClipPlane(Vector4f plane) {

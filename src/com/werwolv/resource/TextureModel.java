@@ -4,12 +4,14 @@ public class TextureModel {
 
     private int textureID;
     private int normalMapID;
+    private int extraInfoMapID;
 
     private float shineDamper = 1;
     private float reflectivity = 0;
 
     private boolean hasTransparency = false;
     private boolean useFakeLightning = false;
+    private boolean hasExtraInfoMap = false;
 
     private int numOfRows = 1;
 
@@ -27,6 +29,19 @@ public class TextureModel {
 
     public void setNormalMapID(int normalMapID) {
         this.normalMapID = normalMapID;
+    }
+
+    public int getExtraInfoMapID() {
+        return extraInfoMapID;
+    }
+
+    public void setExtraInfoMapID(int extraInfoMapID) {
+        this.extraInfoMapID = extraInfoMapID;
+        this.hasExtraInfoMap = true;
+    }
+
+    public boolean hasExtraInfoMap() {
+        return hasExtraInfoMap;
     }
 
     public float getShineDamper() {

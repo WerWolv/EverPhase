@@ -66,6 +66,13 @@ public class RendererNormalMapping {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureID());
         GL13.glActiveTexture(GL13.GL_TEXTURE1);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getNormalMapID());
+
+        shader.loadUseExtraInfoMap(texture.hasExtraInfoMap());
+
+        if(texture.hasExtraInfoMap()) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE2);         //Activate the second texture store
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getExtraInfoMapID());  //Bind the texture of the model to memory
+        }
     }
 
     private void unbindTexturedModel() {

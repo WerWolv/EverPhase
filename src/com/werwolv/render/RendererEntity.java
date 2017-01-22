@@ -24,6 +24,7 @@ public class RendererEntity {
 
         shader.start();                                     //Start the shader rendering
         shader.loadProjectionMatrix(projectionMatrix);      //Load the projection matrix to the shader to add perspective
+        shader.connectTextureUnits();
         shader.stop();                                      //Stop the shader rendering
     }
 
@@ -69,6 +70,13 @@ public class RendererEntity {
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);         //Activate the first texture store
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureID());  //Bind the texture of the model to memory
+
+        shader.loadUseExtraInfoMap(texture.hasExtraInfoMap());
+
+        if(texture.hasExtraInfoMap()) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE1);         //Activate the first texture store
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getExtraInfoMapID());  //Bind the texture of the model to memory
+        }
     }
 
     /*
