@@ -3,6 +3,7 @@ package com.werwolv.game.render;
 import com.werwolv.game.entity.Entity;
 import com.werwolv.game.entity.EntityLight;
 import com.werwolv.game.entity.EntityPlayer;
+import com.werwolv.game.main.Settings;
 import com.werwolv.game.shader.ShaderEntity;
 import com.werwolv.game.shader.ShaderTerrain;
 import com.werwolv.game.terrain.Terrain;
@@ -141,10 +142,12 @@ public class RendererMaster {
     }
 
     public void renderShadowMap(List<Entity> entities, List<Entity> entitiesNM, EntityLight sun) {
-        for(Entity entity : entities) processEntity(entity);
-        for (Entity entity : entitiesNM) processEntityNM(entity);
+        if(Settings.shadows) {
+            for (Entity entity : entities) processEntity(entity);
+            for (Entity entity : entitiesNM) processEntityNM(entity);
 
-        shadowMapMasterRenderer.render(this.entities, this.entitiesNM, sun);
+            shadowMapMasterRenderer.render(this.entities, this.entitiesNM, sun);
+        }
     }
 
     /*

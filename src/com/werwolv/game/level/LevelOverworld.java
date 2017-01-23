@@ -52,7 +52,7 @@ public class LevelOverworld extends Level {
     @Override
     public void initLevel() {
         lights.add(entitySun);
-        entity = new Entity(loader, "dragon", "white", new Vector3f(10, 0, -10), new Vector3f(0, 60, 0), 1, false);
+        entity = new Entity(loader, "dragon", "crate", new Vector3f(10, 0, -10), new Vector3f(0, 60, 0), 1, false);
         entityNm = new Entity(loader, "crate", "crate", new Vector3f(20, 20, -10), new Vector3f(0, 60, 0), 0.03F, true);
 
         entity.getModel().getTexture().setReflectivity(1.0F);
@@ -89,7 +89,7 @@ public class LevelOverworld extends Level {
 
         guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
         guiInventory = new GuiInventory(renderer, renderer.getShadowMapTexture(), new Vector2f(0, 0), new Vector2f(1, 1));
-        guis.add(guiIngame);
+        //guis.add(guiIngame);
 
         currentGui.add(null);
     }
@@ -153,17 +153,6 @@ public class LevelOverworld extends Level {
             player.onMove(terrain);
             player.onInteract();
         }
-    }
-
-    @Override
-    public void applyPostProcessingEffects() {
-        super.applyPostProcessingEffects();
-
-        PostProcessing.applyEffect(new FilterBright());
-        PostProcessing.applyEffect(new FilterGaussianBlurHorizontal());
-        PostProcessing.applyEffect(new FilterGaussianBlurVertical());
-        PostProcessing.applyEffect(new FilterBloom());
-        PostProcessing.applyEffect(new FilterContrast(0.3F));
     }
 
     public void clean() {

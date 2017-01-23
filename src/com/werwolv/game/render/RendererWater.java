@@ -32,8 +32,8 @@ public class RendererWater {
 
 	public RendererWater(ResourceLoader loader, Matrix4f projectionMatrix, float nearPlane, float farPlane) {
 		this.shader = new ShaderWater();
-		fboReflection = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE);
-		fboRefraction = new FrameBufferObject(1280, 720, FrameBufferObject.DEPTH_TEXTURE);
+		fboReflection = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
+		fboRefraction = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
 		textureIdDuDvMap = loader.loadTexture("dudvMapWater");
 		textureIdNormalMap = loader.loadTexture("normalMap");

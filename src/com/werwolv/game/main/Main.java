@@ -9,6 +9,8 @@ import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.level.Level;
 import com.werwolv.game.level.LevelOverworld;
 import com.werwolv.game.modelloader.ResourceLoader;
+import com.werwolv.launcher.Launcher;
+import com.werwolv.launcher.TextAreaOutputStream;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -17,10 +19,14 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.IntBuffer;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.WGLEXTSwapControl.wglSwapIntervalEXT;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
@@ -35,23 +41,36 @@ public class Main {
     private static float delta;
     private static long window;
     private static EntityPlayer player;
-    private static boolean fullscreen = false;
     private boolean running = true;
 
     private ResourceLoader loader = new ResourceLoader();
 
-    public static void main(String[] args) {
+    public void startGame(List<String> args) {
         for (String arg : args) {
             System.out.println(arg);
-            switch (arg) {
+            switch (arg.toLowerCase()) {
                 case "fullscreen":
-                    fullscreen = true;
+                    Settings.fullscreen = true;
+                    break;
+                case "vsync":
+                    Settings.vSync = true;
+                    break;
+                case "antialiasing":
+                    Settings.antialiasing = true;
+                    break;
+                case "anisotropicfilter":
+                    Settings.anisotropicFilter = true;
+                    break;
+                case "shadow":
+                    Settings.shadows = true;
+                    break;
+                case "bloom":
+                    Settings.bloom = true;
                     break;
             }
         }
 
-        Main game = new Main();
-        game.run();
+        this.run();
     }
 
     public static void init() {
@@ -66,7 +85,7 @@ public class Main {
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
 
-        window = glfwCreateWindow(fullscreen ? vidmode.width() : 720, fullscreen ? vidmode.height() : 480, "GameRunner", fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+        window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 720, Settings.fullscreen ? vidmode.height() : 480, "GameRunner", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
 
 
         if(window == NULL) {
@@ -91,7 +110,12 @@ public class Main {
 
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL13.GL_MULTISAMPLE);
+
+        if(Settings.antialiasing)
+            glEnable(GL13.GL_MULTISAMPLE);
+
+        if(Settings.vSync)
+            wglSwapIntervalEXT(1);
 
         lastFrameTime = getCurrentTime();
         setCursorVisibility(false);

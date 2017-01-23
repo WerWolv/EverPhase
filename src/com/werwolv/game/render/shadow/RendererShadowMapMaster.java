@@ -7,13 +7,14 @@ import com.werwolv.game.entity.Entity;
 import com.werwolv.game.entity.EntityLight;
 import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.fbo.FrameBufferObject;
-import com.werwolv.game.fbo.ShadowFrameBuffer;
 import com.werwolv.game.shader.ShaderShadow;
 import com.werwolv.game.model.ModelTextured;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+
+import static com.werwolv.game.fbo.FrameBufferObject.DEPTH_TEXTURE;
 
 /**
  * This class is in charge of using all of the classes in the shadows package to
@@ -28,7 +29,7 @@ public class RendererShadowMapMaster {
 
 	private static final int SHADOW_MAP_SIZE = 8192;
 
-	private ShadowFrameBuffer shadowFbo;
+	private FrameBufferObject shadowFbo;
 	private ShaderShadow shader;
 	private ShadowBox shadowBox;
 	private Matrix4f projectionMatrix = new Matrix4f();
@@ -52,7 +53,7 @@ public class RendererShadowMapMaster {
 	public RendererShadowMapMaster(EntityPlayer player) {
 		shader = new ShaderShadow();
 		shadowBox = new ShadowBox(lightViewMatrix, player);
-		shadowFbo = new ShadowFrameBuffer(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
+		shadowFbo = new FrameBufferObject(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, DEPTH_TEXTURE);
 		entityRenderer = new RendererShadowMapEntity(shader, projectionViewMatrix);
 	}
 
@@ -101,7 +102,7 @@ public class RendererShadowMapMaster {
 	 */
 	public void cleanUp() {
 		shader.clean();
-		shadowFbo.cleanUp();
+		shadowFbo.clean();
 	}
 
 	/**
@@ -110,7 +111,7 @@ public class RendererShadowMapMaster {
 	 *         each frame.
 	 */
 	public int getShadowMap() {
-		return shadowFbo.getShadowMap();
+		return shadowFbo.getDepthTexture();
 	}
 
 	/**
