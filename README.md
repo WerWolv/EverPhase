@@ -28,6 +28,19 @@ License: BSD 3-Clause (see LICENSE.txt)
 |Skilltree|-|✗|
 |Tinkering / Invention|-|✗|
 
+# Current Tasks
+-Shadows on Entities
+-Particles using geometry shaders
+-Fonts
+-Fixing Audio issues when unpluging default device
+-Raytrace interaction with entities
+-AABBs
+-GUI positioning
+-Main Menu
+-Login system
+-Server
+-Minimap with the new FBOs (Hopefully without strange light attenuation now)
+
 
 ## Build Requirements
 
