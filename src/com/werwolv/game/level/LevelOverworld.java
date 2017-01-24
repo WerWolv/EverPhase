@@ -2,6 +2,7 @@ package com.werwolv.game.level;
 
 import com.werwolv.game.api.event.EventBus;
 import com.werwolv.game.api.event.player.OpenGuiEvent;
+import com.werwolv.game.audio.AudioHelper;
 import com.werwolv.game.callback.CursorPositionCallback;
 import com.werwolv.game.callback.KeyCallback;
 import com.werwolv.game.entity.Entity;
@@ -97,7 +98,6 @@ public class LevelOverworld extends Level {
     @Override
     public void updateLevel() {
         glfwPollEvents();
-        handleInput();
     }
 
     @Override
@@ -131,14 +131,16 @@ public class LevelOverworld extends Level {
         }
     }
 
-    private void handleInput() {
-        if (KeyCallback.isKeyPressed(GLFW_KEY_ESCAPE)) System.exit(0);
+    @Override
+    public void handleInput() {
+        super.handleInput();
 
         if (KeyCallback.isKeyPressedEdge(GLFW_KEY_E)) {
             if (player.getCurrentGui() != null) {
                 player.setCurrentGui(null);
                 Main.setCursorVisibility(false);
                 CursorPositionCallback.enableCursorListener(true);
+                AudioHelper.playSound("random");
             } else {
                 EventBus.postEvent(new OpenGuiEvent(player, guiInventory));
                 Main.setCursorVisibility(true);
@@ -161,5 +163,6 @@ public class LevelOverworld extends Level {
         postProcessing.clean();
         outputFBO.clean();
         PostProcessing.clean();
+        AudioHelper.clean();
     }
 }

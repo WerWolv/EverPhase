@@ -1,6 +1,7 @@
 package com.werwolv.game.main;
 
 import com.werwolv.game.api.event.EventBus;
+import com.werwolv.game.audio.AudioHelper;
 import com.werwolv.game.callback.CursorPositionCallback;
 import com.werwolv.game.callback.KeyCallback;
 import com.werwolv.game.callback.MouseButtonCallback;
@@ -41,7 +42,6 @@ public class Main {
     private static float delta;
     private static long window;
     private static EntityPlayer player;
-    private boolean running = true;
 
     private ResourceLoader loader = new ResourceLoader();
 
@@ -96,6 +96,7 @@ public class Main {
         glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
         glfwSetCursorPosCallback(window, cursorPosCallback = new CursorPositionCallback());
         glfwSetScrollCallback(window, scrollCallback = new ScrollCallback());
+        glfwSetWindowShouldClose(window, false);
 
         glfwSetWindowSizeCallback(window, (window, width, height) -> {
             GL11.glViewport(0, 0, width, height);
@@ -122,6 +123,9 @@ public class Main {
         EventBus.registerEventHandlers();
 
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
+
+        AudioHelper.createContext();
+        AudioHelper.loadSoundFile("random");
     }
 
     public static void setCursorVisibility(boolean visible) {
@@ -167,11 +171,13 @@ public class Main {
         currentLevel.initLevel();
 
         currentLevel.applyPostProcessingEffects();
-        while(running) {
+        while(true) {
             glfwSwapBuffers(window);
 
+            AudioHelper.setListener(player);
             EventBus.processEvents();
             currentLevel.updateLevel();
+            currentLevel.handleInput();
             currentLevel.renderLevel();
             currentLevel.renderGUI();
 
@@ -180,13 +186,13 @@ public class Main {
             lastFrameTime = currFrameTime;
 
             if(glfwWindowShouldClose(window)) {
-                running = false;
+                break;
             }
         }
-
         currentLevel.clean();
         keyCallback.free();
         mouseButtonCallback.free();
         cursorPosCallback.free();
+        System.exit(1);
     }
 }

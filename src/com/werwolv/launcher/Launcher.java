@@ -25,12 +25,19 @@ public class Launcher extends JFrame {
     private JPasswordField passwordField1;
     private JEditorPane editorPane1;
 
+    private Thread gameThread;
+
     private TextAreaOutputStream consoleStream = new TextAreaOutputStream(console);
 
     public Launcher() {
         super("Launcher");
 
         setContentPane(rootPanel);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             editorPane1.setPage("http://www.paulsaegesser.ch");
 
@@ -45,6 +52,7 @@ public class Launcher extends JFrame {
         setMaximumSize(new Dimension(1000, 600));
         setVisible(true);
 
+
         System.setOut(new PrintStream(consoleStream));
         System.setErr(new PrintStream(consoleStream));
 
@@ -58,7 +66,15 @@ public class Launcher extends JFrame {
             if(bloomCheckBox.isSelected()) args.add("bloom");
             if(fullscreenCheckBox.isSelected()) args.add("fullscreen");
 
-            new Thread(() -> new Main().startGame(args)).start();
+            gameThread = new Thread(() -> {
+                try {
+                    new Main().startGame(args);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            });
+
+            gameThread.start();
         }));
     }
 

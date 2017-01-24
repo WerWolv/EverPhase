@@ -2,8 +2,8 @@ package com.werwolv.game.api.event;
 
 public abstract class Event {
 
-    protected long timeStamp = System.currentTimeMillis();
-    protected String name;
+    private long timeStamp = System.currentTimeMillis();
+    private String name;
 
     public Event(String name) {
         this.name = name;

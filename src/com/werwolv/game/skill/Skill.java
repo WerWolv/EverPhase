@@ -2,12 +2,12 @@ package com.werwolv.game.skill;
 
 public abstract class Skill {
 
-    protected String name;
-    protected int textureID;
-    protected int skillID;
-    protected int maxLevel = 99;
-    protected int currLevel;
-    protected int currExperience;
+    private String name;
+    private int textureID;
+    private int skillID;
+    private int maxLevel = 99;
+    private int currLevel;
+    private int currExperience;
     private int xOffset, yOffset;
 
     protected Skill(String name, int textureID, int xOffset, int yOffset, int skillID) {

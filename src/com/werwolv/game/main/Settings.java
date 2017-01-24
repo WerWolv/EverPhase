@@ -1,8 +1,5 @@
 package com.werwolv.game.main;
 
-/**
- * Created by et14sani on 23.01.2017.
- */
 public class Settings {
 
     public static boolean fullscreen = false;

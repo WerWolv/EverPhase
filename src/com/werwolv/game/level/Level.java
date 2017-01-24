@@ -1,18 +1,23 @@
 package com.werwolv.game.level;
 
+import com.werwolv.game.callback.KeyCallback;
 import com.werwolv.game.entity.Entity;
 import com.werwolv.game.entity.EntityLight;
 import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.gui.Gui;
+import com.werwolv.game.main.Main;
 import com.werwolv.game.main.Settings;
 import com.werwolv.game.render.postProcessing.*;
 import com.werwolv.game.terrain.Terrain;
 import com.werwolv.game.modelloader.ResourceLoader;
 import com.werwolv.game.render.RendererMaster;
 import com.werwolv.game.terrain.TileWater;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 
 public abstract class Level {
 
@@ -57,6 +62,11 @@ public abstract class Level {
         }
 
         PostProcessing.applyEffect(new FilterContrast(0.25F));
+    }
+
+    public void handleInput() {
+        if (KeyCallback.isKeyPressed(GLFW_KEY_ESCAPE))
+            GLFW.glfwSetWindowShouldClose(Main.getWindow(), true);
     }
 
     public void clean() {

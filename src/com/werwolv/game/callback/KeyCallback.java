@@ -18,9 +18,7 @@ public class KeyCallback extends GLFWKeyCallback {
      *  @return     If the passed key is pressed
      */
     public static boolean isKeyPressed(int key) {
-        if (key < 0 || key >= 1024) return false;    //Abort if the passed key is out of bounds
-
-        return keys[key];
+        return !(key < 0 || key >= 1024) && keys[key];
     }
 
     public static boolean isKeyPressedEdge(int key) {
