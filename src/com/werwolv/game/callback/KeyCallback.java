@@ -11,7 +11,7 @@ public class KeyCallback extends GLFWKeyCallback {
     private static boolean[] keys = new boolean[1024];  //Array to store the state of each and every button on the Keyboard
     private static boolean[] lastKeys = new boolean[1024];  //Array to store the state of each and every button on the Keyboard
 
-    /*
+    /**
      *  Get the current state of a key
      *
      *  @param key  The key to be tested
@@ -31,7 +31,7 @@ public class KeyCallback extends GLFWKeyCallback {
         return result;
     }
 
-    /*
+    /**
      * Called when any key on the keyboard got pressed
      *
      * @param window    The id of the current window

@@ -1,24 +1,21 @@
 package com.werwolv.game.audio;
 
 import com.werwolv.game.entity.EntityPlayer;
-import org.lwjgl.BufferUtils;
+import com.werwolv.game.toolbox.Maths;
+import org.joml.Matrix4f;
 import org.lwjgl.openal.*;
 import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.libc.Stdlib;
 
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.lwjgl.openal.ALC10.*;
 
 public class AudioHelper {
 
     public static long context, device;
-    public static Map<String, Integer> audioFiles = new HashMap<>();
 
     public static void createContext() {
         String defaultDeviceName = ALC10.alcGetString(0, ALC10.ALC_DEFAULT_DEVICE_SPECIFIER);
@@ -28,14 +25,16 @@ public class AudioHelper {
 
         ALCapabilities alCapabilities = AL.createCapabilities(ALC.createCapabilities(device));
 
+        AL10.alDistanceModel(AL11.AL_EXPONENT_DISTANCE);
+
         if(!alCapabilities.OpenAL10) {
-            System.err.println("OpenGL 1.0 isn't supported!");
+            System.err.println("OpenAL 1.0 isn't supported!");
         }
 
         System.out.println("OpenAL: " + AL10.alGetString(AL10.AL_VERSION));
     }
 
-    public static void loadSoundFile(String fileName) {
+    public static int loadSoundFile(String fileName) {
         MemoryStack.stackPush();
         IntBuffer channelsBuffer = MemoryStack.stackMallocInt(1);
         MemoryStack.stackPush();
@@ -60,52 +59,17 @@ public class AudioHelper {
         AL10.alBufferData(bufferPointer, format, rawAudioBuffer, sampleRate);
 
         Stdlib.free(rawAudioBuffer);
-        audioFiles.put(fileName, bufferPointer);
+
+        return bufferPointer;
     }
 
     public static void setListener(EntityPlayer player) {
         AL10.alListener3f(AL10.AL_POSITION, player.getPosition().x(), player.getPosition().y(), player.getPosition().z());
+        AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
 
-        FloatBuffer listenerPosition = BufferUtils.createFloatBuffer( 3 ).put(
-                new float[] { 0.0f, 0.0f, 0.0f } );
-        FloatBuffer listenerOrientation = BufferUtils.createFloatBuffer( 6 ).put (
-                new float[] { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f } );
-        FloatBuffer listenerVelocity = BufferUtils.createFloatBuffer( 3 ).put (
-                new float[] { 0.0f, 0.0f, 0.0f } );
+        Matrix4f absMatrix = Maths.createTransformationMatrix(player.getPosition(), player.getYaw(), player.getPitch(), player.getRoll(), 1.0F);
 
-        listenerPosition.flip();
-        listenerOrientation.flip();
-        listenerVelocity.flip();
-
-        float xOffset = player.getPosition().x() - listenerPosition.get( 0 );
-        float yOffset = player.getPosition().y() - listenerPosition.get( 1 );
-        float zOffset = player.getPosition().z() - listenerPosition.get( 2 );
-
-        listenerPosition.put( 0, player.getPosition().x() );
-        listenerPosition.put( 1, player.getPosition().y() );
-        listenerPosition.put( 2, player.getPosition().z() );
-
-        AL10.alListenerfv( AL10.AL_POSITION, listenerPosition );
-
-        listenerOrientation.put( 0, listenerOrientation.get( 0 ) + xOffset );
-        listenerOrientation.put( 1, listenerOrientation.get( 1 ) + yOffset );
-        listenerOrientation.put( 2, listenerOrientation.get( 2 ) + zOffset );
-
-        AL10.alListenerfv( AL10.AL_ORIENTATION, listenerOrientation );
-        float xOffsetAngle = -1.0f * (float) Math.sin(player.getYaw());
-        float zOffsetAngle = -1.0f * (float) Math.cos(player.getYaw());
-        listenerOrientation.put( 0, listenerPosition.get( 0 ) + xOffsetAngle);
-        listenerOrientation.put( 2, listenerPosition.get( 2 ) + zOffsetAngle);
-        AL10.alListenerfv( AL10.AL_ORIENTATION, listenerOrientation );
-    }
-
-    public static void playSound(String fileName) {
-        int sourcePointer = AL10.alGenSources();
-        AL10.alSource3f(sourcePointer, AL10.AL_POSITION, 0,0,0);
-        AL10.alSource3f(sourcePointer, AL10.AL_VELOCITY, 1F,1F,1F);
-        AL10.alSourcei(sourcePointer, AL10.AL_BUFFER, audioFiles.get(fileName));
-        AL10.alSourcePlay(sourcePointer);
-
+        AL10.alListenerfv(AL10.AL_ORIENTATION, new float[] { absMatrix.m00(), absMatrix.m10(), absMatrix.m20(), absMatrix.m01(), absMatrix.m11(), absMatrix.m21() });
     }
 
     public static void clean() {

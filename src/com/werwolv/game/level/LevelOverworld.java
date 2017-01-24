@@ -3,6 +3,7 @@ package com.werwolv.game.level;
 import com.werwolv.game.api.event.EventBus;
 import com.werwolv.game.api.event.player.OpenGuiEvent;
 import com.werwolv.game.audio.AudioHelper;
+import com.werwolv.game.audio.SoundSource;
 import com.werwolv.game.callback.CursorPositionCallback;
 import com.werwolv.game.callback.KeyCallback;
 import com.werwolv.game.entity.Entity;
@@ -140,7 +141,7 @@ public class LevelOverworld extends Level {
                 player.setCurrentGui(null);
                 Main.setCursorVisibility(false);
                 CursorPositionCallback.enableCursorListener(true);
-                AudioHelper.playSound("random");
+                new SoundSource("random", 1.0F, 1.0F, false).setLooping(true).setPosition(0,0,0).setVelocity(1,1,1).play();
             } else {
                 EventBus.postEvent(new OpenGuiEvent(player, guiInventory));
                 Main.setCursorVisibility(true);
