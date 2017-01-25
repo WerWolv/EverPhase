@@ -124,8 +124,8 @@ public class Main {
 
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
 
-        AudioHelper.createContext();
-        AudioHelper.loadSoundFile("random");
+        /*AudioHelper.createContext();
+        AudioHelper.loadSoundFile("random");*/
     }
 
     public static void setCursorVisibility(boolean visible) {
@@ -174,7 +174,7 @@ public class Main {
         while(true) {
             glfwSwapBuffers(window);
 
-            AudioHelper.setListener(player);
+/*            AudioHelper.setListener(player);*/
             EventBus.processEvents();
             currentLevel.updateLevel();
             currentLevel.handleInput();

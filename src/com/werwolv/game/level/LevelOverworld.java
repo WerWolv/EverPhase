@@ -164,6 +164,6 @@ public class LevelOverworld extends Level {
         postProcessing.clean();
         outputFBO.clean();
         PostProcessing.clean();
-        AudioHelper.clean();
+//        AudioHelper.clean();
     }
 }

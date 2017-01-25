@@ -53,8 +53,8 @@ public class Launcher extends JFrame {
         setVisible(true);
 
 
-        System.setOut(new PrintStream(consoleStream));
-        System.setErr(new PrintStream(consoleStream));
+        /*System.setOut(new PrintStream(consoleStream));
+        System.setErr(new PrintStream(consoleStream));*/
 
         start.addActionListener((e -> {
             List<String> args = new ArrayList<>();

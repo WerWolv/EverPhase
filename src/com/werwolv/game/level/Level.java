@@ -61,6 +61,8 @@ public abstract class Level {
             PostProcessing.applyEffect(new FilterBloom());
         }
 
+        PostProcessing.applyEffect(new FilterVignette());
+
         PostProcessing.applyEffect(new FilterContrast(0.25F));
     }
 
