@@ -27,7 +27,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class RendererMaster {
 
-    public static final Vector3f SKY_COLOR = new Vector3f(0.5F, 0.5F, 0.5F);   //The color of the sky
+    public static final Vector3f SKY_COLOR = new Vector3f(0.446F, 0.696F, 0.946F);   //The color of the sky
     public static final float FOV = 70;                //The field of view
     public static final float NEAR_PLANE = 0.01F;       //The plane to start rendering
     public static final float FAR_PLANE = 1000.0F;     //The plane to stop rendering
@@ -72,7 +72,7 @@ public class RendererMaster {
         shadowMapMasterRenderer = new RendererShadowMapMaster(player);
     }
 
-    /*
+    /**
      * Disables rendering of not seen triangles
      */
     public static void enableCulling() {
@@ -80,19 +80,18 @@ public class RendererMaster {
         GL11.glCullFace(GL11.GL_BACK);
     }
 
-    /*
+    /**
      * Enables rendering og not seen triangles
      */
     public static void disableCulling() {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
-    /*
+    /**
      * Helper function that renders everything in the game.
      *
      * @param entities  A list of all entities to render
      * @param terrains  A list of all terrains to render
-     * @param waters    A list of every water plane to render
      * @param lights    A list of all lights to render
      * @param player    The player to render the camera in the right place
      * @param clipPlane The plane where everything above stops rendering
@@ -105,11 +104,12 @@ public class RendererMaster {
         this.render(player, lights, clipPlane);
     }
 
-    /*
+    /**
      * Renders the camera, entities, terrains and lights into the world
      *
      * @param player    The player to render
      * @param lights    The lights to light up the entities
+     * @param clipPlane The plane where everything above stops rendering
      */
     public void render(EntityPlayer player, List<EntityLight> lights, Vector4f clipPlane) {
         init();
@@ -150,7 +150,7 @@ public class RendererMaster {
         }
     }
 
-    /*
+    /**
      * Reset everything to start a new frame
      */
     private void init() {
@@ -161,7 +161,7 @@ public class RendererMaster {
         GL11.glBindTexture(GL_TEXTURE_2D, getShadowMapTexture());
     }
 
-    /*
+    /**
      * Create a new projection matrix
      */
     private void createProjectionMatrix(){
@@ -178,14 +178,15 @@ public class RendererMaster {
         projectionMatrix.m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
         projectionMatrix.m33(0);
     }
-    /*
+
+    /**
      * Add the passed terrain to the list of terrains
      */
     private void processTerrains(Terrain terrain) {
         terrains.add(terrain);
     }
 
-    /*
+    /**
      * Add the passed entity to the list of entities and link it to
      * other entities with the same model
      */
@@ -202,10 +203,10 @@ public class RendererMaster {
         }
     }
 
-    /*
- * Add the passed entity to the list of entities and link it to
- * other entities with the same model
- */
+    /**
+    * Add the passed entity to the list of entities and link it to
+    * other entities with the same model
+    */
     private void processEntityNM(Entity entity) {
         ModelTextured entityModel = entity.getModel();      //Get the model of the entity
         List<Entity> batch = entitiesNM.get(entityModel);     //Get the list of entities linked to that model
@@ -219,7 +220,7 @@ public class RendererMaster {
         }
     }
 
-    /*
+    /**
      * Cleanup method to clear the memory after using it
      */
     public void clean() {

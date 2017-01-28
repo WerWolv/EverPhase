@@ -55,14 +55,14 @@ public abstract class Level {
         PostProcessing.init(loader);
 
         if(Settings.bloom) {
-            PostProcessing.applyEffect(new FilterBright());
+            PostProcessing.applyEffect(new FilterBright(0.6F));
             PostProcessing.applyEffect(new FilterGaussianBlurHorizontal());
             PostProcessing.applyEffect(new FilterGaussianBlurVertical());
             PostProcessing.applyEffect(new FilterBloom());
         }
+        PostProcessing.applyEffect(new FilterLightScattering());
 
         PostProcessing.applyEffect(new FilterVignette());
-
         PostProcessing.applyEffect(new FilterContrast(0.25F));
     }
 

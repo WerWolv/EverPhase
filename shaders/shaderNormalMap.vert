@@ -18,7 +18,7 @@ uniform vec3 lightPositionEyeSpace[4];
 uniform float numberOfRows;
 uniform vec2 offset;
 
-const float density = 0;
+const float density = 0.0035;
 const float gradient = 5.0;
 
 uniform vec4 plane;
@@ -28,7 +28,7 @@ void main(void){
 	vec4 worldPosition = transformationMatrix * vec4(position,1.0);
 	gl_ClipDistance[0] = dot(worldPosition, plane);
 	mat4 modelViewMatrix = viewMatrix * transformationMatrix;
-	vec4 positionRelativeToCam = modelViewMatrix * vec4(position,1.0);
+	vec4 positionRelativeToCam = viewMatrix * worldPosition;
 	gl_Position = projectionMatrix * positionRelativeToCam;
 	
 	pass_textureCoords = (textureCoords/numberOfRows) + offset;
@@ -49,7 +49,7 @@ void main(void){
 	toCameraVector = -positionRelativeToCam.xyz * toTangentSpace;
 	
 	float distance = length(positionRelativeToCam.xyz);
-	visibility = exp(-pow((distance*density),gradient));
-	visibility = clamp(visibility,0.0,1.0);
+	visibility = exp(-pow((distance * density), gradient));
+	visibility = clamp(visibility, 0.0, 1.0);
 	
 }

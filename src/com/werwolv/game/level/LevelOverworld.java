@@ -46,7 +46,6 @@ public class LevelOverworld extends Level {
     private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
-
     public LevelOverworld(EntityPlayer player) {
         super(player);
     }
@@ -130,6 +129,7 @@ public class LevelOverworld extends Level {
         if (player.getCurrentGui() != null) {
             renderer.getRendererGui().render(player.getCurrentGui());
         }
+
     }
 
     @Override

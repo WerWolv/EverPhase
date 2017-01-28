@@ -19,6 +19,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GLUtil;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -188,6 +189,8 @@ public class Main {
             if(glfwWindowShouldClose(window)) {
                 break;
             }
+
+            GLUtil.setupDebugMessageCallback(System.err);
         }
         currentLevel.clean();
         keyCallback.free();

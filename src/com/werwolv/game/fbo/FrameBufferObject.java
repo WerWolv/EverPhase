@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import com.werwolv.game.main.Main;
 import org.lwjgl.opengl.*;
 
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 public class FrameBufferObject {
 
 	public static final int NONE = 0;
@@ -165,8 +167,7 @@ public class FrameBufferObject {
 	private void createTextureAttachment() {
 		colorTexture = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, colorTexture);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
-				(ByteBuffer) null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (ByteBuffer) null);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, colorTexture, 0);
