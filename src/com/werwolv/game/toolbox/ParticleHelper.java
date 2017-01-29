@@ -22,7 +22,8 @@ public class ParticleHelper {
         Iterator<Map.Entry<TextureParticle, List<EntityParticle>>> mapIterator = particles.entrySet().iterator();
 
         while(mapIterator.hasNext()) {
-            List<EntityParticle> list = mapIterator.next().getValue();
+            Map.Entry<TextureParticle, List<EntityParticle>> entry = mapIterator.next();
+            List<EntityParticle> list = entry.getValue();
             Iterator<EntityParticle> iter = list.iterator();
 
             while(iter.hasNext()) {
@@ -34,7 +35,8 @@ public class ParticleHelper {
                         mapIterator.remove();
                 }
             }
-            sortHighToLow(list);
+            if(!entry.getKey().usesAdditiveBlending())
+                sortHighToLow(list);
         }
     }
 

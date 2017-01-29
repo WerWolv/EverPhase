@@ -25,6 +25,8 @@ public class EntityParticle extends Entity {
 
     private float distanceToCamera;
 
+    private Vector3f change = new Vector3f();
+
     public EntityParticle(TextureParticle texture, Vector3f position, Vector3f velocity, float gravityEffect, float lifeLength, float rotation, float scale) {
         super(position, rotation, scale);
         this.texture = texture;
@@ -37,13 +39,13 @@ public class EntityParticle extends Entity {
 
     public boolean update(EntityPlayer player) {
         velocity.y += Entity.GRAVITY * gravityEffect * Main.getFrameTimeSeconds();
-        Vector3f change = new Vector3f(velocity);
+        change.set(velocity);
 
-        change = change.mul(Main.getFrameTimeSeconds(), new Vector3f());
+        change.mul(Main.getFrameTimeSeconds());
 
         distanceToCamera = player.getPosition().sub(position, new Vector3f()).lengthSquared();
 
-        position = change.add(position, new Vector3f());
+        position.add(change);
         updateTextureCoordInfo();
 
         elapsedTime += Main.getFrameTimeSeconds();
