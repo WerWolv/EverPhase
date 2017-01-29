@@ -11,7 +11,9 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class Launcher extends JFrame {
     private JComboBox mipmapType;
     private JSlider mipmapLevel;
     private JComboBox shadowQuality;
+    private JLabel mipmapLevelValue;
     private WebView webView;
 
     private Thread gameThread;
@@ -44,7 +47,7 @@ public class Launcher extends JFrame {
     private TextAreaOutputStream consoleStream = new TextAreaOutputStream(console);
 
     public Launcher() {
-        super("Launcher");
+        super("EverPhase Launcher");
 
 
         try {
@@ -69,11 +72,11 @@ public class Launcher extends JFrame {
         setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);
+        mipmapLevelValue.setText(Integer.toString(mipmapLevel.getValue()));
 
 
-
-        /*System.setOut(new PrintStream(consoleStream));
-        System.setErr(new PrintStream(consoleStream));*/
+        System.setOut(new PrintStream(consoleStream));
+        System.setErr(new PrintStream(consoleStream));
 
         start.addActionListener((e -> {
             List<String> args = new ArrayList<>();
@@ -90,13 +93,16 @@ public class Launcher extends JFrame {
             gameThread = new Thread(() -> {
                 try {
                     new Main().startGame(args);
+                    start.setEnabled(false);
+                    tabbedPane1.setSelectedIndex(1);
+                    gameThread.stop();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
-            });
-
+            }, "EverPhase");
             gameThread.start();
         }));
+        mipmapLevel.addChangeListener((e) -> mipmapLevelValue.setText(Integer.toString(mipmapLevel.getValue())));
     }
 
     private Scene createWebScene() {

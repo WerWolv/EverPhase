@@ -49,7 +49,7 @@ public class LevelOverworld extends Level {
     private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
-    private FontType font = new FontType(loader.loadGuiTexture("fonts/sans").getTextureID(), new File("res/fonts/sans.fnt"));
+    private FontType font = new FontType(loader.loadGuiTexture("fonts/productSans").getTextureID(), new File("res/fonts/productSans.fnt"));
 
     private GuiText text;
 

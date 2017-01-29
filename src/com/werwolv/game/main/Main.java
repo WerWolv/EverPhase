@@ -38,7 +38,8 @@ public class Main {
     private static Level currentLevel;
     private static long lastFrameTime;
     private static float delta;
-    private static long window;
+    private long window;
+    private static long static_Window;
     private static EntityPlayer player;
 
     private ResourceLoader loader = new ResourceLoader();
@@ -85,12 +86,10 @@ public class Main {
         this.run();
     }
 
-    public static void init() {
+    public void init() {
         if(!glfwInit()){
             System.err.println("GLFW initialization failed!");
         }
-
-        glfwDestroyWindow(window);
 
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
@@ -98,7 +97,7 @@ public class Main {
 
 
         window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 720, Settings.fullscreen ? vidmode.height() : 480, "GameRunner", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
-
+        static_Window = window;
 
         if(window == NULL) {
             System.err.println("Could not create window!");
@@ -141,18 +140,18 @@ public class Main {
     }
 
     public static void setCursorVisibility(boolean visible) {
-        glfwSetInputMode(window, GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(static_Window, GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     }
 
     public static long getWindow() {
-        return window;
+        return static_Window;
     }
 
     public static int[] getWindowSize() {
         IntBuffer w = BufferUtils.createIntBuffer(4);
         IntBuffer h = BufferUtils.createIntBuffer(4);
 
-        glfwGetWindowSize(window, w, h);
+        glfwGetWindowSize(static_Window, w, h);
 
         return new int[]{w.get(0), h.get(0)};
     }
@@ -183,6 +182,7 @@ public class Main {
         currentLevel.initLevel();
 
         currentLevel.applyPostProcessingEffects();
+
         while(true) {
             glfwSwapBuffers(window);
 
@@ -198,13 +198,20 @@ public class Main {
             lastFrameTime = currFrameTime;
 
             if(glfwWindowShouldClose(window)) {
+                System.out.println("Exited");
                 break;
             }
         }
+
+        glfwSetWindowShouldClose(window, false);
+        glfwDestroyWindow(window);
+        window = NULL;
+        static_Window = NULL;
+        glfwMakeContextCurrent(NULL);
+
         currentLevel.clean();
         keyCallback.free();
         mouseButtonCallback.free();
         cursorPosCallback.free();
-        System.exit(1);
     }
 }

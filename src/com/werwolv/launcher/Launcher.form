@@ -194,6 +194,9 @@
                     <item value="Bilinear"/>
                     <item value="Trilinear"/>
                   </model>
+                  <popupVisible value="false"/>
+                  <requestFocusEnabled value="false"/>
+                  <selectedIndex value="2"/>
                 </properties>
               </component>
               <component id="41455" class="javax.swing.JLabel">
@@ -258,7 +261,7 @@
                 </constraints>
                 <properties>
                   <maximum value="5"/>
-                  <value value="0"/>
+                  <value value="5"/>
                 </properties>
               </component>
               <hspacer id="7761b">
@@ -274,7 +277,7 @@
                   <text value="Mipmap Level"/>
                 </properties>
               </component>
-              <component id="4f782" class="javax.swing.JLabel">
+              <component id="4f782" class="javax.swing.JLabel" binding="mipmapLevelValue">
                 <constraints>
                   <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -294,6 +297,7 @@
                     <item value="High"/>
                     <item value="Ultra High"/>
                   </model>
+                  <selectedIndex value="2"/>
                 </properties>
               </component>
             </children>
