@@ -49,7 +49,9 @@ public class LevelOverworld extends Level {
     private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
-    private FontType font = new FontType(loader.loadTexture("fonts/sans"), new File("res/fonts/sans.fnt"));
+    private FontType font = new FontType(loader.loadGuiTexture("fonts/sans").getTextureID(), new File("res/fonts/sans.fnt"));
+
+    private GuiText text;
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -101,7 +103,7 @@ public class LevelOverworld extends Level {
 
         TextRenderingHelper.initTextRendering(loader);
 
-        GuiText text = new GuiText("Hello World! Hopefully...", 1, font, new Vector2f(0, 0), 1.0F, true);
+        text = new GuiText("Hello World! Hopefully...", 1, font, new Vector2f(0, 0), 1.0F, true);
     }
 
     @Override
@@ -160,8 +162,10 @@ public class LevelOverworld extends Level {
             }
         }
 
-        if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F))
+        if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F)) {
             player.toggleFlight();
+            TextRenderingHelper.removeText(text);
+        }
 
         if (player.getCurrentGui() == null) {
             player.onMove(terrain);

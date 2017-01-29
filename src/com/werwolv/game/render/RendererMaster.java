@@ -142,12 +142,12 @@ public class RendererMaster {
     }
 
     public void renderShadowMap(List<Entity> entities, List<Entity> entitiesNM, EntityLight sun) {
-        if(Settings.shadowQuality > 0) {
+        if(Settings.shadowQuality > 1) {
             for (Entity entity : entities) processEntity(entity);
             for (Entity entity : entitiesNM) processEntityNM(entity);
-
-            shadowMapMasterRenderer.render(this.entities, this.entitiesNM, sun);
         }
+            shadowMapMasterRenderer.render(this.entities, this.entitiesNM, sun);
+
     }
 
     /**

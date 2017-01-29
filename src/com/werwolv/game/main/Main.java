@@ -81,6 +81,7 @@ public class Main {
 
         }
 
+        System.out.println(Settings.shadowQuality);
         this.run();
     }
 
