@@ -24,7 +24,7 @@ uniform float reflectivity;
 
 uniform vec3 skyColor;
 
-const int pcfCnt = 3;
+const int pcfCnt = 5;
 const float totalTexels = (pcfCnt * 2.0 + 1.0) * (pcfCnt * 2.0 + 1.0);
 
 void main(void) {

@@ -1,5 +1,6 @@
 package com.werwolv.game.modelloader;
 
+import com.werwolv.game.main.Settings;
 import com.werwolv.game.model.ModelRaw;
 import com.werwolv.game.resource.Texture;
 import com.werwolv.game.resource.TextureData;
@@ -148,8 +149,13 @@ public class ResourceLoader {
         textures.add(texture.getTextureId());                                                   //Add the texture to the list of textures for cleanup
         texturesSize.add(texture.getWidth());
 
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);   //Set the mipmap detail level to decrease linearly
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        if(Settings.mipmappingType != GL11.GL_NONE) {
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, Settings.mipmappingType);   //Set the mipmap detail level to decrease linearly
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, Settings.mipmappingType);
+            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -5 + Settings.mipmappingLevel);
+        }
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);       //Set the texture to repeat itself if it gets drawn on a bigger surface
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 

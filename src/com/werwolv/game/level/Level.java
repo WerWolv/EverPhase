@@ -12,12 +12,14 @@ import com.werwolv.game.terrain.Terrain;
 import com.werwolv.game.modelloader.ResourceLoader;
 import com.werwolv.game.render.RendererMaster;
 import com.werwolv.game.terrain.TileWater;
+import com.werwolv.game.toolbox.ScreenShotHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F2;
 
 public abstract class Level {
 
@@ -25,12 +27,12 @@ public abstract class Level {
 
     protected RendererMaster renderer;
 
-    protected List<Entity> entities = new ArrayList<>();
-    protected List<Entity> entitiesNM = new ArrayList<>();
-    protected List<Terrain> terrains = new ArrayList<>();
+    protected List<Entity> entities    = new ArrayList<>();
+    protected List<Entity> entitiesNM  = new ArrayList<>();
+    protected List<Terrain> terrains   = new ArrayList<>();
     protected List<EntityLight> lights = new ArrayList<>();
-    protected List<TileWater> waters = new ArrayList<>();
-    protected List<Gui> guis = new ArrayList<>();
+    protected List<TileWater> waters   = new ArrayList<>();
+    protected List<Gui> guis           = new ArrayList<>();
 
     protected EntityPlayer player;
 
@@ -69,6 +71,8 @@ public abstract class Level {
     public void handleInput() {
         if (KeyCallback.isKeyPressed(GLFW_KEY_ESCAPE))
             GLFW.glfwSetWindowShouldClose(Main.getWindow(), true);
+        if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F2))
+            ScreenShotHelper.takeScreenShot();
     }
 
     public void clean() {

@@ -16,10 +16,7 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.opengl.*;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -62,13 +59,26 @@ public class Main {
                 case "anisotropicfilter":
                     Settings.anisotropicFilter = true;
                     break;
-                case "shadow":
-                    Settings.shadows = true;
-                    break;
                 case "bloom":
                     Settings.bloom = true;
                     break;
             }
+
+            if(arg.toLowerCase().startsWith("shadowquality"))
+                Settings.shadowQuality = (int) Math.pow(2, Integer.parseInt(arg.split("_")[1]));
+
+            else if(arg.toLowerCase().startsWith("mipmaplevel"))
+                Settings.mipmappingLevel = Integer.parseInt(arg.split("_")[1]);
+            else if(arg.toLowerCase().startsWith("mipmaptype")) {
+                switch (Integer.parseInt(arg.split("_")[1])) {
+                    case 0: Settings.mipmappingType = GL_NONE; break;
+                    case 1: Settings.mipmappingType = GL_LINEAR; break;
+                    case 2: Settings.mipmappingType = GL_LINEAR_MIPMAP_NEAREST; break;
+                    case 3: Settings.mipmappingType = GL_LINEAR_MIPMAP_LINEAR; break;
+                    default: Settings.mipmappingType = GL_NONE; break;
+                }
+            }
+
         }
 
         this.run();
@@ -189,8 +199,6 @@ public class Main {
             if(glfwWindowShouldClose(window)) {
                 break;
             }
-
-            GLUtil.setupDebugMessageCallback(System.err);
         }
         currentLevel.clean();
         keyCallback.free();

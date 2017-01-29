@@ -7,6 +7,7 @@ import com.werwolv.game.entity.Entity;
 import com.werwolv.game.entity.EntityLight;
 import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.fbo.FrameBufferObject;
+import com.werwolv.game.main.Settings;
 import com.werwolv.game.shader.ShaderShadow;
 import com.werwolv.game.model.ModelTextured;
 import org.joml.Matrix4f;
@@ -27,7 +28,7 @@ import static com.werwolv.game.fbo.FrameBufferObject.DEPTH_TEXTURE;
  */
 public class RendererShadowMapMaster {
 
-	private static final int SHADOW_MAP_SIZE = 8192;
+	private static final int SHADOW_MAP_SIZE = Settings.shadowQuality * 1024;
 
 	private FrameBufferObject shadowFbo;
 	private ShaderShadow shader;
