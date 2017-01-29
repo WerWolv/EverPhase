@@ -1,6 +1,7 @@
 package com.werwolv.game.render;
 
 import com.werwolv.game.model.ModelRaw;
+import com.werwolv.game.render.shadow.RendererShadowMapMaster;
 import com.werwolv.game.resource.TextureTerrainPack;
 import com.werwolv.game.shader.ShaderTerrain;
 import com.werwolv.game.terrain.Terrain;
@@ -25,6 +26,7 @@ public class RendererTerrain {
         shader.start();                                     //Start the terrain shader
         shader.connectTextureUnits();                       //Connect the 4 textures together in the way specified in the blend map
         shader.loadProjectionMatrix(projectionMatrix);      //Load up the projection matrix to the shader
+        shader.loadMapSize(RendererShadowMapMaster.SHADOW_MAP_SIZE);
         shader.stop();                                      //Stop the terrain shader
     }
 

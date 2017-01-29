@@ -3,7 +3,6 @@ package com.werwolv.launcher;
 import com.werwolv.game.main.Main;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -11,9 +10,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;

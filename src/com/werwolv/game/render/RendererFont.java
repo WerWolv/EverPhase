@@ -54,6 +54,7 @@ public class RendererFont {
 
 		shader.loadColor(text.getColor());
 		shader.loadTranslation(text.getPosition());
+		shader.loadFontEffect(text.getFontEffect());
 
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.getVertexCnt());
 

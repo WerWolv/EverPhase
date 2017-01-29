@@ -17,7 +17,7 @@ void main()
     direction /= samples;
     vec3 color = texture2D(colorBuffer, textureCoords_local).rgb;
 
-    if(color.r < 0.8 || color.g < 0.8 || color.b < 0.8)
+    if(color.r < 1.0 && color.g < 1.0 && color.b < 1.0)
         intensity = 0.01;
 
     for(int samp = 0; samp < samples; samp++)

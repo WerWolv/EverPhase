@@ -19,7 +19,7 @@ public class ShaderTerrain extends Shader {
     private int loc_skyColor;
     private int loc_backgroundTexture, loc_rTexture, loc_gTexture, loc_bTexture, loc_blendMap;
     private int loc_plane;
-    private int loc_toShadowMapSpace, loc_shadowMap;
+    private int loc_toShadowMapSpace, loc_shadowMap, loc_mapSize;
 
     public ShaderTerrain() {
         super("shaderTerrain", "shaderTerrain");
@@ -52,6 +52,7 @@ public class ShaderTerrain extends Shader {
         loc_plane = super.getUniformLocation("plane");
         loc_toShadowMapSpace = super.getUniformLocation("toShadowMapSpace");
         loc_shadowMap = super.getUniformLocation("shadowMap");
+        loc_mapSize = super.getUniformLocation("mapSize");
 
         loc_lightPos = new int[MAX_LIGHTS];
         loc_lightColor = new int[MAX_LIGHTS];
@@ -113,5 +114,9 @@ public class ShaderTerrain extends Shader {
 
     public void loadClipPlane(Vector4f plane) {
         super.loadVector(loc_plane, plane);
+    }
+
+    public void loadMapSize(float mapSize) {
+        super.loadFloat(loc_mapSize, mapSize);
     }
 }

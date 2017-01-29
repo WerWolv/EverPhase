@@ -1,6 +1,7 @@
 package com.werwolv.game.gui;
 
 import com.werwolv.game.font.FontType;
+import com.werwolv.game.font.effects.FontEffect;
 import com.werwolv.game.level.Level;
 import com.werwolv.game.toolbox.TextRenderingHelper;
 import org.joml.Vector2f;
@@ -8,8 +9,6 @@ import org.joml.Vector3f;
 
 /**
  * Represents a piece of text in the game.
- * 
- * @author Karl
  *
  */
 public class GuiText extends Gui{
@@ -24,6 +23,7 @@ public class GuiText extends Gui{
 	private int numberOfLines;
 
 	private FontType font;
+	private FontEffect effect;
 
 	private boolean centerText = false;
 
@@ -52,10 +52,11 @@ public class GuiText extends Gui{
 	 * @param centered
 	 *            - whether the text should be centered or not.
 	 */
-	public GuiText(String text, float fontSize, FontType font, Vector2f position, float maxLineLength, boolean centered) {
+	public GuiText(String text, float fontSize, FontType font, FontEffect effect, Vector2f position, float maxLineLength, boolean centered) {
 		super(Level.getRenderer(), 0, position, new Vector2f(fontSize, fontSize));
 		this.textString = text;
 		this.font = font;
+		this.effect = effect;
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
 		this.centerText = centered;
@@ -182,4 +183,7 @@ public class GuiText extends Gui{
 		return textString;
 	}
 
+	public FontEffect getFontEffect() {
+		return effect;
+	}
 }

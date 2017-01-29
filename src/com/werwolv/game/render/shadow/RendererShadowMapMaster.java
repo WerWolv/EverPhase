@@ -28,7 +28,7 @@ import static com.werwolv.game.fbo.FrameBufferObject.DEPTH_TEXTURE;
  */
 public class RendererShadowMapMaster {
 
-	private static final int SHADOW_MAP_SIZE = Settings.shadowQuality * 1024;
+	public static final int SHADOW_MAP_SIZE = Settings.shadowQuality * 1024;
 
 	private FrameBufferObject shadowFbo;
 	private ShaderShadow shader;

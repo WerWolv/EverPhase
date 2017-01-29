@@ -10,6 +10,7 @@ import com.werwolv.game.entity.EntityLight;
 import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.fbo.FrameBufferObject;
 import com.werwolv.game.font.FontType;
+import com.werwolv.game.font.effects.FontEffect;
 import com.werwolv.game.gui.GuiText;
 import com.werwolv.game.gui.Gui;
 import com.werwolv.game.gui.GuiIngame;
@@ -103,7 +104,7 @@ public class LevelOverworld extends Level {
 
         TextRenderingHelper.initTextRendering(loader);
 
-        text = new GuiText("Hello World! Hopefully...", 1, font, new Vector2f(0.5F, 0.5F), 0.5F, true);
+        text = new GuiText("Hello World! Hopefully...", 3, font, new FontEffect(), new Vector2f(0.5F, 0.5F), 0.5F, true);
     }
 
     @Override

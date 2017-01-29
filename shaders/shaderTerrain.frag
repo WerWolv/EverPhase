@@ -24,13 +24,14 @@ uniform float reflectivity;
 
 uniform vec3 skyColor;
 
+uniform float mapSize;
+
 const int pcfCnt = 5;
 const float totalTexels = (pcfCnt * 2.0 + 1.0) * (pcfCnt * 2.0 + 1.0);
 
 void main(void) {
 
-    ivec2 mapSize = textureSize(shadowMap, 0);
-    float texelSize = 1.0 / mapSize.x;
+    float texelSize = 1.0 / mapSize;
     float totalShadowSamples = 0.0;
 
     for(int x = -pcfCnt; x <= pcfCnt; x++) {
