@@ -1,4 +1,4 @@
-# VoxelGame Client
+# EverPhase Client
 
 A MMORPG based on LWJGL using Java.
 
