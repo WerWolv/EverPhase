@@ -209,7 +209,7 @@ public class Main {
         window = NULL;
         static_Window = NULL;
         glfwMakeContextCurrent(NULL);
-        AudioHelper.clean();
+        //AudioHelper.clean();
 
         currentLevel.clean();
         keyCallback.free();

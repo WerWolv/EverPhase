@@ -2,8 +2,11 @@ package com.werwolv.game.entity.particle;
 
 
 import com.werwolv.game.entity.Entity;
+import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.main.Main;
+import com.werwolv.game.resource.TextureParticle;
 import com.werwolv.game.toolbox.ParticleHelper;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class EntityParticle extends Entity {
@@ -14,8 +17,17 @@ public class EntityParticle extends Entity {
 
     private float elapsedTime;
 
-    public EntityParticle(Vector3f position, Vector3f velocity, float gravityEffect, float lifeLength, float rotation, float scale) {
+    private TextureParticle texture;
+
+    private Vector2f texOffset1 = new Vector2f();
+    private Vector2f texOffset2 = new Vector2f();
+    private float blend;
+
+    private float distanceToCamera;
+
+    public EntityParticle(TextureParticle texture, Vector3f position, Vector3f velocity, float gravityEffect, float lifeLength, float rotation, float scale) {
         super(position, rotation, scale);
+        this.texture = texture;
         this.velocity = velocity;
         this.gravityEffect = gravityEffect;
         this.lifeLength = lifeLength;
@@ -23,19 +35,63 @@ public class EntityParticle extends Entity {
         ParticleHelper.addParticle(this);
     }
 
-    public boolean update() {
+    public boolean update(EntityPlayer player) {
         velocity.y += Entity.GRAVITY * gravityEffect * Main.getFrameTimeSeconds();
         Vector3f change = new Vector3f(velocity);
 
         change = change.mul(Main.getFrameTimeSeconds(), new Vector3f());
 
+        distanceToCamera = player.getPosition().sub(position, new Vector3f()).lengthSquared();
+
         position = change.add(position, new Vector3f());
+        updateTextureCoordInfo();
+
         elapsedTime += Main.getFrameTimeSeconds();
 
         return elapsedTime < lifeLength;
     }
 
+    private void updateTextureCoordInfo() {
+        float lifeFactor = elapsedTime / lifeLength;
+        int stageCount = texture.getNumOfRows() * texture.getNumOfRows();
+        float atlasProgress = lifeFactor * stageCount;
+
+        int index1 = (int) Math.floor(atlasProgress);
+        int index2 = index1 < stageCount - 1 ? index1 + 1 : index1;
+        this.blend = atlasProgress % 1;
+        setTextureOffset(texOffset1, index1);
+        setTextureOffset(texOffset2, index2);
+    }
+
+    private void setTextureOffset(Vector2f offset, int index) {
+        int column = index % texture.getNumOfRows();
+        int row = index / texture.getNumOfRows();
+
+        offset.x = (float) column / texture.getNumOfRows();
+        offset.y = (float) row / texture.getNumOfRows();
+    }
+
     public Vector3f getPosition() {
         return position;
+    }
+
+    public TextureParticle getTexture() {
+        return texture;
+    }
+
+    public Vector2f getTexOffset1() {
+        return texOffset1;
+    }
+
+    public Vector2f getTexOffset2() {
+        return texOffset2;
+    }
+
+    public float getBlend() {
+        return blend;
+    }
+
+    public float getDistanceToCamera() {
+        return distanceToCamera;
     }
 }

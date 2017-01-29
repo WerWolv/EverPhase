@@ -17,6 +17,7 @@ import com.werwolv.game.font.effects.FontEffect;
 import com.werwolv.game.gui.*;
 import com.werwolv.game.main.Main;
 import com.werwolv.game.render.postProcessing.*;
+import com.werwolv.game.resource.TextureParticle;
 import com.werwolv.game.resource.TextureTerrainPack;
 import com.werwolv.game.structure.Labyrinth;
 import com.werwolv.game.terrain.Terrain;
@@ -56,7 +57,7 @@ public class LevelOverworld extends Level {
 
     private GuiText text;
 
-    private ParticleSystem system = new ParticleSystem(150, 30,0.3F, 5, 1);
+    private ParticleSystem system = new ParticleSystem(new TextureParticle(loader.loadTexture("particles/fire"), 8, false),50, 1,-0.1F, 3, 5);
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -116,7 +117,7 @@ public class LevelOverworld extends Level {
     @Override
     public void updateLevel() {
         glfwPollEvents();
-        ParticleHelper.update();
+        ParticleHelper.update(player);
         system.randomizeRotation();
         system.generateParticles(new Vector3f(20, 5, -20));
     }
@@ -177,9 +178,6 @@ public class LevelOverworld extends Level {
             player.toggleFlight();
         }
 
-        if(KeyCallback.isKeyPressed(GLFW_KEY_Q))
-            new EntityParticle(new Vector3f(player.getPosition()).add(0, 0, 10), new Vector3f(0, 30, 0), 1, 4, 0, 1);
-
         if (player.getCurrentGui() == null) {
             player.onMove(terrain);
             player.onInteract();
@@ -193,6 +191,6 @@ public class LevelOverworld extends Level {
         outputFBO.clean();
         PostProcessing.clean();
         TextRenderingHelper.clean();
-//        AudioHelper.clean();
+        AudioHelper.clean();
     }
 }

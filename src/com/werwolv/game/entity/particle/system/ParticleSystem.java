@@ -2,6 +2,7 @@ package com.werwolv.game.entity.particle.system;
 
 import com.werwolv.game.entity.particle.EntityParticle;
 import com.werwolv.game.main.Main;
+import com.werwolv.game.resource.TextureParticle;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -19,7 +20,10 @@ public class ParticleSystem {
 
     private Random random = new Random();
 
-    public ParticleSystem(float pps, float speed, float gravityComplient, float lifeLength, float scale) {
+    private TextureParticle texture;
+
+    public ParticleSystem(TextureParticle texture, float pps, float speed, float gravityComplient, float lifeLength, float scale) {
+        this.texture = texture;
         this.pps = pps;
         this.averageSpeed = speed;
         this.gravityComplient = gravityComplient;
@@ -88,7 +92,7 @@ public class ParticleSystem {
         velocity = velocity.mul(generateValue(averageSpeed, speedError), new Vector3f());
         float scale = generateValue(averageScale, scaleError);
         float lifeLength = generateValue(averageLifeLength, lifeError);
-        new EntityParticle(new Vector3f(center), velocity, gravityComplient, lifeLength, generateRotation(), scale);
+        new EntityParticle(texture, new Vector3f(center), velocity, gravityComplient, lifeLength, generateRotation(), scale);
     }
 
     private float generateValue(float average, float errorMargin) {

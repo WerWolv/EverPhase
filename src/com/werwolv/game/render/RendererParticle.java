@@ -1,16 +1,19 @@
 package com.werwolv.game.render;
 
 import java.util.List;
+import java.util.Map;
 
 import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.entity.particle.EntityParticle;
 import com.werwolv.game.model.ModelRaw;
 import com.werwolv.game.modelloader.ResourceLoader;
+import com.werwolv.game.resource.TextureParticle;
 import com.werwolv.game.shader.ShaderParticle;
 import com.werwolv.game.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -30,7 +33,7 @@ public class RendererParticle {
 		shader.stop();
 	}
 
-	public void render(List<EntityParticle> particles, EntityPlayer player){
+	public void render(Map<TextureParticle, List<EntityParticle>> particles, EntityPlayer player){
 		Matrix4f viewMatrix = Maths.createViewMatrix(player);
 
 		shader.start();
@@ -38,13 +41,18 @@ public class RendererParticle {
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDepthMask(false);
 
-		for(EntityParticle particle : particles) {
-			updateModelViewMatrix(particle.getPosition(), particle.getRotZ(), particle.getScale(), viewMatrix);
+		for(TextureParticle texture : particles.keySet()) {
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, texture.usesAdditiveBlending() ? GL11.GL_ONE : GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
+			for (EntityParticle particle : particles.get(texture)) {
+				updateModelViewMatrix(particle.getPosition(), particle.getRotZ(), particle.getScale(), viewMatrix);
 
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
+				shader.loadTextureCoordInfo(particle.getTexOffset1(), particle.getTexOffset2(), texture.getNumOfRows(), particle.getBlend());
+				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
+			}
 		}
 
 		GL11.glDepthMask(true);
