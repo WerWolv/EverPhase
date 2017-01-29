@@ -31,7 +31,6 @@ License: BSD 3-Clause (see LICENSE.txt)
 |Current Tasks|
 |-------------|
 |Shadows on Entities|
-|Particles using geometry shaders|
 |Fixing Audio issues when unpluging default device|
 |Raytrace interaction with entities|
 |AABBs|
