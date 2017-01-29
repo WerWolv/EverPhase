@@ -32,7 +32,6 @@ License: BSD 3-Clause (see LICENSE.txt)
 |-------------|
 |Shadows on Entities|
 |Particles using geometry shaders|
-|Font rendering|
 |Fixing Audio issues when unpluging default device|
 |Raytrace interaction with entities|
 |AABBs|
