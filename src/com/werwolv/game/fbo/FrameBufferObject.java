@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 
 import com.werwolv.game.main.Main;
 import org.lwjgl.opengl.*;
+import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -103,6 +104,10 @@ public class FrameBufferObject {
 	 */
 	public int getDepthTexture() {
 		return depthTexture;
+	}
+
+	public void clearDepthTexture() {
+		this.depthTexture = 0;
 	}
 
 	/**

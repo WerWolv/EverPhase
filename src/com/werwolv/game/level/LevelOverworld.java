@@ -2,25 +2,26 @@ package com.werwolv.game.level;
 
 import com.werwolv.game.api.event.EventBus;
 import com.werwolv.game.api.event.player.OpenGuiEvent;
+import com.werwolv.game.audio.AudioHelper;
 import com.werwolv.game.audio.SoundSource;
 import com.werwolv.game.callback.CursorPositionCallback;
 import com.werwolv.game.callback.KeyCallback;
 import com.werwolv.game.entity.Entity;
 import com.werwolv.game.entity.EntityLight;
 import com.werwolv.game.entity.EntityPlayer;
+import com.werwolv.game.entity.particle.EntityParticle;
+import com.werwolv.game.entity.particle.system.ParticleSystem;
 import com.werwolv.game.fbo.FrameBufferObject;
 import com.werwolv.game.font.FontType;
 import com.werwolv.game.font.effects.FontEffect;
-import com.werwolv.game.gui.GuiText;
-import com.werwolv.game.gui.Gui;
-import com.werwolv.game.gui.GuiIngame;
-import com.werwolv.game.gui.GuiInventory;
+import com.werwolv.game.gui.*;
 import com.werwolv.game.main.Main;
 import com.werwolv.game.render.postProcessing.*;
 import com.werwolv.game.resource.TextureTerrainPack;
 import com.werwolv.game.structure.Labyrinth;
 import com.werwolv.game.terrain.Terrain;
 import com.werwolv.game.terrain.TileWater;
+import com.werwolv.game.toolbox.ParticleHelper;
 import com.werwolv.game.toolbox.TextRenderingHelper;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -41,7 +42,7 @@ public class LevelOverworld extends Level {
 
     private Labyrinth labyrinth;
 
-    private Gui guiIngame, guiInventory;
+    private Gui guiIngame, guiInventory, guiMiniMap;
 
     private EntityLight entitySun = new EntityLight(new Vector3f(1000, 1000, -1000), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
 
@@ -49,10 +50,13 @@ public class LevelOverworld extends Level {
 
     private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
+    private FrameBufferObject miniMapFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
     private FontType font = new FontType(loader.loadGuiTexture("fonts/productSans").getTextureID(), new File("res/fonts/productSans.fnt"));
 
     private GuiText text;
+
+    private ParticleSystem system = new ParticleSystem(150, 30,0.3F, 5, 1);
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -90,7 +94,7 @@ public class LevelOverworld extends Level {
         }
 
         labyrinth.process();
-        entities.addAll(labyrinth.RenderLabyrinth());
+        //entities.addAll(labyrinth.RenderLabyrinth());
 
         terrains.add(terrain);
 
@@ -98,7 +102,9 @@ public class LevelOverworld extends Level {
 
         guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
         guiInventory = new GuiInventory(renderer, renderer.getShadowMapTexture(), new Vector2f(0, 0), new Vector2f(1, 1));
+        guiMiniMap = new GuiMiniMap(renderer, miniMapFBO.getColorTexture(), new Vector2f(0.0F, 0.0F), new Vector2f(0.5F, 0.5F));
         //guis.add(guiIngame);
+        guis.add(guiMiniMap);
 
         currentGui.add(null);
 
@@ -110,26 +116,30 @@ public class LevelOverworld extends Level {
     @Override
     public void updateLevel() {
         glfwPollEvents();
+        ParticleHelper.update();
+        system.randomizeRotation();
+        system.generateParticles(new Vector3f(20, 5, -20));
     }
 
     @Override
     public void renderLevel() {
-        entity.increaseRotation(0, 0.5F, 0);
         renderer.renderShadowMap(entities, entitiesNM, entitySun);
+        entity.increaseRotation(0, 0.5F, 0);
 
         for (TileWater water : waters)
-           water.renderWaterEffects();
+            water.renderWaterEffects();
+
 
         postProcessing.bindFrameBuffer();
-
         renderer.renderScene(entities, entitiesNM, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
         renderer.getRendererWater().render(waters, lights, player);
+
+        ParticleHelper.renderParticles(player);
 
         postProcessing.unbindFrameBuffer();
 
         postProcessing.resolveToFBO(outputFBO);
         PostProcessing.doPostProcessing(outputFBO.getColorTexture());
-
     }
 
     @Override
@@ -165,8 +175,10 @@ public class LevelOverworld extends Level {
 
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F)) {
             player.toggleFlight();
-            TextRenderingHelper.removeText(text);
         }
+
+        if(KeyCallback.isKeyPressed(GLFW_KEY_Q))
+            new EntityParticle(new Vector3f(player.getPosition()).add(0, 0, 10), new Vector3f(0, 30, 0), 1, 4, 0, 1);
 
         if (player.getCurrentGui() == null) {
             player.onMove(terrain);

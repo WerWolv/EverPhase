@@ -12,6 +12,7 @@ import com.werwolv.game.terrain.Terrain;
 import com.werwolv.game.modelloader.ResourceLoader;
 import com.werwolv.game.render.RendererMaster;
 import com.werwolv.game.terrain.TileWater;
+import com.werwolv.game.toolbox.ParticleHelper;
 import com.werwolv.game.toolbox.ScreenShotHelper;
 import org.lwjgl.glfw.GLFW;
 
@@ -39,6 +40,7 @@ public abstract class Level {
     public Level(EntityPlayer player) {
         this.player = player;
         this.renderer = new RendererMaster(loader, player);
+        ParticleHelper.init(loader, renderer.getProjectionMatrix());
     }
 
     public void reInitRenderer() {
@@ -81,6 +83,7 @@ public abstract class Level {
         lights.clear();
         waters.clear();
         guis.clear();
+        ParticleHelper.clean();
     }
 
     public ResourceLoader getLoader() {

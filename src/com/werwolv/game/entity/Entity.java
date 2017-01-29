@@ -51,6 +51,15 @@ public class Entity {
         this.scale = scale;
     }
 
+    public Entity(Vector3f position, float rotation, float scale) {
+        this.loader = null;
+        this.position = position;
+        this.rotX = rotation;
+        this.rotY = rotation;
+        this.rotZ = rotation;
+        this.scale = scale;
+    }
+
     /*
      * Calculates the x coordinate of the texture inside the texture
      * atlas.

@@ -16,6 +16,7 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.openal.AL10;
 import org.lwjgl.opengl.*;
 
 import java.io.OutputStream;
@@ -135,8 +136,8 @@ public class Main {
 
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
 
-        /*AudioHelper.createContext();
-        AudioHelper.loadSoundFile("random");*/
+        AudioHelper.createContext();
+        AudioHelper.loadSoundFile("random");
     }
 
     public static void setCursorVisibility(boolean visible) {
@@ -186,7 +187,7 @@ public class Main {
         while(true) {
             glfwSwapBuffers(window);
 
-/*            AudioHelper.setListener(player);*/
+            AudioHelper.setListener(player);
             EventBus.processEvents();
             currentLevel.updateLevel();
             currentLevel.handleInput();
@@ -208,6 +209,7 @@ public class Main {
         window = NULL;
         static_Window = NULL;
         glfwMakeContextCurrent(NULL);
+        AudioHelper.clean();
 
         currentLevel.clean();
         keyCallback.free();

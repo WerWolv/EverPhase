@@ -263,4 +263,8 @@ public class RendererMaster {
     public int getShadowMapTexture() {
         return shadowMapMasterRenderer.getShadowMap();
     }
+
+    public void clearShadowMapTexture() {
+        shadowMapMasterRenderer.clearDepthTexture();
+    }
 }

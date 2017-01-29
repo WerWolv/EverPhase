@@ -26,7 +26,7 @@ uniform vec3 skyColor;
 
 uniform float mapSize;
 
-const int pcfCnt = 5;
+const int pcfCnt = 8;
 const float totalTexels = (pcfCnt * 2.0 + 1.0) * (pcfCnt * 2.0 + 1.0);
 
 void main(void) {

@@ -221,4 +221,8 @@ public class RendererShadowMapMaster {
 		offset.scale(new Vector3f(0.5f, 0.5f, 0.5f));
 		return offset;
 	}
+
+	public void clearDepthTexture() {
+		shadowFbo.clearDepthTexture();
+	}
 }
