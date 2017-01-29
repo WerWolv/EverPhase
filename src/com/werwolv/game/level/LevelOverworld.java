@@ -2,7 +2,6 @@ package com.werwolv.game.level;
 
 import com.werwolv.game.api.event.EventBus;
 import com.werwolv.game.api.event.player.OpenGuiEvent;
-import com.werwolv.game.audio.AudioHelper;
 import com.werwolv.game.audio.SoundSource;
 import com.werwolv.game.callback.CursorPositionCallback;
 import com.werwolv.game.callback.KeyCallback;
@@ -10,6 +9,8 @@ import com.werwolv.game.entity.Entity;
 import com.werwolv.game.entity.EntityLight;
 import com.werwolv.game.entity.EntityPlayer;
 import com.werwolv.game.fbo.FrameBufferObject;
+import com.werwolv.game.font.FontType;
+import com.werwolv.game.gui.GuiText;
 import com.werwolv.game.gui.Gui;
 import com.werwolv.game.gui.GuiIngame;
 import com.werwolv.game.gui.GuiInventory;
@@ -19,10 +20,12 @@ import com.werwolv.game.resource.TextureTerrainPack;
 import com.werwolv.game.structure.Labyrinth;
 import com.werwolv.game.terrain.Terrain;
 import com.werwolv.game.terrain.TileWater;
+import com.werwolv.game.toolbox.TextRenderingHelper;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,6 +48,8 @@ public class LevelOverworld extends Level {
 
     private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
+
+    private FontType font = new FontType(loader.loadTexture("fonts/sans"), new File("res/fonts/sans.fnt"));
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -93,6 +98,10 @@ public class LevelOverworld extends Level {
         //guis.add(guiIngame);
 
         currentGui.add(null);
+
+        TextRenderingHelper.initTextRendering(loader);
+
+        GuiText text = new GuiText("Hello World! Hopefully...", 1, font, new Vector2f(0, 0), 1.0F, true);
     }
 
     @Override
@@ -130,6 +139,8 @@ public class LevelOverworld extends Level {
             renderer.getRendererGui().render(player.getCurrentGui());
         }
 
+        TextRenderingHelper.renderTexts();
+
     }
 
     @Override
@@ -164,6 +175,7 @@ public class LevelOverworld extends Level {
         postProcessing.clean();
         outputFBO.clean();
         PostProcessing.clean();
+        TextRenderingHelper.clean();
 //        AudioHelper.clean();
     }
 }

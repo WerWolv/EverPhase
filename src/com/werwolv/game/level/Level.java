@@ -25,7 +25,7 @@ public abstract class Level {
 
     protected ResourceLoader loader = new ResourceLoader();
 
-    protected RendererMaster renderer;
+    protected static RendererMaster renderer;
 
     protected List<Entity> entities    = new ArrayList<>();
     protected List<Entity> entitiesNM  = new ArrayList<>();
@@ -87,7 +87,7 @@ public abstract class Level {
         return loader;
     }
 
-    public RendererMaster getRenderer() {
+    public static RendererMaster getRenderer() {
         return renderer;
     }
 

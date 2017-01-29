@@ -24,7 +24,7 @@ public class ResourceLoader {
     private List<Integer> textures = new ArrayList<>();     //All Textures for cleanup
     private List<Integer> texturesSize = new ArrayList<>();
 
-    /*
+    /**
      * Create a new Model that can be rendered to the screen using the data
      * from the loaded obj file
      *
@@ -42,7 +42,7 @@ public class ResourceLoader {
         return new ModelRaw(vaoID, data.getIndices().length);           //Return a new Model with the id of the model and the amount of indices
     }
 
-    /*
+    /**
      * Create a new Model that can be rendered to the screen using the data
      * from the loaded obj file
      *
@@ -61,8 +61,25 @@ public class ResourceLoader {
         return new ModelRaw(vaoID, data.getIndices().length);           //Return a new Model with the id of the model and the amount of indices
     }
 
+    /**
+     * Create a new Model that can be rendered to the screen using the data
+     * from the loaded obj file
+     *
+     * @param positions  The models vertex positions
+     * @param textureCoords The models texture coordinates
+     * @return      The ID of the created VAO
+     */
+    public int loadToVAO(float[] positions, float[] textureCoords) {
+        int vaoID = createVAO();                                        //Create a new Vertex Array Object
+        storeDataInAttrList(0, 2, positions);           //Bind the vertices to the first VBO
+        storeDataInAttrList(1, 2, textureCoords);       //Bind the texture coordinates to the second VBO
+        unbindVAO();                                                    //Unbind the VAO
 
-    /*
+        return vaoID;                                                   //Return a new Model with the id of the model and the amount of indices
+    }
+
+
+    /**
      * Create a new Model that can be rendered to the screen using the
      * passed vertices. This is used for 2D Rendering (GUIs) and
      * Boxmodels (Skymaps).
@@ -79,7 +96,7 @@ public class ResourceLoader {
         return new ModelRaw(vaoID, positions.length / dimensions);
     }
 
-    /*
+    /**
      * Create a new VAO
      *
      * @return  The id of the VAO
@@ -92,11 +109,11 @@ public class ResourceLoader {
         return vaoID;
     }
 
-    /*
+    /**
      * Create a new Vertex Buffer Object and store data in it
      *
      * @param attrNr    The index in the VBO
-     * @param coorSize  The amount of coordinates
+     * @param coordSize  The amount of coordinates
      * @param data      The data that should get stored in the VBO
      */
     private void storeDataInAttrList(int attrNr, int coordSize, float[] data) {
@@ -110,7 +127,7 @@ public class ResourceLoader {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);                             //Unbind the VBO
     }
 
-    /*
+    /**
      * Create a new buffer for indices
      *
      * @param indices   An array of indices for a model
@@ -123,7 +140,7 @@ public class ResourceLoader {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, storeDataInIntBuffer(indices), GL15.GL_STATIC_DRAW);    //Store the indices in the VBO
     }
 
-    /*
+    /**
      * Delete all VAOs, VBOs and textures from memory
      */
     public void clean() {
@@ -137,7 +154,7 @@ public class ResourceLoader {
             GL11.glDeleteTextures(texture);
     }
 
-    /*
+    /**
      * Load a texture into memory and get its id
      *
      * @param fileName  The name of the png texture file located inside the /res folder
@@ -181,7 +198,7 @@ public class ResourceLoader {
         return new GuiTextureUnit(0, 0, 1, texture.getWidth(), texture.getTextureId());
     }
 
-    /*
+    /**
      * Create a cube map out of 6 different cube side textures
      *
      * @param textureFiles  The textures in the specific order: right, left, top, bottom, back, front
@@ -207,7 +224,7 @@ public class ResourceLoader {
         return textureID;
     }
 
-    /*
+    /**
      * Loads a png file into a TextureData Object
      *
      * @param fileName  The name of the file stored in /res
@@ -237,7 +254,7 @@ public class ResourceLoader {
         GL30.glBindVertexArray(0);
     }
 
-    /*
+    /**
      * Convert a float array to a float buffer to pass to the VBO
      *
      * @param data  The float array to convert
@@ -247,7 +264,7 @@ public class ResourceLoader {
         return (FloatBuffer) BufferUtils.createFloatBuffer(data.length).put(data).flip();
     }
 
-    /*
+    /**
      * Convert a in array to a int buffer to pass to the VBO
      *
      * @param data  The int array to convert
