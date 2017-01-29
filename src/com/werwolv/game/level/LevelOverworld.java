@@ -103,7 +103,7 @@ public class LevelOverworld extends Level {
 
         TextRenderingHelper.initTextRendering(loader);
 
-        text = new GuiText("Hello World! Hopefully...", 1, font, new Vector2f(0, 0), 1.0F, true);
+        text = new GuiText("Hello World! Hopefully...", 1, font, new Vector2f(0.5F, 0.5F), 0.5F, true);
     }
 
     @Override
