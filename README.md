@@ -17,8 +17,8 @@ License: BSD 3-Clause (see LICENSE.txt)
 
 |Objective|Developer(s)|State|
 |---------|------------|-----|
-|Render Engine|Nik|◔|
-|Fonts|-|✗|
+|Render Engine|WerWolv|◔|
+|Fonts|WerWolv|✓|
 |CMake Build|SmallJoker|◔|
 |Achievements|-|✗|
 |Random Dungeons (Rogue Like)|Mrasam|◔|
