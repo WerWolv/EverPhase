@@ -14,7 +14,9 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import java.nio.IntBuffer;
 
@@ -90,7 +92,7 @@ public class Main {
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
 
-        window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 720, Settings.fullscreen ? vidmode.height() : 480, "GameRunner", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+        window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 720, Settings.fullscreen ? vidmode.height() : 480, "EverPhase", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
         static_Window = window;
 
         if(window == NULL) {

@@ -11,6 +11,8 @@ void main(void){
 
 	if(!(textureCoords.x < size.x || textureCoords.y < size.y || textureCoords.x > size.z || textureCoords.y > size.w)) {
 	    out_Color = texture(guiTexture,textureCoords);
+	} else {
+	out_Color = vec4(0.0F, 0.0F, 0.0F, 0.0F);
 	}
 
 }

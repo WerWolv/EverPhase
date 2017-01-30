@@ -63,7 +63,7 @@ public class RendererGui {
     public void drawTexture(float posX, float posY, float scale, Vector4f size, TextureGui texture) {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
-        shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f((posX - (size.z() - size.x()) / Main.getWindowSize()[0]) *0.5F, (posY - (size.w() - size.y()) / Main.getWindowSize()[1]) *0.5F) , new Vector2f(scale, -scale * Main.getAspectRatio())));
+        shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f(posX, posY), new Vector2f(Math.min(scale, scale / Main.getAspectRatio()), Math.max(-scale, -scale * Main.getAspectRatio()))));
         shader.loadSize(size.x / texture.getSize(), size.y / texture.getSize(), size.z / texture.getSize(), size.w / texture.getSize());
         GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
     }
