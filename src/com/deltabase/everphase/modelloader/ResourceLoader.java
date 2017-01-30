@@ -4,7 +4,7 @@ import com.deltabase.everphase.main.Settings;
 import com.deltabase.everphase.model.ModelRaw;
 import com.deltabase.everphase.resource.Texture;
 import com.deltabase.everphase.resource.TextureData;
-import com.deltabase.everphase.gui.GuiTextureUnit;
+import com.deltabase.everphase.resource.TextureGui;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
@@ -214,7 +214,7 @@ public class ResourceLoader {
         return texture.getTextureId();
     }
 
-    public GuiTextureUnit loadGuiTexture(String fileName) {
+    public TextureGui loadGuiTexture(String fileName) {
         Texture texture = Texture.loadTexture("res/" + fileName + ".png");                      //Load the texture
 
         textures.add(texture.getTextureId());                                                   //Add the texture to the list of textures for cleanup
@@ -226,7 +226,7 @@ public class ResourceLoader {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);       //Set the texture to repeat itself if it gets drawn on a bigger surface
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 
-        return new GuiTextureUnit(0, 0, 1, texture.getWidth(), texture.getTextureId());
+        return new TextureGui(0, 0, 1, texture.getWidth(), texture.getTextureId());
     }
 
     /**

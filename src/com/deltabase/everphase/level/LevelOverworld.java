@@ -5,24 +5,24 @@ import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.audio.AudioHelper;
 import com.deltabase.everphase.audio.SoundSource;
 import com.deltabase.everphase.callback.CursorPositionCallback;
+import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.entity.EntityLight;
 import com.deltabase.everphase.entity.EntityPlayer;
+import com.deltabase.everphase.entity.particle.system.ParticleSystem;
 import com.deltabase.everphase.fbo.FrameBufferObject;
 import com.deltabase.everphase.font.FontType;
 import com.deltabase.everphase.font.effects.FontEffect;
 import com.deltabase.everphase.gui.*;
+import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.render.postProcessing.PostProcessing;
 import com.deltabase.everphase.resource.TextureParticle;
 import com.deltabase.everphase.resource.TextureTerrainPack;
 import com.deltabase.everphase.structure.Labyrinth;
 import com.deltabase.everphase.terrain.Terrain;
 import com.deltabase.everphase.terrain.TileWater;
-import com.deltabase.everphase.toolbox.TextRenderingHelper;
-import com.deltabase.everphase.callback.KeyCallback;
-import com.deltabase.everphase.entity.particle.system.ParticleSystem;
-import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.toolbox.ParticleHelper;
+import com.deltabase.everphase.toolbox.TextRenderingHelper;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -100,9 +100,9 @@ public class LevelOverworld extends Level {
 
         waters.add(new TileWater(renderer, this, 75, -75, 0));
 
-        guiIngame = new GuiIngame(renderer, 0, new Vector2f(0.85F, 0.5F), new Vector2f(0, 0));
-        guiInventory = new GuiInventory(renderer, renderer.getShadowMapTexture(), new Vector2f(0, 0), new Vector2f(1, 1));
-        guiMiniMap = new GuiMiniMap(renderer, miniMapFBO.getColorTexture(), new Vector2f(0.0F, 0.0F), new Vector2f(0.5F, 0.5F));
+        guiIngame = new GuiIngame(renderer);
+        guiInventory = new GuiInventory(renderer);
+        guiMiniMap = new GuiMiniMap(renderer);
         guis.add(guiIngame);
         guis.add(guiMiniMap);
 

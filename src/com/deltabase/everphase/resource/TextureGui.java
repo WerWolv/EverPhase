@@ -1,13 +1,13 @@
-package com.deltabase.everphase.gui;
+package com.deltabase.everphase.resource;
 
-public class GuiTextureUnit {
+public class TextureGui {
 
     private float posX, posY;
     private float scale;
     private int size;
     private int textureID;
 
-    public GuiTextureUnit(float posX, float posY, float scale, int size, int textureID) {
+    public TextureGui(float posX, float posY, float scale, int size, int textureID) {
         this.posX = posX;
         this.posY = posY;
         this.scale = scale;

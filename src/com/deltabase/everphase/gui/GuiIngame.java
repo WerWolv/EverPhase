@@ -1,15 +1,15 @@
 package com.deltabase.everphase.gui;
 
 import com.deltabase.everphase.render.RendererMaster;
-import org.joml.Vector2f;
+import com.deltabase.everphase.resource.TextureGui;
 import org.joml.Vector4f;
 
 public class GuiIngame extends Gui {
 
-    private GuiTextureUnit textureGuiIngame;
+    private TextureGui textureGuiIngame;
 
-    public GuiIngame(RendererMaster renderer, int texture, Vector2f position, Vector2f scale) {
-        super(renderer, texture, position, scale);
+    public GuiIngame(RendererMaster renderer) {
+        super(renderer);
 
         textureGuiIngame = renderer.getModelLoader().loadGuiTexture("gui/guiIngame");
     }

@@ -15,6 +15,9 @@ public class GuiText extends Gui{
 
 	private String textString;
 
+	private Vector2f position;
+	private float fontSize;
+
 	private int textMeshVao;
 	private int vertexCount;
 	private Vector3f color = new Vector3f(0f, 0f, 0f);
@@ -53,8 +56,9 @@ public class GuiText extends Gui{
 	 *            - whether the text should be centered or not.
 	 */
 	public GuiText(String text, float fontSize, FontType font, FontEffect effect, Vector2f position, float maxLineLength, boolean centered) {
-		super(Level.getRenderer(), 0, position, new Vector2f(fontSize, fontSize));
+		super(Level.getRenderer());
 		this.textString = text;
+		this.fontSize = fontSize;
 		this.font = font;
 		this.effect = effect;
 		this.position = position;
@@ -108,6 +112,16 @@ public class GuiText extends Gui{
 	}
 
 	/**
+	 * Sets the number of lines that this text covers (method used only in
+	 * loading).
+	 *
+	 * @param number The number of lines
+	 */
+	public void setNumberOfLines(int number) {
+		this.numberOfLines = number;
+	}
+
+	/**
 	 * @return The position of the top-left corner of the text in screen-space.
 	 *         (0, 0) is the top left corner of the screen, (1, 1) is the bottom
 	 *         right.
@@ -126,7 +140,7 @@ public class GuiText extends Gui{
 
 	/**
 	 * Set the VAO and vertex count for this text.
-	 * 
+	 *
 	 * @param vao
 	 *            - the VAO containing all the vertex data for the quads on
 	 *            which the text will be rendered.
@@ -149,17 +163,7 @@ public class GuiText extends Gui{
 	 * @return the font size of the text (a font size of 1 is normal).
 	 */
 	public float getFontSize() {
-		return getScale().x();
-	}
-
-	/**
-	 * Sets the number of lines that this text covers (method used only in
-	 * loading).
-	 * 
-	 * @param number The number of lines
-	 */
-	public void setNumberOfLines(int number) {
-		this.numberOfLines = number;
+		return fontSize;
 	}
 
 	/**

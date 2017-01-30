@@ -1,10 +1,10 @@
 package com.deltabase.everphase.render;
 
 import com.deltabase.everphase.gui.Gui;
-import com.deltabase.everphase.gui.GuiTextureUnit;
 import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.model.ModelRaw;
 import com.deltabase.everphase.modelloader.ResourceLoader;
+import com.deltabase.everphase.resource.TextureGui;
 import com.deltabase.everphase.shader.ShaderGui;
 import com.deltabase.everphase.toolbox.Maths;
 import org.joml.Matrix4f;
@@ -24,7 +24,7 @@ public class RendererGui {
     private ShaderGui shader;
     private ResourceLoader loader;
 
-    private List<GuiTextureUnit> textureUnits = new ArrayList<>();
+    private List<TextureGui> textureUnits = new ArrayList<>();
 
     public RendererGui(ResourceLoader loader) {
         float[] positions = { -1, 1, -1, -1, 1, 1, 1, -1};  //The six indices of the quad
@@ -43,13 +43,8 @@ public class RendererGui {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_DEPTH_TEST);                                 //Disable the depth test so you can render multiple transparent GUIs behind each other
 
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);                         //...activate its texture...
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());       //...bind its texture...
-
-        Matrix4f matrix = Maths.createTransformationMatrix(gui.getPosition(), gui.getScale());  //...create a new transformation matrix...
+        Matrix4f matrix = Maths.createTransformationMatrix(new Vector2f(0.0F, 0.0F), new Vector2f(1.0F, 1.0F));  //...create a new transformation matrix...
         shader.loadTransformationMatrix(matrix);                        //...load it to the shader
-
-        GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());  //...and draw the quad onto the screen
 
         gui.render();
 
@@ -65,7 +60,7 @@ public class RendererGui {
         textureUnits.clear();
     }
 
-    public void drawTexture(float posX, float posY, float scale, Vector4f size, GuiTextureUnit texture) {
+    public void drawTexture(float posX, float posY, float scale, Vector4f size, TextureGui texture) {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
         shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f((posX - (size.z() - size.x()) / Main.getWindowSize()[0]) *0.5F, (posY - (size.w() - size.y()) / Main.getWindowSize()[1]) *0.5F) , new Vector2f(scale, -scale * Main.getAspectRatio())));
