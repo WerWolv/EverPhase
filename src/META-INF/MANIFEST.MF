@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: com.werwolv.launcher.Launcher
+Class-Path: /res; /shaders
+Main-Class: com.deltabase.everphase.main.Main
 
