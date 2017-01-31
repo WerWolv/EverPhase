@@ -5,6 +5,7 @@ import com.deltabase.everphase.api.event.SubscribeEvent;
 import com.deltabase.everphase.api.event.input.ScrollEvent;
 import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
+import com.deltabase.everphase.api.event.rendering.HoverItemEvent;
 
 @EventBusSubscriber
 public class EventHandler {
@@ -28,5 +29,10 @@ public class EventHandler {
             Main.getPlayer().setSelectedItem(0);
         else if(Main.getPlayer().getSelectedItem() < 0)
             Main.getPlayer().setSelectedItem(8);
+    }
+
+    @SubscribeEvent
+    public void onItemHover(HoverItemEvent event) {
+        System.out.println(event.getItemStack().getItem().getName());
     }
 }

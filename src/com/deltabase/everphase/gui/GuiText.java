@@ -91,7 +91,7 @@ public class GuiText extends Gui{
 	 * @param b
 	 *            - blue value, between 0 and 1.
 	 */
-	public void setColour(float r, float g, float b) {
+	public void setColor(float r, float g, float b) {
 		color.set(r, g, b);
 	}
 

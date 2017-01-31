@@ -33,6 +33,10 @@ public class Item {
         return this;
     }
 
+    public String getTooltipDescription() {
+        return null;
+    }
+
     public String getName() {
         return name;
     }

@@ -39,7 +39,6 @@ public class TextRenderingHelper {
     public static void removeText(GuiText text) {
         List<GuiText> textBatch = texts.get(text.getFont());
         if(textBatch == null) {
-            System.err.println("Text is already removed!");
             return;
         }
         textBatch.remove(text);
