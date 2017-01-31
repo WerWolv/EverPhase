@@ -1,7 +1,7 @@
 package com.deltabase.everphase.structure;
 
+import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.entity.Entity;
-import com.deltabase.everphase.modelloader.ResourceLoader;
 
 import java.util.ArrayList;
 import java.util.List;

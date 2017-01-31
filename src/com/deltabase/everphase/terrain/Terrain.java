@@ -1,11 +1,11 @@
 package com.deltabase.everphase.terrain;
 
-import com.deltabase.everphase.model.ModelRaw;
-import com.deltabase.everphase.modelloader.ResourceLoader;
-import com.deltabase.everphase.resource.TextureTerrain;
-import com.deltabase.everphase.resource.TextureTerrainPack;
-import com.deltabase.everphase.toolbox.Maths;
-import com.deltabase.everphase.modelloader.ModelData;
+import com.deltabase.everphase.engine.model.ModelRaw;
+import com.deltabase.everphase.engine.modelloader.ModelData;
+import com.deltabase.everphase.engine.modelloader.ResourceLoader;
+import com.deltabase.everphase.engine.resource.TextureTerrain;
+import com.deltabase.everphase.engine.resource.TextureTerrainPack;
+import com.deltabase.everphase.engine.toolbox.Maths;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

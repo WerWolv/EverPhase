@@ -1,11 +1,11 @@
 package com.deltabase.everphase.entity.particle;
 
 
+import com.deltabase.everphase.engine.resource.TextureParticle;
+import com.deltabase.everphase.engine.toolbox.ParticleHelper;
 import com.deltabase.everphase.entity.Entity;
-import com.deltabase.everphase.resource.TextureParticle;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.main.Main;
-import com.deltabase.everphase.toolbox.ParticleHelper;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

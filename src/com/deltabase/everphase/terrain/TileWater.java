@@ -1,8 +1,8 @@
 package com.deltabase.everphase.terrain;
 
-import com.deltabase.everphase.fbo.FrameBufferObject;
+import com.deltabase.everphase.engine.fbo.FrameBufferObject;
+import com.deltabase.everphase.engine.render.RendererMaster;
 import com.deltabase.everphase.level.Level;
-import com.deltabase.everphase.render.RendererMaster;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;

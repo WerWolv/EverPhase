@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWCursorPosCallback;
 
 public class CursorPositionCallback extends GLFWCursorPosCallback {
 
+    public static double xPos, yPos;
     private static boolean enabled = true;
 
     public static void enableCursorListener(boolean enabled) {
@@ -15,7 +16,10 @@ public class CursorPositionCallback extends GLFWCursorPosCallback {
 
     @Override
     public void invoke(long window, double xpos, double ypos) {
-        if (KeyCallback.isKeyPressed(GLFW.GLFW_KEY_LEFT_ALT) || !enabled) return;
+        CursorPositionCallback.xPos = xpos;
+        CursorPositionCallback.yPos = ypos;
+
+        if (!enabled) return;
 
         GLFW.glfwSetCursorPos(window, Main.getWindowSize()[0] / 2, Main.getWindowSize()[1] / 2);        //Holds the cursor on a fixed position on the screen
 

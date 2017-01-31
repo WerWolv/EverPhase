@@ -2,27 +2,28 @@ package com.deltabase.everphase.level;
 
 import com.deltabase.everphase.api.event.EventBus;
 import com.deltabase.everphase.api.event.player.OpenGuiEvent;
-import com.deltabase.everphase.audio.AudioHelper;
-import com.deltabase.everphase.audio.SoundSource;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
+import com.deltabase.everphase.engine.audio.AudioHelper;
+import com.deltabase.everphase.engine.fbo.FrameBufferObject;
+import com.deltabase.everphase.engine.font.FontType;
+import com.deltabase.everphase.engine.font.effects.FontEffect;
+import com.deltabase.everphase.engine.render.postProcessing.PostProcessing;
+import com.deltabase.everphase.engine.resource.TextureTerrainPack;
+import com.deltabase.everphase.engine.toolbox.ParticleHelper;
+import com.deltabase.everphase.engine.toolbox.TextRenderingHelper;
 import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.entity.EntityLight;
 import com.deltabase.everphase.entity.EntityPlayer;
-import com.deltabase.everphase.entity.particle.system.ParticleSystem;
-import com.deltabase.everphase.fbo.FrameBufferObject;
-import com.deltabase.everphase.font.FontType;
-import com.deltabase.everphase.font.effects.FontEffect;
-import com.deltabase.everphase.gui.*;
+import com.deltabase.everphase.gui.Gui;
+import com.deltabase.everphase.gui.GuiIngame;
+import com.deltabase.everphase.gui.GuiMiniMap;
+import com.deltabase.everphase.gui.GuiText;
+import com.deltabase.everphase.gui.inventory.GuiInventoryPlayer;
 import com.deltabase.everphase.main.Main;
-import com.deltabase.everphase.render.postProcessing.PostProcessing;
-import com.deltabase.everphase.resource.TextureParticle;
-import com.deltabase.everphase.resource.TextureTerrainPack;
 import com.deltabase.everphase.structure.Labyrinth;
 import com.deltabase.everphase.terrain.Terrain;
 import com.deltabase.everphase.terrain.TileWater;
-import com.deltabase.everphase.toolbox.ParticleHelper;
-import com.deltabase.everphase.toolbox.TextRenderingHelper;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -56,7 +57,7 @@ public class LevelOverworld extends Level {
 
     private GuiText text;
 
-    private ParticleSystem system = new ParticleSystem(new TextureParticle(loader.loadTexture("particles/fire"), 8, false),50, 1,-0.1F, 3, 5);
+    //private ParticleSystem system = new ParticleSystem(new TextureParticle(loader.loadTexture("particles/fire"), 8, false),50, 1,-0.1F, 3, 5);
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -101,7 +102,7 @@ public class LevelOverworld extends Level {
         waters.add(new TileWater(renderer, this, 75, -75, 0));
 
         guiIngame = new GuiIngame(renderer);
-        guiInventory = new GuiInventory(renderer);
+        guiInventory = new GuiInventoryPlayer(renderer);
         guiMiniMap = new GuiMiniMap(renderer);
         guis.add(guiIngame);
         guis.add(guiMiniMap);
@@ -117,8 +118,8 @@ public class LevelOverworld extends Level {
     public void updateLevel() {
         glfwPollEvents();
         ParticleHelper.update(player);
-        system.randomizeRotation();
-        system.generateParticles(new Vector3f(20, 5, -20));
+        /*system.randomizeRotation();
+        system.generateParticles(new Vector3f(20, 5, -20));*/
     }
 
     @Override
@@ -165,7 +166,6 @@ public class LevelOverworld extends Level {
                 player.setCurrentGui(null);
                 Main.setCursorVisibility(false);
                 CursorPositionCallback.enableCursorListener(true);
-                new SoundSource("random", 1.0F, 1.0F, false).setLooping(true).setPosition(0,0,0).setVelocity(1,1,1).play();
             } else {
                 EventBus.postEvent(new OpenGuiEvent(player, guiInventory));
                 Main.setCursorVisibility(true);

@@ -1,10 +1,10 @@
 package com.deltabase.everphase.entity;
 
-import com.deltabase.everphase.modelloader.OBJModelLoader;
-import com.deltabase.everphase.modelloader.ResourceLoader;
-import com.deltabase.everphase.model.ModelTextured;
-import com.deltabase.everphase.modelloader.NormalMappedObjLoader;
-import com.deltabase.everphase.resource.TextureModel;
+import com.deltabase.everphase.engine.model.ModelTextured;
+import com.deltabase.everphase.engine.modelloader.NormalMappedObjLoader;
+import com.deltabase.everphase.engine.modelloader.OBJModelLoader;
+import com.deltabase.everphase.engine.modelloader.ResourceLoader;
+import com.deltabase.everphase.engine.resource.TextureModel;
 import org.joml.Vector3f;
 
 public class Entity {

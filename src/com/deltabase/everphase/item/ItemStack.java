@@ -4,18 +4,15 @@ public class ItemStack {
 
     private Item item;
     private int stackSize;
-    private int maxStackSize;
 
     public ItemStack(Item item) {
         this.item = item;
         this.stackSize = 1;
-        this.maxStackSize = 1;
     }
 
-    public ItemStack(Item item, int stackSize, int maxStackSize) {
+    public ItemStack(Item item, int stackSize) {
         this.item = item;
         this.stackSize = stackSize;
-        this.maxStackSize = maxStackSize;
     }
 
     public boolean decrementStackSize() {
@@ -32,11 +29,15 @@ public class ItemStack {
         return item;
     }
 
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
     public int getStackSize() {
         return stackSize;
     }
 
-    public int getMaxStackSize() {
-        return maxStackSize;
+    public void setStackSize(int stackSize) {
+        this.stackSize = stackSize;
     }
 }

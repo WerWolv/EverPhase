@@ -1,8 +1,8 @@
 package com.deltabase.everphase.entity.particle.system;
 
+import com.deltabase.everphase.engine.resource.TextureParticle;
 import com.deltabase.everphase.entity.particle.EntityParticle;
 import com.deltabase.everphase.main.Main;
-import com.deltabase.everphase.resource.TextureParticle;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -29,6 +29,29 @@ public class ParticleSystem {
         this.gravityComplient = gravityComplient;
         this.averageLifeLength = lifeLength;
         this.averageScale = scale;
+    }
+
+    private static Vector3f generateRandomUnitVectorWithinCone(Vector3f coneDirection, float angle) {
+        float cosAngle = (float) Math.cos(angle);
+        Random random = new Random();
+        float theta = (float) (random.nextFloat() * 2f * Math.PI);
+        float z = cosAngle + (random.nextFloat() * (1 - cosAngle));
+        float rootOneMinusZSquared = (float) Math.sqrt(1 - z * z);
+        float x = (float) (rootOneMinusZSquared * Math.cos(theta));
+        float y = (float) (rootOneMinusZSquared * Math.sin(theta));
+
+        Vector4f direction = new Vector4f(x, y, z, 1);
+        if (coneDirection.x != 0 || coneDirection.y != 0 || (coneDirection.z != 1 && coneDirection.z != -1)) {
+            Vector3f rotateAxis = coneDirection.cross(new Vector3f(0, 0, 1), new Vector3f());
+            rotateAxis.normalize();
+            float rotateAngle = (float) Math.acos(coneDirection.dot(new Vector3f(0, 0, 1)));
+            Matrix4f rotationMatrix = new Matrix4f();
+            rotationMatrix.rotate(-rotateAngle, rotateAxis);
+            direction = rotationMatrix.transform(direction, new Vector4f());
+        } else if (coneDirection.z == -1) {
+            direction.z *= -1;
+        }
+        return new Vector3f(direction.x(), direction.y(), direction.z());
     }
 
     /**
@@ -106,29 +129,6 @@ public class ParticleSystem {
         } else {
             return 0;
         }
-    }
-
-    private static Vector3f generateRandomUnitVectorWithinCone(Vector3f coneDirection, float angle) {
-        float cosAngle = (float) Math.cos(angle);
-        Random random = new Random();
-        float theta = (float) (random.nextFloat() * 2f * Math.PI);
-        float z = cosAngle + (random.nextFloat() * (1 - cosAngle));
-        float rootOneMinusZSquared = (float) Math.sqrt(1 - z * z);
-        float x = (float) (rootOneMinusZSquared * Math.cos(theta));
-        float y = (float) (rootOneMinusZSquared * Math.sin(theta));
-
-        Vector4f direction = new Vector4f(x, y, z, 1);
-        if (coneDirection.x != 0 || coneDirection.y != 0 || (coneDirection.z != 1 && coneDirection.z != -1)) {
-            Vector3f rotateAxis = coneDirection.cross(new Vector3f(0, 0, 1), new Vector3f());
-            rotateAxis.normalize();
-            float rotateAngle = (float) Math.acos(coneDirection.dot(new Vector3f(0, 0, 1)));
-            Matrix4f rotationMatrix = new Matrix4f();
-            rotationMatrix.rotate(-rotateAngle, rotateAxis);
-            direction = rotationMatrix.transform(direction, new Vector4f());
-        } else if (coneDirection.z == -1) {
-            direction.z *= -1;
-        }
-        return new Vector3f(direction.x(), direction.y(), direction.z());
     }
 
     private Vector3f generateRandomUnitVector() {

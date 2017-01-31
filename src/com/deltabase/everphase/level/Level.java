@@ -1,19 +1,19 @@
 package com.deltabase.everphase.level;
 
+import com.deltabase.everphase.callback.KeyCallback;
+import com.deltabase.everphase.engine.modelloader.ResourceLoader;
+import com.deltabase.everphase.engine.render.RendererMaster;
+import com.deltabase.everphase.engine.render.postProcessing.*;
+import com.deltabase.everphase.engine.toolbox.ParticleHelper;
+import com.deltabase.everphase.engine.toolbox.ScreenShotHelper;
 import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.entity.EntityLight;
-import com.deltabase.everphase.gui.Gui;
-import com.deltabase.everphase.main.Settings;
-import com.deltabase.everphase.modelloader.ResourceLoader;
-import com.deltabase.everphase.render.RendererMaster;
-import com.deltabase.everphase.render.postProcessing.*;
-import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.entity.EntityPlayer;
+import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.main.Main;
+import com.deltabase.everphase.main.Settings;
 import com.deltabase.everphase.terrain.Terrain;
 import com.deltabase.everphase.terrain.TileWater;
-import com.deltabase.everphase.toolbox.ParticleHelper;
-import com.deltabase.everphase.toolbox.ScreenShotHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -24,10 +24,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_F2;
 
 public abstract class Level {
 
-    protected ResourceLoader loader = new ResourceLoader();
-
     protected static RendererMaster renderer;
-
+    protected ResourceLoader loader = new ResourceLoader();
     protected List<Entity> entities    = new ArrayList<>();
     protected List<Entity> entitiesNM  = new ArrayList<>();
     protected List<Terrain> terrains   = new ArrayList<>();
@@ -43,7 +41,12 @@ public abstract class Level {
         ParticleHelper.init(loader, renderer.getProjectionMatrix());
     }
 
+    public static RendererMaster getRenderer() {
+        return renderer;
+    }
+
     public void reInitRenderer() {
+        Level.renderer.clean();
         Level.renderer = new RendererMaster(loader, player);
     }
 
@@ -88,10 +91,6 @@ public abstract class Level {
 
     public ResourceLoader getLoader() {
         return loader;
-    }
-
-    public static RendererMaster getRenderer() {
-        return renderer;
     }
 
     public List<Entity> getEntities() {

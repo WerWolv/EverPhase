@@ -1,7 +1,8 @@
 package com.deltabase.everphase.gui;
 
-import com.deltabase.everphase.render.RendererMaster;
-import com.deltabase.everphase.resource.TextureGui;
+import com.deltabase.everphase.engine.render.RendererMaster;
+import com.deltabase.everphase.engine.resource.TextureGui;
+import com.deltabase.everphase.main.Main;
 import org.joml.Vector4f;
 
 public class GuiIngame extends Gui {
@@ -16,9 +17,9 @@ public class GuiIngame extends Gui {
 
     @Override
     public void render() {
-        renderer.getRendererGui().drawTexture(0, 0, 1.0F, new Vector4f(0, 0, 256, 256), textureGuiIngame);
+        renderer.getRendererGui().drawTexture(0, -1.8F, 1.0F, new Vector4f(0, 0, 256, 24), textureGuiIngame);
 
-        //renderer.getRendererGui().drawTexture(-0F, -0F, 0.5F, new Vector4f(210, 25, 256, 50), textureGuiIngame);
+        renderer.getRendererGui().drawTexture(-1.563F / Main.getAspectRatio() + 0.1955F * Main.getPlayer().getSelectedItem() / Main.getAspectRatio(), -1.5975F, 1.0F, new Vector4f(210, 25, 256, 50), textureGuiIngame);
 
         /*renderer.getRendererGui().drawTexture(-0.5F, 0.2F, 0.5F, new Vector4f(0, 195, 256, 122), textureGuiIngame);
 

@@ -1,9 +1,9 @@
 package com.deltabase.everphase.gui;
 
-import com.deltabase.everphase.font.FontType;
-import com.deltabase.everphase.font.effects.FontEffect;
+import com.deltabase.everphase.engine.font.FontType;
+import com.deltabase.everphase.engine.font.effects.FontEffect;
+import com.deltabase.everphase.engine.toolbox.TextRenderingHelper;
 import com.deltabase.everphase.level.Level;
-import com.deltabase.everphase.toolbox.TextRenderingHelper;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

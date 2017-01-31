@@ -1,15 +1,15 @@
 package com.deltabase.everphase.main;
 
 import com.deltabase.everphase.api.event.EventBus;
-import com.deltabase.everphase.audio.AudioHelper;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
 import com.deltabase.everphase.callback.ScrollCallback;
+import com.deltabase.everphase.engine.audio.AudioHelper;
+import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.level.LevelOverworld;
-import com.deltabase.everphase.modelloader.ResourceLoader;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -36,7 +36,6 @@ public class Main {
     private static long lastFrameTime;
     private static float delta;
     private static long window;
-    private static long static_Window;
     private static EntityPlayer player;
 
     private static ResourceLoader loader = new ResourceLoader();
@@ -93,7 +92,6 @@ public class Main {
 
 
         window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 720, Settings.fullscreen ? vidmode.height() : 480, "EverPhase", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
-        static_Window = window;
 
         if(window == NULL) {
             System.err.println("Could not create window!");
@@ -108,7 +106,6 @@ public class Main {
         glfwSetWindowSizeCallback(window, (window, width, height) -> {
             GL11.glViewport(0, 0, width, height);
             glfwSetWindowSize(window, width, height);
-            currentLevel.reInitRenderer();
         });
 
         glfwSetWindowPos(window, 100, 100);
@@ -136,36 +133,7 @@ public class Main {
     }
 
     public static void setCursorVisibility(boolean visible) {
-        glfwSetInputMode(static_Window, GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
-    }
-
-    public static long getWindow() {
-        return static_Window;
-    }
-
-    public static int[] getWindowSize() {
-        IntBuffer w = BufferUtils.createIntBuffer(4);
-        IntBuffer h = BufferUtils.createIntBuffer(4);
-
-        glfwGetWindowSize(static_Window, w, h);
-
-        return new int[]{w.get(0), h.get(0)};
-    }
-
-    public static float getAspectRatio() {
-        return (float) getWindowSize()[0] / (float) getWindowSize()[1];
-    }
-
-    private static long getCurrentTime() {
-        return (long) (GLFW.glfwGetTime() * 1000);
-    }
-
-    public static float getFrameTimeSeconds() {
-        return delta;
-    }
-
-    public static EntityPlayer getPlayer() {
-        return player;
+        glfwSetInputMode(window, GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     }
 
     private static void run() {
@@ -205,5 +173,39 @@ public class Main {
         keyCallback.free();
         mouseButtonCallback.free();
         cursorPosCallback.free();
+    }
+
+
+    public static long getWindow() {
+        return window;
+    }
+
+    public static int[] getWindowSize() {
+        IntBuffer w = BufferUtils.createIntBuffer(4);
+        IntBuffer h = BufferUtils.createIntBuffer(4);
+
+        glfwGetWindowSize(window, w, h);
+
+        return new int[]{w.get(0), h.get(0)};
+    }
+
+    public static float getAspectRatio() {
+        return (float) getWindowSize()[0] / (float) getWindowSize()[1];
+    }
+
+    private static long getCurrentTime() {
+        return (long) (GLFW.glfwGetTime() * 1000);
+    }
+
+    public static float getFrameTimeSeconds() {
+        return delta;
+    }
+
+    public static EntityPlayer getPlayer() {
+        return player;
+    }
+
+    public static ResourceLoader getLoader() {
+        return loader;
     }
 }
