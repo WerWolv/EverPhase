@@ -13,7 +13,7 @@ public class InventoryPlayer extends Inventory {
         this.inventorySize = inventorySize;
         this.maxStackSize = maxStackSize;
 
-        inventorySlots.add(new Slot(new Vector2f(0.0F, 0.0F), 99, 0));
+        inventorySlots.add(new Slot(new Vector2f(0.5F, 0.5F), 99, 0));
     }
 
     @Override

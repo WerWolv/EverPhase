@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 public class Slot {
 
-    public static final float SLOT_SIZE = 0.25F;
+    public static final float SLOT_SIZE = 0.07F;
 
     private Vector2f position;
     private ItemStack itemStack;

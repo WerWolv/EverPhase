@@ -67,12 +67,12 @@ public class RendererGui {
     }
 
     public void drawSlot(Slot slot) {
-        double cursorX = (CursorPositionCallback.xPos / Main.getWindowSize()[0]) * 2.0F - 1.0F;
+        double cursorX = ((CursorPositionCallback.xPos / Main.getWindowSize()[0]) * 2.0F - 1.0F);
         double cursorY = -((CursorPositionCallback.yPos / Main.getWindowSize()[1]) * 2.0F - 1.0F);
 
         if (slot.getItemStack() == null) return;
 
-        if (cursorX > (slot.getPosition().x() - (Slot.SLOT_SIZE / 2.0F) - 0.075F / Main.getAspectRatio()) && cursorX < (slot.getPosition().x() + (Slot.SLOT_SIZE / 2.0F) + 0.075F / Main.getAspectRatio()) && cursorY > (slot.getPosition().y() - (Slot.SLOT_SIZE / 2.0F) - 0.125F) && cursorY < (slot.getPosition().y() + (Slot.SLOT_SIZE / 2.0F) + 0.125F))
+        if (cursorX > (slot.getPosition().x() - (Slot.SLOT_SIZE / Main.getAspectRatio())) && cursorX < (slot.getPosition().x() + (Slot.SLOT_SIZE / Main.getAspectRatio())) && cursorY > (slot.getPosition().y() - (Slot.SLOT_SIZE)) && cursorY < (slot.getPosition().y() + (Slot.SLOT_SIZE)))
             return;
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
