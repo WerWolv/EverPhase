@@ -1,8 +1,5 @@
 package com.deltabase.everphase.level;
 
-import com.deltabase.everphase.api.event.EventBus;
-import com.deltabase.everphase.api.event.player.OpenGuiEvent;
-import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.engine.audio.AudioHelper;
 import com.deltabase.everphase.engine.fbo.FrameBufferObject;
@@ -162,15 +159,7 @@ public class LevelOverworld extends Level {
         super.handleInput();
 
         if (KeyCallback.isKeyPressedEdge(GLFW_KEY_E)) {
-            if (player.getCurrentGui() != null) {
-                player.setCurrentGui(null);
-                Main.setCursorVisibility(false);
-                CursorPositionCallback.enableCursorListener(true);
-            } else {
-                EventBus.postEvent(new OpenGuiEvent(player, guiInventory));
-                Main.setCursorVisibility(true);
-                CursorPositionCallback.enableCursorListener(false);
-            }
+            player.setCurrentGui(player.getCurrentGui() == null ? guiInventory : null);
         }
 
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F)) {

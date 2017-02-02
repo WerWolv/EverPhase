@@ -42,40 +42,73 @@ public class Main {
 
     public static void main(String[] args) {
         for (String arg : args) {
-            System.out.println(arg);
             switch (arg.toLowerCase()) {
                 case "fullscreen":
                     Settings.fullscreen = true;
+                    System.out.println("[Settings] Starting in fullscreen mode");
                     break;
                 case "vsync":
                     Settings.vSync = true;
+                    System.out.println("[Settings] VSync enabled");
                     break;
                 case "antialiasing":
                     Settings.antialiasing = true;
+                    System.out.println("[Settings] Anti aliasing enabled");
                     break;
                 case "anisotropicfilter":
                     Settings.anisotropicFilter = true;
+                    System.out.println("[Settings] Anisotropic filtering enabled");
                     break;
                 case "bloom":
                     Settings.bloom = true;
+                    System.out.println("[Settings] Bloom filter enabled");
                     break;
             }
 
-            if(arg.toLowerCase().startsWith("shadowquality"))
+            if (arg.toLowerCase().startsWith("shadowquality")) {
                 Settings.shadowQuality = (int) Math.pow(2, Integer.parseInt(arg.split("_")[1]));
+
+                switch (Settings.shadowQuality) {
+                    case 0:
+                        System.out.println("[Settings] Dynamic shadows disabled");
+                        break;
+                    case 1:
+                        System.out.println("[Settings] Low quality dynamic shadows enabled");
+                        break;
+                    case 2:
+                        System.out.println("[Settings] Medium quality dynamic shadows enabled");
+                        break;
+                    case 4:
+                        System.out.println("[Settings] High quality dynamic shadows enabled");
+                        break;
+                    case 8:
+                        System.out.println("[Settings] Ultra High quality dynamic shadows enabled");
+                        break;
+                }
+            }
 
             else if(arg.toLowerCase().startsWith("mipmaplevel"))
                 Settings.mipmappingLevel = Integer.parseInt(arg.split("_")[1]);
             else if(arg.toLowerCase().startsWith("mipmaptype")) {
                 switch (Integer.parseInt(arg.split("_")[1])) {
-                    case 0: Settings.mipmappingType = GL_NONE; break;
-                    case 1: Settings.mipmappingType = GL_LINEAR; break;
-                    case 2: Settings.mipmappingType = GL_LINEAR_MIPMAP_NEAREST; break;
-                    case 3: Settings.mipmappingType = GL_LINEAR_MIPMAP_LINEAR; break;
-                    default: Settings.mipmappingType = GL_NONE; break;
+                    case 1:
+                        Settings.mipmappingType = GL_LINEAR;
+                        System.out.println("[Settings] Linear mipmapping enabled");
+                        break;
+                    case 2:
+                        Settings.mipmappingType = GL_LINEAR_MIPMAP_NEAREST;
+                        System.out.println("[Settings] Bilinear mipmapping enabled");
+                        break;
+                    case 3:
+                        Settings.mipmappingType = GL_LINEAR_MIPMAP_LINEAR;
+                        System.out.println("[Settings] Trilinear mipmapping enabled");
+                        break;
+                    default:
+                        Settings.mipmappingType = GL_NONE;
+                        System.out.println("[Settings] Mipmapping disabled");
+                        break;
                 }
             }
-
         }
 
         run();
@@ -83,18 +116,18 @@ public class Main {
 
     private static void init() {
         if(!glfwInit()){
-            System.err.println("GLFW initialization failed!");
+            System.err.println("[GLFW] Initialization failed!");
         }
 
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
 
-        window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 720, Settings.fullscreen ? vidmode.height() : 480, "EverPhase", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+        window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 1080, Settings.fullscreen ? vidmode.height() : 720, "EverPhase", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
 
         if(window == NULL) {
-            System.err.println("Could not create window!");
+            System.err.println("[GLFW] Could not create window!");
         }
 
         glfwSetKeyCallback(window, keyCallback = new KeyCallback());
@@ -126,7 +159,7 @@ public class Main {
         setCursorVisibility(false);
         EventBus.registerEventHandlers();
 
-        System.out.println("OpenGL: " + glGetString(GL_VERSION));
+        System.out.println("[OpenGL] Version:" + glGetString(GL_VERSION));
 
         AudioHelper.createContext();
         AudioHelper.loadSoundFile("random");
@@ -162,7 +195,7 @@ public class Main {
             lastFrameTime = currFrameTime;
 
             if(glfwWindowShouldClose(window)) {
-                System.out.println("Exited");
+                System.out.println("[EverPhase] Window closed");
                 break;
             }
         }

@@ -28,10 +28,10 @@ public class AudioHelper {
         AL10.alDistanceModel(AL11.AL_EXPONENT_DISTANCE);
 
         if(!alCapabilities.OpenAL10) {
-            System.err.println("OpenAL 1.0 isn't supported!");
+            System.err.println("[OpenAL] OpenAL 1.0 isn't supported!");
         }
 
-        System.out.println("OpenAL: " + AL10.alGetString(AL10.AL_VERSION));
+        System.out.println("[OpenAL] Version: " + AL10.alGetString(AL10.AL_VERSION));
     }
 
     public static int loadSoundFile(String fileName) {

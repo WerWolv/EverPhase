@@ -3,9 +3,11 @@ package com.deltabase.everphase.main;
 import com.deltabase.everphase.api.event.EventBusSubscriber;
 import com.deltabase.everphase.api.event.SubscribeEvent;
 import com.deltabase.everphase.api.event.input.ScrollEvent;
+import com.deltabase.everphase.api.event.inventory.InventoryItemClickEvent;
+import com.deltabase.everphase.api.event.inventory.InventoryItemHoverEvent;
 import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
-import com.deltabase.everphase.api.event.rendering.HoverItemEvent;
+import com.deltabase.everphase.item.ItemStack;
 
 @EventBusSubscriber
 public class EventHandler {
@@ -17,12 +19,14 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onPlayerGuiOpenend(OpenGuiEvent event) {
-        event.getPlayer().setCurrentGui(event.getOpenGui());
         System.out.println(event.getOpenGui());
     }
 
     @SubscribeEvent
     public void onScroll(ScrollEvent event) {
+
+        if (Main.getPlayer().getCurrentGui() != null) return;
+
         Main.getPlayer().setSelectedItem(Main.getPlayer().getSelectedItem() - event.getYScroll());
 
         if(Main.getPlayer().getSelectedItem() > 8)
@@ -32,7 +36,18 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public void onItemHover(HoverItemEvent event) {
-        System.out.println(event.getItemStack().getItem().getName());
+    public void onItemHover(InventoryItemHoverEvent event) {
+
+    }
+
+    @SubscribeEvent
+    public void onInventoryItemClick(InventoryItemClickEvent event) {
+        if (event.getPressedButton() == InventoryItemClickEvent.MOUSE_BUTTON_LEFT && event.getSlot() != null) {
+
+            ItemStack oldHeldItem = event.getInventory().getPickedUpItemStack();
+
+            event.getInventory().setPickedUpItemStack(event.getSlot().getItemStack());
+            event.getSlot().setItemStack(oldHeldItem);
+        }
     }
 }

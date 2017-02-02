@@ -34,7 +34,7 @@ public class Item {
     }
 
     public String getTooltipDescription() {
-        return null;
+        return "Hello World";
     }
 
     public String getName() {

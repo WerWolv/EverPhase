@@ -64,7 +64,6 @@ public class GuiText extends Gui{
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
 		this.centerText = centered;
-		TextRenderingHelper.loadText(this);
 	}
 
 	/**
@@ -128,6 +127,10 @@ public class GuiText extends Gui{
 	 */
 	public Vector2f getPosition() {
 		return position;
+	}
+
+	public void setPosition(Vector2f position) {
+		this.position = position;
 	}
 
 	/**

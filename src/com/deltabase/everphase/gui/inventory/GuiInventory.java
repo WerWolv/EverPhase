@@ -25,7 +25,7 @@ public abstract class GuiInventory extends Gui {
         ItemStack[] items = new ItemStack[inventorySize];
 
         for (int slot = 0; slot < inventorySize; slot++) {
-            items[slot] = inventory.inventorySlots.get(slot).getItemStack();
+            items[slot] = inventory.getInventorySlots().get(slot).getItemStack();
         }
 
         return items;
@@ -44,9 +44,13 @@ public abstract class GuiInventory extends Gui {
     }
 
     public void addItemStack(ItemStack itemStack) {
-        for (Slot slot : inventory.inventorySlots)
+        for (Slot slot : inventory.getInventorySlots())
             if (slot.getItemStack() == null)
                 slot.setItemStack(itemStack);
+    }
+
+    public void setItemStackInSlot(ItemStack itemStack, int index) {
+        inventory.setItemStackInSlot(itemStack, index);
     }
 
     public void removeItemStack(ItemStack itemStack) {
@@ -58,4 +62,5 @@ public abstract class GuiInventory extends Gui {
     public Inventory getInventory() {
         return inventory;
     }
+
 }

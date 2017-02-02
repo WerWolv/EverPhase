@@ -10,6 +10,7 @@ public class GuiInventoryPlayer extends GuiInventory {
     public GuiInventoryPlayer(RendererMaster renderer) {
         super(renderer, new InventoryPlayer(1, 99));
 
-        this.addItemStack(new ItemStack(Items.itemTest, 1));
+        this.setItemStackInSlot(new ItemStack(Items.itemTest, 1), 0);
+        this.setItemStackInSlot(new ItemStack(Items.itemTest2, 1), 1);
     }
 }

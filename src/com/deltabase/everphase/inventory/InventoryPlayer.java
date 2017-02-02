@@ -13,12 +13,17 @@ public class InventoryPlayer extends Inventory {
         this.inventorySize = inventorySize;
         this.maxStackSize = maxStackSize;
 
-        inventorySlots.add(new Slot(new Vector2f(0.5F, 0.5F), 99, 0));
+
+        this.addSlot(new Slot(this, new Vector2f(0.5F, 0.5F), 99));
+        this.addSlot(new Slot(this, new Vector2f(0.35F, 0.5F), 99));
+        this.addSlot(new Slot(this, new Vector2f(0.20F, 0.5F), 99));
+        this.addSlot(new Slot(this, new Vector2f(0.05F, 0.5F), 99));
+
     }
 
     @Override
     public int getInventorySize() {
-        return inventorySlots.size();
+        return getInventorySlots().size();
     }
 
     @Override

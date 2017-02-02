@@ -1,8 +1,10 @@
 package com.deltabase.everphase.entity;
 
 import com.deltabase.everphase.api.event.EventBus;
+import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.api.event.player.PlayerItemUseEvent;
 import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
+import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
 import com.deltabase.everphase.engine.modelloader.ResourceLoader;
@@ -158,6 +160,15 @@ public class EntityPlayer extends Entity{
     }
 
     public void setCurrentGui(Gui currentGui) {
+        if (currentGui != null) {
+            EventBus.postEvent(new OpenGuiEvent(this, currentGui));
+            Main.setCursorVisibility(true);
+            CursorPositionCallback.enableCursorListener(false);
+        } else {
+            Main.setCursorVisibility(false);
+            CursorPositionCallback.enableCursorListener(true);
+        }
+
         this.currentGui = currentGui;
     }
 
