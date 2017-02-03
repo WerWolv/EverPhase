@@ -49,3 +49,6 @@ Any Java IDE or only the JDK, in case you do not want to install yet another IDE
 
 Please note that the CMake support is not done yet. You will need to bundle the jar libraries manually.
 
+## Run Requirements
+
+The Java Runtime Environment version 1.8 or later has to be installed. Otherwise EverPhase will throw an "UnsupportedClassVersionError: Unsupported major.minor version 52.0".
