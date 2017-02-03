@@ -20,6 +20,8 @@ License: BSD 3-Clause (see LICENSE.txt)
 |Render Engine|WerWolv|◔|
 |Fonts|WerWolv|✓|
 |CMake Build|SmallJoker|◔|
+|Inventory System|WerWolv|◔|
+|Crafting System|Mrasam|◔|
 |Achievements|-|✗|
 |Random Dungeons (Rogue Like)|Mrasam|◔|
 |Magic (Teleports, etc.)|-|✗|
@@ -27,19 +29,14 @@ License: BSD 3-Clause (see LICENSE.txt)
 |Skills|-|✗|
 |Skilltree|-|✗|
 |Tinkering / Invention|-|✗|
-
-|Current Tasks|
-|-------------|
-|Shadows on Entities|
-|Fixing Audio issues when unpluging default device|
-|Raytrace interaction with entities|
-|AABBs|
-|GUI positioning|
-|Main Menu|
-|Login system|
-|Server|
-|Minimap with the new FBOs|
-
+|Shadows on Entities|WerWolv|◔|
+|Fixing Audio issues when unpluging default device|WerWolv|◔|
+|Raytrace interaction with entities|-|◔|
+|AABBs|WerWolv|✗|
+|Main Menu|WerWolv|✗|
+|Login system|WerWolv|✗|
+|Server|WerWolv|✗|
+|Minimap with the new FBOs|WerWolv|✗|
 
 ## Build Requirements
 
