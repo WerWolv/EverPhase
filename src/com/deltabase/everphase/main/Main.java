@@ -1,6 +1,7 @@
 package com.deltabase.everphase.main;
 
 import com.deltabase.everphase.api.EverPhaseApi;
+import com.deltabase.everphase.api.Log;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
@@ -42,23 +43,27 @@ public class Main {
             switch (arg.toLowerCase()) {
                 case "fullscreen":
                     Settings.fullscreen = true;
-                    System.out.println("[Settings] Starting in fullscreen mode");
+                    Log.i("Settings", "Starting in fullscreen mode");
                     break;
                 case "vsync":
                     Settings.vSync = true;
-                    System.out.println("[Settings] VSync enabled");
+                    Log.i("Settings", "VSync enabled");
                     break;
                 case "antialiasing":
                     Settings.antialiasing = true;
-                    System.out.println("[Settings] Anti aliasing enabled");
+                    Log.i("Settings", "Anti aliasing enabled");
                     break;
                 case "anisotropicfilter":
                     Settings.anisotropicFilter = true;
-                    System.out.println("[Settings] Anisotropic filtering enabled");
+                    Log.i("Settings", "Anisotropic filtering enabled");
                     break;
                 case "bloom":
                     Settings.bloom = true;
-                    System.out.println("[Settings] Bloom filter enabled");
+                    Log.i("Settings", "Bloom filter enabled");
+                    break;
+                case "debug":
+                    Settings.debugMode = true;
+                    Log.i("Settings", "Debug mode enabled");
                     break;
             }
 
@@ -67,19 +72,19 @@ public class Main {
 
                 switch (Settings.shadowQuality) {
                     case 0:
-                        System.out.println("[Settings] Dynamic shadows disabled");
+                        Log.i("Settings", "Dynamic shadows disabled");
                         break;
                     case 1:
-                        System.out.println("[Settings] Low quality dynamic shadows enabled");
+                        Log.i("Settings", "Low quality dynamic shadows enabled");
                         break;
                     case 2:
-                        System.out.println("[Settings] Medium quality dynamic shadows enabled");
+                        Log.i("Settings", "Medium quality dynamic shadows enabled");
                         break;
                     case 4:
-                        System.out.println("[Settings] High quality dynamic shadows enabled");
+                        Log.i("Settings", "High quality dynamic shadows enabled");
                         break;
                     case 8:
-                        System.out.println("[Settings] Ultra High quality dynamic shadows enabled");
+                        Log.i("Settings", "Ultra High quality dynamic shadows enabled");
                         break;
                 }
             }
@@ -90,19 +95,19 @@ public class Main {
                 switch (Integer.parseInt(arg.split("_")[1])) {
                     case 1:
                         Settings.mipmappingType = GL_LINEAR;
-                        System.out.println("[Settings] Linear mipmapping enabled");
+                        Log.i("Settings", "Linear mipmapping enabled");
                         break;
                     case 2:
                         Settings.mipmappingType = GL_LINEAR_MIPMAP_NEAREST;
-                        System.out.println("[Settings] Bilinear mipmapping enabled");
+                        Log.i("Settings", "Bilinear mipmapping enabled");
                         break;
                     case 3:
                         Settings.mipmappingType = GL_LINEAR_MIPMAP_LINEAR;
-                        System.out.println("[Settings] Trilinear mipmapping enabled");
+                        Log.i("Settings", "Trilinear mipmapping enabled");
                         break;
                     default:
                         Settings.mipmappingType = GL_NONE;
-                        System.out.println("[Settings] Mipmapping disabled");
+                        Log.i("Settings", "Mipmapping disabled");
                         break;
                 }
             }
@@ -112,9 +117,8 @@ public class Main {
     }
 
     private static void init() {
-        if(!glfwInit()){
-            System.err.println("[GLFW] Initialization failed!");
-        }
+        if (!glfwInit())
+            Log.wtf("GLFW", "Initialization failed!");
 
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -123,9 +127,8 @@ public class Main {
 
         window = glfwCreateWindow(Settings.fullscreen ? vidmode.width() : 1080, Settings.fullscreen ? vidmode.height() : 720, "EverPhase", Settings.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
 
-        if(window == NULL) {
-            System.err.println("[GLFW] Could not create window!");
-        }
+        if (window == NULL)
+            Log.wtf("GLFW", "Could not create window!");
 
         glfwSetKeyCallback(window, keyCallback = new KeyCallback());
         glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
@@ -156,7 +159,7 @@ public class Main {
         setCursorVisibility(false);
         EverPhaseApi.EVENT_BUS.registerEventHandlers();
 
-        System.out.println("[OpenGL] Version:" + glGetString(GL_VERSION));
+        Log.i("OpenGL", "Version: " + glGetString(GL_VERSION));
 
         AudioHelper.createContext();
         AudioHelper.loadSoundFile("random");
@@ -192,10 +195,11 @@ public class Main {
             lastFrameTime = currFrameTime;
 
             if(glfwWindowShouldClose(window)) {
-                System.out.println("[EverPhase] Window closed");
+                Log.i("EverPhase", "Window Closed!");
                 break;
             }
         }
+
 
         glfwSetWindowShouldClose(window, false);
         glfwDestroyWindow(window);

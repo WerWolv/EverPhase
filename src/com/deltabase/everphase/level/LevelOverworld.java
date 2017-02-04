@@ -1,6 +1,8 @@
 package com.deltabase.everphase.level;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.callback.KeyCallback;
+import com.deltabase.everphase.content.Achievements;
 import com.deltabase.everphase.engine.audio.AudioHelper;
 import com.deltabase.everphase.engine.fbo.FrameBufferObject;
 import com.deltabase.everphase.engine.font.FontType;
@@ -160,6 +162,7 @@ public class LevelOverworld extends Level {
 
         if (KeyCallback.isKeyPressedEdge(GLFW_KEY_E)) {
             player.setCurrentGui(player.getCurrentGui() == null ? guiInventory : null);
+            EverPhaseApi.ACHIEVEMENT_API.unlockAchievement(player, Achievements.testAch);
         }
 
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F)) {

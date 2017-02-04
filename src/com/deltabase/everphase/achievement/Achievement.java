@@ -1,19 +1,22 @@
 package com.deltabase.everphase.achievement;
 
 import com.deltabase.everphase.api.EverPhaseApi;
+import com.deltabase.everphase.engine.resource.TextureGui;
 
 public class Achievement {
 
     private String name;
     private String description;
     private int achievementId = -1;
-    private int textureId;
+    private TextureGui texture;
     private boolean unlocked = false;
 
     public Achievement(String name, String description, String texturePath) {
         this.name = name;
         this.description = description;
-        this.textureId = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture(texturePath).getTextureID();
+        this.texture = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture(texturePath);
+
+        EverPhaseApi.ACHIEVEMENT_API.addAchievement(this);
     }
 
     public void unlockAchievement() {
@@ -43,7 +46,7 @@ public class Achievement {
         this.achievementId = id;
     }
 
-    public int getTextureId() {
-        return textureId;
+    public TextureGui getTexture() {
+        return texture;
     }
 }

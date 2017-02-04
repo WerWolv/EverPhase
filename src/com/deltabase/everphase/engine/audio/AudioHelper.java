@@ -1,5 +1,6 @@
 package com.deltabase.everphase.engine.audio;
 
+import com.deltabase.everphase.api.Log;
 import com.deltabase.everphase.engine.toolbox.Maths;
 import com.deltabase.everphase.entity.EntityPlayer;
 import org.joml.Matrix4f;
@@ -31,7 +32,7 @@ public class AudioHelper {
             System.err.println("[OpenAL] OpenAL 1.0 isn't supported!");
         }
 
-        System.out.println("[OpenAL] Version: " + AL10.alGetString(AL10.AL_VERSION));
+        Log.i("OpenAL", "Version: " + AL10.alGetString(AL10.AL_VERSION));
     }
 
     public static int loadSoundFile(String fileName) {

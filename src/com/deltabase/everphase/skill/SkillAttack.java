@@ -9,6 +9,5 @@ public class SkillAttack extends Skill {
 
     @Override
     public void onLevelUp() {
-        System.out.println("Level up!");
     }
 }

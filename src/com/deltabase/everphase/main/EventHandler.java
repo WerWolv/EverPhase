@@ -1,7 +1,9 @@
 package com.deltabase.everphase.main;
 
+import com.deltabase.everphase.api.Log;
 import com.deltabase.everphase.api.event.EventBusSubscriber;
 import com.deltabase.everphase.api.event.SubscribeEvent;
+import com.deltabase.everphase.api.event.advance.AchievementGetEvent;
 import com.deltabase.everphase.api.event.input.ScrollEvent;
 import com.deltabase.everphase.api.event.inventory.InventoryItemClickEvent;
 import com.deltabase.everphase.api.event.inventory.InventoryItemHoverEvent;
@@ -19,7 +21,6 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onPlayerGuiOpenend(OpenGuiEvent event) {
-        System.out.println(event.getOpenGui());
     }
 
     @SubscribeEvent
@@ -48,5 +49,10 @@ public class EventHandler {
             event.getInventory().setPickedUpItemStack(event.getSlot().getItemStack());
             event.getSlot().setItemStack(oldHeldItem);
         }
+    }
+
+    @SubscribeEvent
+    public void onAchievementGet(AchievementGetEvent event) {
+        Log.i("ABC", event.getAchievement().getName());
     }
 }

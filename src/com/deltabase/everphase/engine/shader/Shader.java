@@ -1,5 +1,6 @@
 package com.deltabase.everphase.engine.shader;
 
+import com.deltabase.everphase.api.Log;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -51,8 +52,8 @@ public abstract class Shader {
         GL20.glShaderSource(shaderID, shaderSource);
         GL20.glCompileShader(shaderID);
         if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-            System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
-            System.err.println("Could not compile shader!");
+            Log.wtf("Shader", GL20.glGetShaderInfoLog(shaderID, 1024));
+            Log.wtf("Shader", "Could not compile shader!");
             System.exit(-1);
         }
         return shaderID;

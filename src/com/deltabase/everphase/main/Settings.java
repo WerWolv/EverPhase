@@ -12,5 +12,6 @@ public class Settings {
     public static boolean bloom = false;
     public static int mipmappingType = GL11.GL_NONE;
     public static int mipmappingLevel = 0;
+    public static boolean debugMode = false;
 
 }
