@@ -1,8 +1,8 @@
 package com.deltabase.everphase.engine.render;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.fbo.FrameBufferObject;
 import com.deltabase.everphase.engine.model.ModelRaw;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.shader.ShaderWater;
 import com.deltabase.everphase.engine.toolbox.Maths;
 import com.deltabase.everphase.entity.EntityLight;
@@ -30,20 +30,20 @@ public class RendererWater {
 
 	private int textureIdDuDvMap, textureIdNormalMap;
 
-	public RendererWater(ResourceLoader loader, Matrix4f projectionMatrix, float nearPlane, float farPlane) {
+	public RendererWater(Matrix4f projectionMatrix, float nearPlane, float farPlane) {
 		this.shader = new ShaderWater();
 		fboReflection = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 		fboRefraction = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
-		textureIdDuDvMap = loader.loadTexture("dudvMapWater");
-		textureIdNormalMap = loader.loadTexture("normalMap");
+		textureIdDuDvMap = EverPhaseApi.RESOURCE_LOADER.loadTexture("dudvMapWater");
+		textureIdNormalMap = EverPhaseApi.RESOURCE_LOADER.loadTexture("normalMap");
 
 		shader.start();
 		shader.loadNearAndFarPlane(nearPlane, farPlane);
 		shader.connectsTextureUnits();
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
-		setUpVAO(loader);
+		setUpVAO();
 	}
 
 	public void render(List<TileWater> waters, List<EntityLight> lights, EntityPlayer player) {
@@ -93,9 +93,9 @@ public class RendererWater {
 		shader.stop();
 	}
 
-	private void setUpVAO(ResourceLoader loader) {
+	private void setUpVAO() {
 		float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
-		quad = loader.loadToVAO(vertices, 2);
+		quad = EverPhaseApi.RESOURCE_LOADER.loadToVAO(vertices, 2);
 	}
 
 	public void clean() {

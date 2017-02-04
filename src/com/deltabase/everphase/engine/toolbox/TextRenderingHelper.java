@@ -1,8 +1,8 @@
 package com.deltabase.everphase.engine.toolbox;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.font.FontType;
 import com.deltabase.everphase.engine.font.TextMeshData;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.render.RendererFont;
 import com.deltabase.everphase.gui.GuiText;
 
@@ -13,19 +13,17 @@ import java.util.Map;
 
 public class TextRenderingHelper {
 
-    private static ResourceLoader loader;
     private static Map<FontType, List<GuiText>> texts = new HashMap<>();
     private static RendererFont renderer;
 
-    public static void initTextRendering(ResourceLoader loader) {
+    public static void initTextRendering() {
         renderer = new RendererFont();
-        TextRenderingHelper.loader = loader;
     }
 
     public static void loadText(GuiText text) {
         FontType font = text.getFont();
         TextMeshData data = font.loadText(text);
-        int vao = loader.loadToVAO(data.getVertexPositions(), data.getTextureCoords());
+        int vao = EverPhaseApi.RESOURCE_LOADER.loadToVAO(data.getVertexPositions(), data.getTextureCoords());
         text.setMeshInfo(vao, data.getVertexCount());
         List<GuiText> textBatch = texts.computeIfAbsent(font, k -> new ArrayList<>());
 

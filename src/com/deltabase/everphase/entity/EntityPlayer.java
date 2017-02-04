@@ -1,13 +1,12 @@
 package com.deltabase.everphase.entity;
 
-import com.deltabase.everphase.api.event.EventBus;
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.api.event.player.PlayerItemUseEvent;
 import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.item.ItemStack;
 import com.deltabase.everphase.main.Main;
@@ -42,10 +41,10 @@ public class EntityPlayer extends Entity{
 
     private List<Skill> skills = new ArrayList<>();
 
-    public EntityPlayer(ResourceLoader loader, Vector3f position, Vector3f rotation, float scale) {
-        super(loader, "", "", position, rotation, scale, false);
+    public EntityPlayer(Vector3f position, Vector3f rotation, float scale) {
+        super("", "", position, rotation, scale, false);
 
-        skills.add(new SkillAttack("Attack", loader.loadGuiTexture("gui/skills").getTextureID(), 99));
+        skills.add(new SkillAttack("Attack", "gui/skills", 99));
     }
 
     public void update() {
@@ -96,7 +95,7 @@ public class EntityPlayer extends Entity{
             }
         }
 
-        EventBus.postEvent(new PlayerMoveEvent(this, position, new Vector3f(speedX, speedY, speedZ), new Vector3f(pitch, yaw, roll)));
+        EverPhaseApi.EVENT_BUS.postEvent(new PlayerMoveEvent(this, position, new Vector3f(speedX, speedY, speedZ), new Vector3f(pitch, yaw, roll)));
 
         float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z) + PLAYER_HEIGHT;   //Get the height of the terrain at the current position of the player
         if(position.y < terrainHeight) {        //If the player is under the terrain plane...
@@ -161,7 +160,7 @@ public class EntityPlayer extends Entity{
 
     public void setCurrentGui(Gui currentGui) {
         if (currentGui != null) {
-            EventBus.postEvent(new OpenGuiEvent(this, currentGui));
+            EverPhaseApi.EVENT_BUS.postEvent(new OpenGuiEvent(this, currentGui));
             Main.setCursorVisibility(true);
             CursorPositionCallback.enableCursorListener(false);
         } else {

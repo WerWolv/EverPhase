@@ -1,5 +1,6 @@
 package com.deltabase.everphase.engine.modelloader;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -12,7 +13,7 @@ public class NormalMappedObjLoader {
 
     private static final String RES_LOC = "res/models/";
 
-    public static ModelRaw loadOBJ(String objFileName, ResourceLoader loader) {
+    public static ModelRaw loadOBJ(String objFileName) {
         FileReader isr;
         File objFile = new File(RES_LOC + objFileName + ".obj");
         try {
@@ -77,7 +78,7 @@ public class NormalMappedObjLoader {
                 texturesArray, normalsArray, tangentsArray);
         int[] indicesArray = convertIndicesListToArray(indices);
 
-        return loader.loadToVAO(new ModelDataNM(verticesArray, texturesArray, normalsArray, tangentsArray, indicesArray, furthest));
+        return EverPhaseApi.RESOURCE_LOADER.loadToVAO(new ModelDataNM(verticesArray, texturesArray, normalsArray, tangentsArray, indicesArray, furthest));
     }
 
     //NEW

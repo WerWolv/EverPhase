@@ -1,8 +1,8 @@
 package com.deltabase.everphase.engine.render;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.engine.model.ModelRaw;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.resource.TextureGui;
 import com.deltabase.everphase.engine.shader.ShaderGui;
 import com.deltabase.everphase.engine.toolbox.Maths;
@@ -25,21 +25,19 @@ public class RendererGui {
 
     private final ModelRaw quad;
     private ShaderGui shader;
-    private ResourceLoader loader;
 
     private List<TextureGui> textureUnits = new ArrayList<>();
     private int slotTexture = 0;
 
-    public RendererGui(ResourceLoader loader) {
+    public RendererGui() {
         float[] positions = { -1, 1, -1, -1, 1, 1, 1, -1};  //The six indices of the quad
-        quad = loader.loadToVAO(positions, 2);   //Create the quad out of the six vertices
+        quad = EverPhaseApi.RESOURCE_LOADER.loadToVAO(positions, 2);   //Create the quad out of the six vertices
 
-        this.loader = loader;
         shader = new ShaderGui();                           //Create an instance of the GUI Shader
 
-        TextRenderingHelper.initTextRendering(loader);
+        TextRenderingHelper.initTextRendering();
 
-        slotTexture = loader.loadGuiTexture("gui/slot").getTextureID();
+        slotTexture = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture("gui/slot").getTextureID();
     }
 
     public void render(Gui gui) {

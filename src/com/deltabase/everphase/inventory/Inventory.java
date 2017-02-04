@@ -16,8 +16,6 @@ public abstract class Inventory {
 
     public abstract int getMaxItemStackSize();
 
-    public abstract boolean isItemAllowed(ItemStack itemStack);
-
     public void addSlot(Slot slot) {
         slot.setSlotID(slotPointer);
         inventorySlots.add(slotPointer, slot);

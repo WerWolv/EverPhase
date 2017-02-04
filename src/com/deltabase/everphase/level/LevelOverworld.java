@@ -63,8 +63,8 @@ public class LevelOverworld extends Level {
     @Override
     public void initLevel() {
         lights.add(entitySun);
-        entity = new Entity(loader, "dragon", "crate", new Vector3f(10, 0, -10), new Vector3f(0, 60, 0), 1, false);
-        entityNm = new Entity(loader, "crate", "crate", new Vector3f(20, 20, -10), new Vector3f(0, 60, 0), 0.03F, true);
+        entity = new Entity("dragon", "crate", new Vector3f(10, 0, -10), new Vector3f(0, 60, 0), 1, false);
+        entityNm = new Entity("crate", "crate", new Vector3f(20, 20, -10), new Vector3f(0, 60, 0), 0.03F, true);
 
         entity.getModel().getTexture().setReflectivity(1.0F);
         entity.getModel().getTexture().setShineDamper(3);
@@ -88,7 +88,7 @@ public class LevelOverworld extends Level {
         for (int i = 0; i < 127; i++) {
             int x = random.nextInt(250);
             int z = -random.nextInt(250);
-            entities.add(new Entity(loader, "pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, z), z), new Vector3f(0, 0, 0), 1, false));
+            entities.add(new Entity("pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, z), z), new Vector3f(0, 0, 0), 1, false));
         }
 
         labyrinth.process();
@@ -106,7 +106,7 @@ public class LevelOverworld extends Level {
 
         currentGui.add(null);
 
-        TextRenderingHelper.initTextRendering(loader);
+        TextRenderingHelper.initTextRendering();
 
         text = new GuiText("Hello World! Hopefully...", 3, font, new FontEffect(), new Vector2f(0.5F, 0.5F), 0.5F, true);
     }

@@ -1,8 +1,7 @@
 package com.deltabase.everphase.item;
 
-import com.deltabase.everphase.api.event.EventBus;
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.event.player.PlayerItemUseEvent;
-import com.deltabase.everphase.engine.resource.TextureGui;
 import com.deltabase.everphase.entity.EntityPlayer;
 
 public class Item {
@@ -13,16 +12,16 @@ public class Item {
 
     private int maxStackSize;
 
-    public Item(String name, int itemID, int metaData, TextureGui texture) {
+    public Item(String name, int itemID, int metaData, String texturePath) {
         this.name = name;
         this.itemID = itemID;
         this.metaData = metaData;
-        this.textureID = texture.getTextureID();
+        this.textureID = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture(texturePath).getTextureID();
         this.maxStackSize = 99;
     }
 
     public ItemStack onItemClick(ItemStack itemStack, EntityPlayer player, PlayerItemUseEvent.Action action) {
-        EventBus.postEvent(new PlayerItemUseEvent(this, player, action));
+        EverPhaseApi.EVENT_BUS.postEvent(new PlayerItemUseEvent(this, player, action));
 
         return itemStack;
     }

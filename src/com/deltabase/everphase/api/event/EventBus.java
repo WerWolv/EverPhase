@@ -12,21 +12,21 @@ import java.util.Stack;
 
 public class EventBus {
 
-    private static Stack<Event> eventStack = new Stack<>();
-    private static List<Class<?>> eventHandlers = new ArrayList<>();
+    private Stack<Event> eventStack = new Stack<>();
+    private List<Class<?>> eventHandlers = new ArrayList<>();
 
-    public static void registerEventHandlers() {
+    public void registerEventHandlers() {
         Reflections reflections = new Reflections("");
 
         for(Class<?> clazz : reflections.getTypesAnnotatedWith(EventBusSubscriber.class))
             eventHandlers.add(clazz);
     }
 
-    public static void postEvent(Event event) {
+    public void postEvent(Event event) {
         eventStack.push(event);
     }
 
-    public static void processEvents() {
+    public void processEvents() {
 
         for (Iterator<Event> iterator = eventStack.iterator(); iterator.hasNext(); ) {
             Event currEvent = iterator.next();
@@ -38,7 +38,7 @@ public class EventBus {
         }
     }
 
-    private static void runAllAnnotatedWith(Class<? extends Annotation> annotation, Class<?> eventListener, Event event) {
+    private void runAllAnnotatedWith(Class<? extends Annotation> annotation, Class<?> eventListener, Event event) {
         Method[] methods = eventListener.getMethods();
 
         for (Method method : methods) {

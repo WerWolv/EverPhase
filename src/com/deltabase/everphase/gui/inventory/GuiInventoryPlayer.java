@@ -1,9 +1,9 @@
 package com.deltabase.everphase.gui.inventory;
 
+import com.deltabase.everphase.content.Items;
 import com.deltabase.everphase.engine.render.RendererMaster;
 import com.deltabase.everphase.inventory.InventoryPlayer;
 import com.deltabase.everphase.item.ItemStack;
-import com.deltabase.everphase.item.Items;
 
 public class GuiInventoryPlayer extends GuiInventory {
 

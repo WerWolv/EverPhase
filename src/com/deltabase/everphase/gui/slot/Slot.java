@@ -1,6 +1,6 @@
 package com.deltabase.everphase.gui.slot;
 
-import com.deltabase.everphase.api.event.EventBus;
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.event.inventory.InventoryItemClickEvent;
 import com.deltabase.everphase.api.event.inventory.InventoryItemHoverEvent;
 import com.deltabase.everphase.callback.CursorPositionCallback;
@@ -62,14 +62,14 @@ public class Slot {
         boolean isHovering = (cursorX > (getPosition().x() - (Slot.SLOT_SIZE / Main.getAspectRatio())) && cursorX < (getPosition().x() + (Slot.SLOT_SIZE / Main.getAspectRatio())) && cursorY > (getPosition().y() - (Slot.SLOT_SIZE)) && cursorY < (getPosition().y() + (Slot.SLOT_SIZE)));
 
         if (isHovering) {
-            EventBus.postEvent(new InventoryItemHoverEvent(getItemStack(), this, ((float) cursorX + 1.0F) / 2.0F, ((float) -cursorY + 1.0F) / 2.0F));
+            EverPhaseApi.EVENT_BUS.postEvent(new InventoryItemHoverEvent(getItemStack(), this, ((float) cursorX + 1.0F) / 2.0F, ((float) -cursorY + 1.0F) / 2.0F));
 
             if (MouseButtonCallback.isButtonPressedEdge(GLFW.GLFW_MOUSE_BUTTON_LEFT))
-                EventBus.postEvent(new InventoryItemClickEvent(inventory, getItemStack(), this, InventoryItemClickEvent.MOUSE_BUTTON_LEFT));
+                EverPhaseApi.EVENT_BUS.postEvent(new InventoryItemClickEvent(inventory, getItemStack(), this, InventoryItemClickEvent.MOUSE_BUTTON_LEFT));
             if (MouseButtonCallback.isButtonPressedEdge(GLFW.GLFW_MOUSE_BUTTON_MIDDLE))
-                EventBus.postEvent(new InventoryItemClickEvent(inventory, getItemStack(), this, InventoryItemClickEvent.MOUSE_BUTTON_MIDDLE));
+                EverPhaseApi.EVENT_BUS.postEvent(new InventoryItemClickEvent(inventory, getItemStack(), this, InventoryItemClickEvent.MOUSE_BUTTON_MIDDLE));
             if (MouseButtonCallback.isButtonPressedEdge(GLFW.GLFW_MOUSE_BUTTON_RIGHT))
-                EventBus.postEvent(new InventoryItemClickEvent(inventory, getItemStack(), this, InventoryItemClickEvent.MOUSE_BUTTON_RIGHT));
+                EverPhaseApi.EVENT_BUS.postEvent(new InventoryItemClickEvent(inventory, getItemStack(), this, InventoryItemClickEvent.MOUSE_BUTTON_RIGHT));
         }
 
         return isHovering;

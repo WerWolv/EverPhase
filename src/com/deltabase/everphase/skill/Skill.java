@@ -1,5 +1,7 @@
 package com.deltabase.everphase.skill;
 
+import com.deltabase.everphase.api.EverPhaseApi;
+
 public abstract class Skill {
 
     private String name;
@@ -10,9 +12,9 @@ public abstract class Skill {
     private int currExperience;
     private int xOffset, yOffset;
 
-    protected Skill(String name, int textureID, int xOffset, int yOffset, int skillID) {
+    protected Skill(String name, String texturePath, int xOffset, int yOffset, int skillID) {
         this.name = name;
-        this.textureID = textureID;
+        this.textureID = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture(texturePath).getTextureID();
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.skillID = skillID;

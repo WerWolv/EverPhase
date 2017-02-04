@@ -1,5 +1,6 @@
 package com.deltabase.everphase.gui;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.render.RendererMaster;
 import com.deltabase.everphase.engine.resource.TextureGui;
 import com.deltabase.everphase.main.Main;
@@ -12,7 +13,7 @@ public class GuiIngame extends Gui {
     public GuiIngame(RendererMaster renderer) {
         super(renderer);
 
-        textureGuiIngame = renderer.getModelLoader().loadGuiTexture("gui/guiIngame");
+        textureGuiIngame = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture("gui/guiIngame");
     }
 
     @Override

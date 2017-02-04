@@ -1,7 +1,7 @@
 package com.deltabase.everphase.engine.render;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.shader.ShaderSkybox;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.main.Main;
@@ -69,10 +69,10 @@ public class RendererSkybox {
 
     private float timeOfDay = 12000;                                         //The time of the day
 
-    public RendererSkybox(ResourceLoader loader, Matrix4f projectionMatrix) {
-        cube = loader.loadToVAO(VERTICES, 3);
-        dayTexture = loader.loadCubeMap(DAY_TEXTURE_FILES);
-        nightTexture = loader.loadCubeMap(NIGHT_TEXTURE_FILES);
+    public RendererSkybox(Matrix4f projectionMatrix) {
+        cube = EverPhaseApi.RESOURCE_LOADER.loadToVAO(VERTICES, 3);
+        dayTexture = EverPhaseApi.RESOURCE_LOADER.loadCubeMap(DAY_TEXTURE_FILES);
+        nightTexture = EverPhaseApi.RESOURCE_LOADER.loadCubeMap(NIGHT_TEXTURE_FILES);
         shader.start();
         shader.connectTextureUnits();
         shader.loadProjectionMatrix(projectionMatrix);

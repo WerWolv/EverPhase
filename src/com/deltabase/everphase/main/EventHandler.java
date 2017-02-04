@@ -42,8 +42,7 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onInventoryItemClick(InventoryItemClickEvent event) {
-        if (event.getPressedButton() == InventoryItemClickEvent.MOUSE_BUTTON_LEFT && event.getSlot() != null) {
-
+        if (event.getPressedButton() == InventoryItemClickEvent.MOUSE_BUTTON_LEFT) {
             ItemStack oldHeldItem = event.getInventory().getPickedUpItemStack();
 
             event.getInventory().setPickedUpItemStack(event.getSlot().getItemStack());

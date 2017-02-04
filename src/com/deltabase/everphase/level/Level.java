@@ -37,7 +37,7 @@ public abstract class Level {
 
     public Level(EntityPlayer player) {
         this.player = player;
-        Level.renderer = new RendererMaster(loader, player);
+        Level.renderer = new RendererMaster(player);
         ParticleHelper.init(loader, renderer.getProjectionMatrix());
     }
 
@@ -47,7 +47,7 @@ public abstract class Level {
 
     public void reInitRenderer() {
         Level.renderer.clean();
-        Level.renderer = new RendererMaster(loader, player);
+        Level.renderer = new RendererMaster(player);
     }
 
     public abstract void initLevel();

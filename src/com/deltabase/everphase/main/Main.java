@@ -1,12 +1,11 @@
 package com.deltabase.everphase.main;
 
-import com.deltabase.everphase.api.event.EventBus;
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
 import com.deltabase.everphase.callback.ScrollCallback;
 import com.deltabase.everphase.engine.audio.AudioHelper;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.level.LevelOverworld;
@@ -37,8 +36,6 @@ public class Main {
     private static float delta;
     private static long window;
     private static EntityPlayer player;
-
-    private static ResourceLoader loader = new ResourceLoader();
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -157,7 +154,7 @@ public class Main {
 
         lastFrameTime = getCurrentTime();
         setCursorVisibility(false);
-        EventBus.registerEventHandlers();
+        EverPhaseApi.EVENT_BUS.registerEventHandlers();
 
         System.out.println("[OpenGL] Version:" + glGetString(GL_VERSION));
 
@@ -172,7 +169,7 @@ public class Main {
     private static void run() {
         init();
 
-        player = new EntityPlayer(loader, new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
+        player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
 
         currentLevel = new LevelOverworld(player);
 
@@ -184,7 +181,7 @@ public class Main {
             glfwSwapBuffers(window);
 
             AudioHelper.setListener(player);
-            EventBus.processEvents();
+            EverPhaseApi.EVENT_BUS.processEvents();
             currentLevel.updateLevel();
             currentLevel.handleInput();
             currentLevel.renderLevel();
@@ -236,9 +233,5 @@ public class Main {
 
     public static EntityPlayer getPlayer() {
         return player;
-    }
-
-    public static ResourceLoader getLoader() {
-        return loader;
     }
 }

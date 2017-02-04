@@ -1,6 +1,6 @@
 package com.deltabase.everphase.callback;
 
-import com.deltabase.everphase.api.event.EventBus;
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.event.input.KeyPressEvent;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
@@ -46,7 +46,7 @@ public class KeyCallback extends GLFWKeyCallback {
 
         keys[key] = action != GLFW_RELEASE;
 
-        EventBus.postEvent(new KeyPressEvent(key));
+        EverPhaseApi.EVENT_BUS.postEvent(new KeyPressEvent(key));
     }
 
 }

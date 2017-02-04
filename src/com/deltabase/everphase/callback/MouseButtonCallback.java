@@ -1,7 +1,7 @@
 package com.deltabase.everphase.callback;
 
 
-import com.deltabase.everphase.api.event.EventBus;
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.event.input.MouseButtonPressEvent;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
@@ -44,6 +44,6 @@ public class MouseButtonCallback extends GLFWMouseButtonCallback {
     public void invoke(long window, int button, int action, int mods) {
         buttons[button] = action != GLFW_RELEASE;
 
-        EventBus.postEvent(new MouseButtonPressEvent(button));
+        EverPhaseApi.EVENT_BUS.postEvent(new MouseButtonPressEvent(button));
     }
 }

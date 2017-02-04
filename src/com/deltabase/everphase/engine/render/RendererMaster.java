@@ -1,7 +1,6 @@
 package com.deltabase.everphase.engine.render;
 
 import com.deltabase.everphase.engine.model.ModelTextured;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
 import com.deltabase.everphase.engine.shader.ShaderEntity;
 import com.deltabase.everphase.engine.shader.ShaderTerrain;
@@ -46,28 +45,26 @@ public class RendererMaster {
 
     /* Shadow Renderer */
 
-    private ResourceLoader loader;
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
     private Map<ModelTextured, List<Entity>> entitiesNM = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
 
     private List<Terrain> terrains = new ArrayList<>(); //A list of all terrains in the game
 
-    public RendererMaster(ResourceLoader loader, EntityPlayer player) {
+    public RendererMaster(EntityPlayer player) {
         enableCulling();                                //Enable culling. This disables the rendering of the not seen triangles
 
         createProjectionMatrix();                       //Create a new projection matrix
 
-        this.loader = loader;
 
         //Renderer initializing
 
         rendererEntity = new RendererEntity(shaderEntity, projectionMatrix);
         rendererNM = new RendererNormalMapping(projectionMatrix);
         rendererTerrain = new RendererTerrain(shaderTerrain, projectionMatrix);
-        rendererSkybox = new RendererSkybox(loader, projectionMatrix);
-        rendererWater = new RendererWater(loader, projectionMatrix, NEAR_PLANE, FAR_PLANE);
-        rendererGui = new RendererGui(loader);
+        rendererSkybox = new RendererSkybox(projectionMatrix);
+        rendererWater = new RendererWater(projectionMatrix, NEAR_PLANE, FAR_PLANE);
+        rendererGui = new RendererGui();
 
         shadowMapMasterRenderer = new RendererShadowMapMaster(player);
     }
@@ -254,10 +251,6 @@ public class RendererMaster {
 
     public RendererGui getRendererGui() {
         return rendererGui;
-    }
-
-    public ResourceLoader getModelLoader() {
-        return loader;
     }
 
     public int getShadowMapTexture() {

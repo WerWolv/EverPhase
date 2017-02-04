@@ -1,5 +1,6 @@
 package com.deltabase.everphase.entity;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelTextured;
 import com.deltabase.everphase.engine.modelloader.NormalMappedObjLoader;
 import com.deltabase.everphase.engine.modelloader.OBJModelLoader;
@@ -16,17 +17,15 @@ public class Entity {
     private float scale;            //Size of the entity
 
     private int textureIndex = 0;   //Address of the texture stored in memory
-    private ResourceLoader loader;
 
-    public Entity(ResourceLoader loader, String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
+    public Entity(String modelPath, String texturePath, Vector3f position, Vector3f rotation, float scale, boolean hasNormalMap) {
         if (!(modelPath.equals("") || texturePath.equals(""))) {
             if (hasNormalMap)
-                this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath, loader), new TextureModel(loader.loadTexture(texturePath)));
+                this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath), new TextureModel(EverPhaseApi.RESOURCE_LOADER.loadTexture(texturePath)));
             else
-                this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
+                this.model = new ModelTextured(EverPhaseApi.RESOURCE_LOADER.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(EverPhaseApi.RESOURCE_LOADER.loadTexture(texturePath)));
         }
 
-        this.loader = loader;
         this.position = position;
         this.rotX = rotation.x;
         this.rotY = rotation.y;
@@ -38,12 +37,11 @@ public class Entity {
         this.textureIndex = index;
         if (!(modelPath.equals("") || texturePath.equals(""))) {
             if (hasNormalMap)
-                this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath, loader), new TextureModel(loader.loadTexture(texturePath)));
+                this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath), new TextureModel(loader.loadTexture(texturePath)));
             else
                 this.model = new ModelTextured(loader.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(loader.loadTexture(texturePath)));
         }
 
-        this.loader = loader;
         this.position = position;
         this.rotX = rotation.x;
         this.rotY = rotation.y;
@@ -52,7 +50,6 @@ public class Entity {
     }
 
     public Entity(Vector3f position, float rotation, float scale) {
-        this.loader = null;
         this.position = position;
         this.rotX = rotation;
         this.rotY = rotation;
@@ -156,9 +153,5 @@ public class Entity {
 
     public void setScale(float scale) {
         this.scale = scale;
-    }
-
-    public ResourceLoader getLoader() {
-        return loader;
     }
 }
