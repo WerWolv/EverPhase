@@ -2,10 +2,8 @@ package com.deltabase.everphase.level;
 
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.callback.KeyCallback;
-import com.deltabase.everphase.content.Achievements;
 import com.deltabase.everphase.engine.audio.AudioHelper;
 import com.deltabase.everphase.engine.fbo.FrameBufferObject;
-import com.deltabase.everphase.engine.font.FontType;
 import com.deltabase.everphase.engine.font.effects.FontEffect;
 import com.deltabase.everphase.engine.render.postProcessing.PostProcessing;
 import com.deltabase.everphase.engine.resource.TextureTerrainPack;
@@ -27,7 +25,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -52,11 +49,9 @@ public class LevelOverworld extends Level {
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
     private FrameBufferObject miniMapFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
-    private FontType font = new FontType(loader.loadGuiTexture("fonts/productSans").getTextureID(), new File("res/fonts/productSans.fnt"));
-
     private GuiText text;
 
-    //private ParticleSystem system = new ParticleSystem(new TextureParticle(loader.loadTexture("particles/fire"), 8, false),50, 1,-0.1F, 3, 5);
+    //private ParticleSystem system = new ParticleSystem(new TextureParticle(EverPhaseApi.RESOURCE_LOADER.loadTexture("particles/fire"), 8, false),50, 1,-0.1F, 3, 5);
 
     public LevelOverworld(EntityPlayer player) {
         super(player);
@@ -73,14 +68,14 @@ public class LevelOverworld extends Level {
 
         entityNm.getModel().getTexture().setReflectivity(0.5F);
         entityNm.getModel().getTexture().setShineDamper(10);
-        entityNm.getModel().getTexture().setNormalMapID(loader.loadTexture("crateNormal"));
-        entityNm.getModel().getTexture().setExtraInfoMapID(loader.loadTexture("crateSpecular"));
+        entityNm.getModel().getTexture().setNormalMapID(EverPhaseApi.RESOURCE_LOADER.loadTexture("crateNormal"));
+        entityNm.getModel().getTexture().setExtraInfoMapID(EverPhaseApi.RESOURCE_LOADER.loadTexture("crateSpecular"));
 
-        textureTerrainPack = new TextureTerrainPack(loader,"grassy", "dirt", "path", "pinkFlowers", "blendMap");
+        textureTerrainPack = new TextureTerrainPack("grassy", "dirt", "path", "pinkFlowers", "blendMap");
 
-        terrain = new Terrain(0, -1, loader, textureTerrainPack, "heightmap");
+        terrain = new Terrain(0, -1, textureTerrainPack, "heightmap");
 
-        labyrinth = new Labyrinth(loader, 0, 0, 0, 3, 10);
+        labyrinth = new Labyrinth(0, 0, 0, 3, 10);
 
 
         entities.add(entity);
@@ -110,7 +105,7 @@ public class LevelOverworld extends Level {
 
         TextRenderingHelper.initTextRendering();
 
-        text = new GuiText("Hello World! Hopefully...", 3, font, new FontEffect(), new Vector2f(0.5F, 0.5F), 0.5F, true);
+        text = new GuiText("Hello World! Hopefully...", 3, TextRenderingHelper.FONTS.fontProductSans, new FontEffect(), new Vector2f(0.5F, 0.5F), 0.5F, true);
     }
 
     @Override
@@ -162,7 +157,6 @@ public class LevelOverworld extends Level {
 
         if (KeyCallback.isKeyPressedEdge(GLFW_KEY_E)) {
             player.setCurrentGui(player.getCurrentGui() == null ? guiInventory : null);
-            EverPhaseApi.ACHIEVEMENT_API.unlockAchievement(player, Achievements.testAch);
         }
 
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F)) {

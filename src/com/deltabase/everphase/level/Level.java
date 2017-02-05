@@ -1,7 +1,6 @@
 package com.deltabase.everphase.level;
 
 import com.deltabase.everphase.callback.KeyCallback;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.render.RendererMaster;
 import com.deltabase.everphase.engine.render.postProcessing.*;
 import com.deltabase.everphase.engine.toolbox.ParticleHelper;
@@ -25,7 +24,6 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_F2;
 public abstract class Level {
 
     protected static RendererMaster renderer;
-    protected ResourceLoader loader = new ResourceLoader();
     protected List<Entity> entities    = new ArrayList<>();
     protected List<Entity> entitiesNM  = new ArrayList<>();
     protected List<Terrain> terrains   = new ArrayList<>();
@@ -38,7 +36,7 @@ public abstract class Level {
     public Level(EntityPlayer player) {
         this.player = player;
         Level.renderer = new RendererMaster(player);
-        ParticleHelper.init(loader, renderer.getProjectionMatrix());
+        ParticleHelper.init(renderer.getProjectionMatrix());
     }
 
     public static RendererMaster getRenderer() {
@@ -59,7 +57,7 @@ public abstract class Level {
     public abstract void renderGUI();
 
     public void applyPostProcessingEffects() {
-        PostProcessing.init(loader);
+        PostProcessing.init();
 
         if(Settings.bloom) {
             PostProcessing.applyEffect(new FilterBright(0.6F));
@@ -87,10 +85,6 @@ public abstract class Level {
         waters.clear();
         guis.clear();
         ParticleHelper.clean();
-    }
-
-    public ResourceLoader getLoader() {
-        return loader;
     }
 
     public List<Entity> getEntities() {

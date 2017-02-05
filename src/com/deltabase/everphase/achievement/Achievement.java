@@ -20,7 +20,7 @@ public class Achievement {
     }
 
     public void unlockAchievement() {
-        this.unlocked = true;
+        this.unlocked = false;
     }
 
     public boolean isAchievementUnlocked() {

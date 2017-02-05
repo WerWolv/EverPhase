@@ -2,12 +2,14 @@ package com.deltabase.everphase.engine.render;
 
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.callback.CursorPositionCallback;
+import com.deltabase.everphase.engine.font.effects.FontEffect;
 import com.deltabase.everphase.engine.model.ModelRaw;
 import com.deltabase.everphase.engine.resource.TextureGui;
 import com.deltabase.everphase.engine.shader.ShaderGui;
 import com.deltabase.everphase.engine.toolbox.Maths;
 import com.deltabase.everphase.engine.toolbox.TextRenderingHelper;
 import com.deltabase.everphase.gui.Gui;
+import com.deltabase.everphase.gui.GuiText;
 import com.deltabase.everphase.gui.inventory.GuiInventory;
 import com.deltabase.everphase.gui.slot.Slot;
 import com.deltabase.everphase.main.Main;
@@ -84,7 +86,6 @@ public class RendererGui {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, slot.getItemStack() != null ? slot.getItemStack().getItem().getTextureID() : slotTexture);
         shader.loadTransformationMatrix(Maths.createTransformationMatrix(slot.getPosition(), new Vector2f(Math.min(Slot.SLOT_SIZE, Slot.SLOT_SIZE / Main.getAspectRatio()), -Math.min(Slot.SLOT_SIZE, Slot.SLOT_SIZE * Main.getAspectRatio()))));
         shader.loadSize(0, 0, 64, 64);
-
         if (slot.isMouseOverSlot()) {
             shader.loadOverlay(true);
         }
@@ -93,6 +94,14 @@ public class RendererGui {
 
         shader.loadOverlay(false);
 
+        if (slot.isMouseOverSlot() && slot.getItemStack() != null) {
+            shader.stop();
+            drawString(slot.getItemStack().getItem().getName(), (float) ((CursorPositionCallback.xPos / Main.getWindowSize()[0]) * 2.0F - 1.0F) + 0.02F, (float) ((CursorPositionCallback.yPos / Main.getWindowSize()[1]) * 2.0F - 1.0F + 0.02F), 1.0F);
+            drawString(slot.getItemStack().getItem().getTooltipDescription(), (float) ((CursorPositionCallback.xPos / Main.getWindowSize()[0]) * 2.0F - 1.0F) + 0.03F, (float) ((CursorPositionCallback.yPos / Main.getWindowSize()[1]) * 2.0F - 1.0F + 0.06F), 1.0F);
+            shader.start();
+            GL30.glBindVertexArray(quad.getVaoID());                            //Bind the VAO of the quad to memory
+            GL20.glEnableVertexAttribArray(0);                            //Enable the vertices buffer
+        }
     }
 
 
@@ -102,6 +111,12 @@ public class RendererGui {
         shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f(posX, posY), new Vector2f(Math.min(scale, scale / Main.getAspectRatio()), -Math.min(scale, scale * Main.getAspectRatio()))));
         shader.loadSize(size.x / texture.getSize(), size.y / texture.getSize(), size.z / texture.getSize(), size.w / texture.getSize());
         GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
+    }
+
+    public void drawString(String text, float posX, float posY, float size) {
+        GuiText guiText = new GuiText(text, size, TextRenderingHelper.FONTS.fontProductSans, new FontEffect(), new Vector2f(posX, posY), 1.0F, false);
+
+        TextRenderingHelper.renderText(guiText);
     }
 
     /*

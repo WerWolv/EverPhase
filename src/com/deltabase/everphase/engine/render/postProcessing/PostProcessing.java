@@ -1,7 +1,7 @@
 package com.deltabase.everphase.engine.render.postProcessing;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -16,9 +16,9 @@ public class PostProcessing {
 
 	private static List<Filter> postProcessEffects = new ArrayList<>();
 
-	public static void init(ResourceLoader loader){
-		quad = loader.loadToVAO(POSITIONS, 2);
-	}
+    public static void init() {
+        quad = EverPhaseApi.RESOURCE_LOADER.loadToVAO(POSITIONS, 2);
+    }
 
 	public static void doPostProcessing(int colorTexture){
 		start();

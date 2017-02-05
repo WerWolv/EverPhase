@@ -9,6 +9,8 @@ import com.deltabase.everphase.main.Main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class EverPhaseApi {
 
@@ -22,6 +24,7 @@ public class EverPhaseApi {
         private static final double DISPLAY_TIME = 5.0D;
 
         private List<Achievement> listAchievement = new ArrayList<>();
+        private Queue<Achievement> achievementQueue = new LinkedBlockingQueue<>();
         private Achievement currProcessedAchievement;
 
         private double achievementDisplayTicker = 0;
@@ -39,7 +42,7 @@ public class EverPhaseApi {
                         ach.unlockAchievement();
                         listAchievement.set(listAchievement.indexOf(ach), ach);
                         achievementDisplayTicker = DISPLAY_TIME;
-                        currProcessedAchievement = achievement;
+                        achievementQueue.add(achievement);
                     }
                 }
             }

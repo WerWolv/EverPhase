@@ -37,10 +37,10 @@ public class GuiText extends Gui{
 	 * @param text
 	 *            - the text.
 	 * @param fontSize
-	 *            - the font size of the text, where a font size of 1 is the
+	 *            - the fontProductSans size of the text, where a fontProductSans size of 1 is the
 	 *            default size.
 	 * @param font
-	 *            - the font that this text should use.
+	 *            - the fontProductSans that this text should use.
 	 * @param position
 	 *            - the position on the screen where the top left corner of the
 	 *            text should be rendered. The top left corner of the screen is
@@ -64,6 +64,7 @@ public class GuiText extends Gui{
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
 		this.centerText = centered;
+		TextRenderingHelper.loadText(this);
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class GuiText extends Gui{
 	}
 
 	/**
-	 * @return The font used by this text.
+	 * @return The fontProductSans used by this text.
 	 */
 	public FontType getFont() {
 		return font;
@@ -163,7 +164,7 @@ public class GuiText extends Gui{
 	}
 
 	/**
-	 * @return the font size of the text (a font size of 1 is normal).
+	 * @return the fontProductSans size of the text (a fontProductSans size of 1 is normal).
 	 */
 	public float getFontSize() {
 		return fontSize;

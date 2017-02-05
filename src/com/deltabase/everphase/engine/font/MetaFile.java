@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Provides functionality for getting the values from a font file.
+ * Provides functionality for getting the values from a fontProductSans file.
  */
 public class MetaFile {
 
@@ -39,10 +39,10 @@ public class MetaFile {
 	private Map<String, String> values = new HashMap<>();
 
 	/**
-	 * Opens a font file in preparation for reading.
+	 * Opens a fontProductSans file in preparation for reading.
 	 * 
 	 * @param file
-	 *            - the font file.
+	 *            - the fontProductSans file.
 	 */
 	public MetaFile(File file) {
 		this.aspectRatio = Main.getAspectRatio();
@@ -116,7 +116,7 @@ public class MetaFile {
 	}
 
 	/**
-	 * Closes the font file after finishing reading.
+	 * Closes the fontProductSans file after finishing reading.
 	 */
 	private void close() {
 		try {
@@ -127,17 +127,17 @@ public class MetaFile {
 	}
 
 	/**
-	 * Opens the font file, ready for reading.
+	 * Opens the fontProductSans file, ready for reading.
 	 * 
 	 * @param file
-	 *            - the font file.
+	 *            - the fontProductSans file.
 	 */
 	private void openFile(File file) {
 		try {
 			reader = new BufferedReader(new FileReader(file));
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Couldn't read font meta file!");
+			System.err.println("Couldn't read fontProductSans meta file!");
 		}
 	}
 
@@ -153,7 +153,7 @@ public class MetaFile {
 	}
 
 	/**
-	 * Loads information about the line height for this font in pixels, and uses
+	 * Loads information about the line height for this fontProductSans in pixels, and uses
 	 * this as a way to find the conversion rate between pixels in the texture
 	 * atlas and screen-space.
 	 */

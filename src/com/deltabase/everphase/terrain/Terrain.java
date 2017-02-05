@@ -1,8 +1,8 @@
 package com.deltabase.everphase.terrain;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
 import com.deltabase.everphase.engine.modelloader.ModelData;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.resource.TextureTerrain;
 import com.deltabase.everphase.engine.resource.TextureTerrainPack;
 import com.deltabase.everphase.engine.toolbox.Maths;
@@ -29,16 +29,16 @@ public class Terrain {
     private float[][] heights;
 
 
-    public Terrain(int gridX, int gridZ, ResourceLoader loader, TextureTerrainPack texturePack, String heightMap) {
+    public Terrain(int gridX, int gridZ, TextureTerrainPack texturePack, String heightMap) {
         this.texturePack = texturePack;
         this.blendMap = texturePack.getBlendMap();
         this.x = gridX * SIZE;
         this.z = gridZ * SIZE;
 
-       this.model = generateTerrain(loader, heightMap);
+        this.model = generateTerrain(heightMap);
     }
 
-    private ModelRaw generateTerrain(ResourceLoader loader, String heightMap){
+    private ModelRaw generateTerrain(String heightMap) {
 
         BufferedImage image = null;
 
@@ -91,7 +91,7 @@ public class Terrain {
             }
         }
 
-        return loader.loadToVAO(new ModelData(vertices, textureCoords, normals, indices, 0));
+        return EverPhaseApi.RESOURCE_LOADER.loadToVAO(new ModelData(vertices, textureCoords, normals, indices, 0));
     }
 
     private float getHeight(int x, int z, BufferedImage image) {

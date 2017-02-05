@@ -1,7 +1,7 @@
 package com.deltabase.everphase.engine.render;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.resource.TextureParticle;
 import com.deltabase.everphase.engine.shader.ShaderParticle;
 import com.deltabase.everphase.engine.toolbox.Maths;
@@ -26,22 +26,20 @@ public class RendererParticle {
 
 	private ModelRaw quad;
 	private ShaderParticle shader;
-	private ResourceLoader loader;
 	private int vboID;
 	private int floatArraypointer = 0;
 
-	public RendererParticle(ResourceLoader loader, Matrix4f projectionMatrix){
-		quad = loader.loadToVAO(VERTICES, 2);
+	public RendererParticle(Matrix4f projectionMatrix) {
+		quad = EverPhaseApi.RESOURCE_LOADER.loadToVAO(VERTICES, 2);
 		shader = new ShaderParticle();
-		this.loader = loader;
 
-		this.vboID = loader.createEmptyVBO(INSTANCED_DATA_LENGTH * MAX_PARTICLES_IN_SCENE);
-		loader.addInstancedAttribute(quad.getVaoID(), vboID, 1, 4, INSTANCED_DATA_LENGTH, 0);
-		loader.addInstancedAttribute(quad.getVaoID(), vboID, 2, 4, INSTANCED_DATA_LENGTH, 4);
-		loader.addInstancedAttribute(quad.getVaoID(), vboID, 3, 4, INSTANCED_DATA_LENGTH, 8);
-		loader.addInstancedAttribute(quad.getVaoID(), vboID, 4, 4, INSTANCED_DATA_LENGTH, 12);
-		loader.addInstancedAttribute(quad.getVaoID(), vboID, 5, 4, INSTANCED_DATA_LENGTH, 16);
-		loader.addInstancedAttribute(quad.getVaoID(), vboID, 6, 1, INSTANCED_DATA_LENGTH, 20);
+		this.vboID = EverPhaseApi.RESOURCE_LOADER.createEmptyVBO(INSTANCED_DATA_LENGTH * MAX_PARTICLES_IN_SCENE);
+		EverPhaseApi.RESOURCE_LOADER.addInstancedAttribute(quad.getVaoID(), vboID, 1, 4, INSTANCED_DATA_LENGTH, 0);
+		EverPhaseApi.RESOURCE_LOADER.addInstancedAttribute(quad.getVaoID(), vboID, 2, 4, INSTANCED_DATA_LENGTH, 4);
+		EverPhaseApi.RESOURCE_LOADER.addInstancedAttribute(quad.getVaoID(), vboID, 3, 4, INSTANCED_DATA_LENGTH, 8);
+		EverPhaseApi.RESOURCE_LOADER.addInstancedAttribute(quad.getVaoID(), vboID, 4, 4, INSTANCED_DATA_LENGTH, 12);
+		EverPhaseApi.RESOURCE_LOADER.addInstancedAttribute(quad.getVaoID(), vboID, 5, 4, INSTANCED_DATA_LENGTH, 16);
+		EverPhaseApi.RESOURCE_LOADER.addInstancedAttribute(quad.getVaoID(), vboID, 6, 1, INSTANCED_DATA_LENGTH, 20);
 
 
 		shader.start();
@@ -77,7 +75,7 @@ public class RendererParticle {
 				updateModelViewMatrix(particle.getPosition(), particle.getRotZ(), particle.getScale(), viewMatrix, vboData);
 				updateTexCoordInfo(particle, vboData);
 			}
-			loader.updateVBO(vboID, vboData, buffer);
+			EverPhaseApi.RESOURCE_LOADER.updateVBO(vboID, vboData, buffer);
 			GL31.glDrawArraysInstanced(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt(), particleList.size());
 		}
 

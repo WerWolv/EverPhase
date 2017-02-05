@@ -6,6 +6,7 @@ import com.deltabase.everphase.engine.font.TextMeshData;
 import com.deltabase.everphase.engine.render.RendererFont;
 import com.deltabase.everphase.gui.GuiText;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 public class TextRenderingHelper {
 
+    public static final Fonts FONTS = new Fonts();
     private static Map<FontType, List<GuiText>> texts = new HashMap<>();
     private static RendererFont renderer;
 
@@ -25,13 +27,21 @@ public class TextRenderingHelper {
         TextMeshData data = font.loadText(text);
         int vao = EverPhaseApi.RESOURCE_LOADER.loadToVAO(data.getVertexPositions(), data.getTextureCoords());
         text.setMeshInfo(vao, data.getVertexCount());
-        List<GuiText> textBatch = texts.computeIfAbsent(font, k -> new ArrayList<>());
+
+    }
+
+    public static void addText(GuiText text) {
+        List<GuiText> textBatch = texts.computeIfAbsent(text.getFont(), k -> new ArrayList<>());
 
         textBatch.add(text);
     }
 
     public static void renderTexts() {
         renderer.render(texts);
+    }
+
+    public static void renderText(GuiText text) {
+        renderer.renderText(text);
     }
 
     public static void removeText(GuiText text) {
@@ -47,6 +57,10 @@ public class TextRenderingHelper {
 
     public static void clean() {
         renderer.clean();
+    }
+
+    public static class Fonts {
+        public FontType fontProductSans = new FontType(EverPhaseApi.RESOURCE_LOADER.loadGuiTexture("fonts/productSans").getTextureID(), new File("res/fonts/productSans.fnt"));
     }
 
 }

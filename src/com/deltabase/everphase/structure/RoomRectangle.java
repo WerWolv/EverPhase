@@ -1,6 +1,5 @@
 package com.deltabase.everphase.structure;
 
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.entity.Entity;
 import org.joml.Vector3f;
 
@@ -11,7 +10,6 @@ import java.util.List;
 public class RoomRectangle {
     private List<Entity> blocks = new ArrayList<>();
 
-    private ResourceLoader loader;
 
     private int length;
     private int width;
@@ -23,8 +21,7 @@ public class RoomRectangle {
 
     private boolean north=false,  south=false,  west=false,  east=false;
 
-    public RoomRectangle(ResourceLoader loader, int x, int y, int z, int length, int width, int height){
-        this.loader = loader;
+    public RoomRectangle(int x, int y, int z, int length, int width, int height) {
         this.length = length;
         this.width = width;
         this.height = height;

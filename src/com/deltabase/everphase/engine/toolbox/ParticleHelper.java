@@ -1,6 +1,5 @@
 package com.deltabase.everphase.engine.toolbox;
 
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.render.RendererParticle;
 import com.deltabase.everphase.engine.resource.TextureParticle;
 import com.deltabase.everphase.entity.EntityPlayer;
@@ -14,8 +13,8 @@ public class ParticleHelper {
     private static Map<TextureParticle, List<EntityParticle>> particles = new HashMap<>();
     private static RendererParticle renderer;
 
-    public static void init(ResourceLoader loader, Matrix4f projectionMatrix) {
-        renderer = new RendererParticle(loader, projectionMatrix);
+    public static void init(Matrix4f projectionMatrix) {
+        renderer = new RendererParticle(projectionMatrix);
     }
 
     public static void update(EntityPlayer player) {

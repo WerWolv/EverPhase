@@ -5,7 +5,6 @@ import com.deltabase.everphase.engine.font.FontType;
 import com.deltabase.everphase.engine.font.effects.FontEffect;
 import com.deltabase.everphase.engine.render.RendererMaster;
 import com.deltabase.everphase.engine.resource.TextureGui;
-import com.deltabase.everphase.engine.toolbox.TextRenderingHelper;
 import com.deltabase.everphase.gui.slot.Slot;
 import com.deltabase.everphase.main.Main;
 import org.joml.Vector2f;
@@ -30,7 +29,7 @@ public class GuiIngame extends Gui {
     public void render() {
         renderer.getRendererGui().drawTexture(0, -1.8F, 1.0F, new Vector4f(0, 0, 256, 24), textureGuiIngame);
 
-        renderer.getRendererGui().drawTexture(-1.563F / Main.getAspectRatio() + 0.1955F * Main.getPlayer().getSelectedItem() / Main.getAspectRatio(), -1.5975F, 1.0F, new Vector4f(210, 25, 256, 50), textureGuiIngame);
+        renderer.getRendererGui().drawTexture(-1.563F / Main.getAspectRatio() + 0.1955F * Main.getPlayer().getSelectedItem() / Main.getAspectRatio(), -1.5975F, 1.0F, new Vector4f(215, 25, 256, 50), textureGuiIngame);
 
         if (EverPhaseApi.ACHIEVEMENT_API.isAchievementBeingDisplayed()) {
             text.remove();
@@ -40,9 +39,9 @@ public class GuiIngame extends Gui {
                 achievementDialogYPos -= 0.01F;
             renderer.getRendererGui().drawTexture(0.5F, 0.55F + achievementDialogYPos, 1.0F, new Vector4f(115, 29, 211, 66), textureGuiIngame);
             renderer.getRendererGui().drawTexture(0.51F, 1.185F + achievementDialogYPos, Slot.SLOT_SIZE, new Vector4f(0, 0, EverPhaseApi.ACHIEVEMENT_API.getCurrentlyProcessedAchievement().getTexture().getSize(), EverPhaseApi.ACHIEVEMENT_API.getCurrentlyProcessedAchievement().getTexture().getSize()), EverPhaseApi.ACHIEVEMENT_API.getCurrentlyProcessedAchievement().getTexture());
-            text = new GuiText("Hello", 3, font, new FontEffect(), new Vector2f(0.51F, 0.185F - achievementDialogYPos), 1.0F, false);
-            TextRenderingHelper.loadText(text);
+            renderer.getRendererGui().drawString("Hello World", 0.0F, 0.0F, 1.0F);
         }
+
 
 
         /*renderer.getRendererGui().drawTexture(-0.5F, 0.2F, 0.5F, new Vector4f(0, 195, 256, 122), textureGuiIngame);

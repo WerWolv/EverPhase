@@ -1,6 +1,5 @@
 package com.deltabase.everphase.structure;
 
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.entity.Entity;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ public class Labyrinth {
     //Settings
     private int room_length = 18, room_width = 18, room_height = 2;
     //Defines
-    private ResourceLoader loader;
     private List<RoomRectangle> rooms = new ArrayList<>();
     private List<Entity> blocks = new ArrayList<>();
     private int[][] labyrinth = new int[30][30];
@@ -24,8 +22,7 @@ public class Labyrinth {
     private int length;
     private int branch;
 
-    public Labyrinth(ResourceLoader loader, int x, int y, int z, int branch, int length){
-        this.loader = loader;
+    public Labyrinth(int x, int y, int z, int branch, int length) {
         this.pos_x = x;
         this.pos_y = y;
         this.pos_z = z;
@@ -107,7 +104,7 @@ public class Labyrinth {
     }
 
     private void room(int x, int z) {
-        rooms.add(new RoomRectangle(loader, x*(room_length), 0, z*(room_width), room_length, room_width, room_height));
+        rooms.add(new RoomRectangle(x * (room_length), 0, z * (room_width), room_length, room_width, room_height));
         labyrinth[x+15][z+15] = rooms.size();
     }
 

@@ -1,6 +1,6 @@
 package com.deltabase.everphase.engine.resource;
 
-import com.deltabase.everphase.engine.modelloader.ResourceLoader;
+import com.deltabase.everphase.api.EverPhaseApi;
 
 public class TextureTerrainPack {
 
@@ -10,12 +10,12 @@ public class TextureTerrainPack {
     private TextureTerrain bTexture;
     private TextureTerrain blendMap;
 
-    public TextureTerrainPack(ResourceLoader loader, String backgroundTexture, String rTexture, String gTexture, String bTexture, String blendMap) {
-        this.backgroundTexture = new TextureTerrain(loader.loadTexture(backgroundTexture));
-        this.rTexture = new TextureTerrain(loader.loadTexture(rTexture));
-        this.gTexture = new TextureTerrain(loader.loadTexture(gTexture));
-        this.bTexture = new TextureTerrain(loader.loadTexture(bTexture));
-        this.blendMap = new TextureTerrain(loader.loadTexture(blendMap));
+    public TextureTerrainPack(String backgroundTexture, String rTexture, String gTexture, String bTexture, String blendMap) {
+        this.backgroundTexture = new TextureTerrain(EverPhaseApi.RESOURCE_LOADER.loadTexture(backgroundTexture));
+        this.rTexture = new TextureTerrain(EverPhaseApi.RESOURCE_LOADER.loadTexture(rTexture));
+        this.gTexture = new TextureTerrain(EverPhaseApi.RESOURCE_LOADER.loadTexture(gTexture));
+        this.bTexture = new TextureTerrain(EverPhaseApi.RESOURCE_LOADER.loadTexture(bTexture));
+        this.blendMap = new TextureTerrain(EverPhaseApi.RESOURCE_LOADER.loadTexture(blendMap));
     }
 
     public TextureTerrain getBackgroundTexture() {

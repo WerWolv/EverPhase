@@ -3,6 +3,7 @@ package com.deltabase.everphase.engine.render;
 import com.deltabase.everphase.engine.font.FontType;
 import com.deltabase.everphase.engine.shader.ShaderFont;
 import com.deltabase.everphase.gui.GuiText;
+import org.joml.Vector2f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -39,7 +40,7 @@ public class RendererFont {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, font.getTextureAtlas());
 
 			for(GuiText text : texts.get(font))
-				renderText(text);
+				renderWithoutBindText(text);
 		}
 
 		shader.stop();
@@ -47,13 +48,13 @@ public class RendererFont {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
-	private void renderText(GuiText text){
+	private void renderWithoutBindText(GuiText text) {
 		GL30.glBindVertexArray(text.getMesh());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
 
 		shader.loadColor(text.getColor());
-		shader.loadTranslation(text.getPosition());
+		shader.loadTranslation(new Vector2f((text.getPosition().x() + 1) / 2, (text.getPosition().y() + 1) / 2));
 		shader.loadFontEffect(text.getFontEffect());
 
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.getVertexCnt());
@@ -61,6 +62,15 @@ public class RendererFont {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL30.glBindVertexArray(0);
+	}
+
+	public void renderText(GuiText text) {
+		shader.start();
+
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, text.getFont().getTextureAtlas());
+		renderWithoutBindText(text);
+		shader.stop();
 	}
 
 }
