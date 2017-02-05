@@ -36,7 +36,8 @@ public class Main {
     private static long lastFrameTime;
     private static float delta;
     private static long window;
-    private static EntityPlayer player;
+    private static EntityPlayer player = new EntityPlayer(new Vector3f(0, 0, 0), 1);
+
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -163,6 +164,8 @@ public class Main {
 
         AudioHelper.createContext();
         AudioHelper.loadSoundFile("random");
+
+        EverPhaseApi.RendererUtils.initRenderers();
     }
 
     public static void setCursorVisibility(boolean visible) {
@@ -172,7 +175,7 @@ public class Main {
     private static void run() {
         init();
 
-        player = new EntityPlayer(new Vector3f(0, 10, 0), new Vector3f(0, 0, 0), 1);
+        player.setPosition(new Vector3f(0, 0, 0));
 
         currentLevel = new LevelOverworld(player);
 

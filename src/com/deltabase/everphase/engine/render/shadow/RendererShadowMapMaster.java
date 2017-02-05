@@ -5,7 +5,6 @@ import com.deltabase.everphase.engine.model.ModelTextured;
 import com.deltabase.everphase.engine.shader.ShaderShadow;
 import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.entity.EntityLight;
-import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.main.Settings;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -43,12 +42,10 @@ public class RendererShadowMapMaster {
 	 * {@link FrameBufferObject} to which the scene is rendered. The size of the
 	 * shadow map is determined here.
 	 *
-	 * @param player
-	 *            - the camera being used in the scene.
 	 */
-	public RendererShadowMapMaster(EntityPlayer player) {
+	public RendererShadowMapMaster() {
 		shader = new ShaderShadow();
-		shadowBox = new ShadowBox(lightViewMatrix, player);
+		shadowBox = new ShadowBox(lightViewMatrix);
 		shadowFbo = new FrameBufferObject(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, FrameBufferObject.DEPTH_TEXTURE);
 		entityRenderer = new RendererShadowMapEntity(shader, projectionViewMatrix);
 	}
@@ -110,7 +107,7 @@ public class RendererShadowMapMaster {
 	/**
 	 * Clean up the shader and FBO on closing.
 	 */
-	public void cleanUp() {
+	public void clean() {
 		shader.clean();
 		shadowFbo.clean();
 	}

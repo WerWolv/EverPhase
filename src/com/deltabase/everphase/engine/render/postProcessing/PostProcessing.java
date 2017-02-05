@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostProcessing {
-	
-	private static final float[] POSITIONS = { -1, 1, -1, -1, 1, 1, 1, -1 };	
+
+	private static final float[] POSITIONS = {-1.0F, 1.0F, -1.0F, -1.0F, 1.0F, 1.0F, 1.0F, -1.0F};
 	private static ModelRaw quad;
 
 	private static List<Filter> postProcessEffects = new ArrayList<>();
 
-    public static void init() {
-        quad = EverPhaseApi.RESOURCE_LOADER.loadToVAO(POSITIONS, 2);
-    }
+	public static void init() {
+		quad = EverPhaseApi.RESOURCE_LOADER.loadToVAO(POSITIONS, 2);
+	}
 
 	public static void doPostProcessing(int colorTexture){
 		start();

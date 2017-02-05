@@ -1,5 +1,6 @@
 package com.deltabase.everphase.engine.render;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
 import com.deltabase.everphase.engine.model.ModelTextured;
 import com.deltabase.everphase.engine.resource.TextureModel;
@@ -19,11 +20,11 @@ public class RendererEntity {
 
     private ShaderEntity shader;
 
-    public RendererEntity(ShaderEntity shader, Matrix4f projectionMatrix) {
-        this.shader = shader;
+    public RendererEntity() {
+        this.shader = new ShaderEntity();
 
         shader.start();                                     //Start the shader rendering
-        shader.loadProjectionMatrix(projectionMatrix);      //Load the projection matrix to the shader to add perspective
+        shader.loadProjectionMatrix(EverPhaseApi.RendererUtils.PROJECTION_MATRIX);      //Load the projection matrix to the shader to add perspective
         shader.connectTextureUnits();
         shader.stop();                                      //Stop the shader rendering
     }
@@ -101,7 +102,9 @@ public class RendererEntity {
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());    //Create a fresh transformation matrix
         shader.loadTransformationMatrix(transformationMatrix);  //Load the transformation matrix to the shader
         shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());  //Load the x and y offset of the texture on the texture atlas to the shader
-
     }
 
+    public ShaderEntity getShader() {
+        return shader;
+    }
 }

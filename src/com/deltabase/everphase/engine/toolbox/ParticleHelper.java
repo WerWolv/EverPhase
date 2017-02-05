@@ -4,7 +4,6 @@ import com.deltabase.everphase.engine.render.RendererParticle;
 import com.deltabase.everphase.engine.resource.TextureParticle;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.entity.particle.EntityParticle;
-import org.joml.Matrix4f;
 
 import java.util.*;
 
@@ -13,8 +12,8 @@ public class ParticleHelper {
     private static Map<TextureParticle, List<EntityParticle>> particles = new HashMap<>();
     private static RendererParticle renderer;
 
-    public static void init(Matrix4f projectionMatrix) {
-        renderer = new RendererParticle(projectionMatrix);
+    public static void init() {
+        renderer = new RendererParticle();
     }
 
     public static void update(EntityPlayer player) {

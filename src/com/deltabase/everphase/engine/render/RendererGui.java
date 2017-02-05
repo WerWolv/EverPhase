@@ -51,7 +51,7 @@ public class RendererGui {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_DEPTH_TEST);                                 //Disable the depth test so you can render multiple transparent GUIs behind each other
 
-        gui.render();
+        gui.render(EverPhaseApi.RendererUtils.RENDERER_GUI);
 
         if (gui instanceof GuiInventory) {
             GuiInventory guiInventory = (GuiInventory) gui;
@@ -86,21 +86,16 @@ public class RendererGui {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, slot.getItemStack() != null ? slot.getItemStack().getItem().getTextureID() : slotTexture);
         shader.loadTransformationMatrix(Maths.createTransformationMatrix(slot.getPosition(), new Vector2f(Math.min(Slot.SLOT_SIZE, Slot.SLOT_SIZE / Main.getAspectRatio()), -Math.min(Slot.SLOT_SIZE, Slot.SLOT_SIZE * Main.getAspectRatio()))));
         shader.loadSize(0, 0, 64, 64);
-        if (slot.isMouseOverSlot()) {
-            shader.loadOverlay(true);
-        }
+        shader.loadOverlay(slot.isMouseOverSlot() && slot.shouldOverlayBeDrawn());
+
 
         GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
 
         shader.loadOverlay(false);
 
         if (slot.isMouseOverSlot() && slot.getItemStack() != null) {
-            shader.stop();
             drawString(slot.getItemStack().getItem().getName(), (float) ((CursorPositionCallback.xPos / Main.getWindowSize()[0]) * 2.0F - 1.0F) + 0.02F, (float) ((CursorPositionCallback.yPos / Main.getWindowSize()[1]) * 2.0F - 1.0F + 0.02F), 1.0F);
             drawString(slot.getItemStack().getItem().getTooltipDescription(), (float) ((CursorPositionCallback.xPos / Main.getWindowSize()[0]) * 2.0F - 1.0F) + 0.03F, (float) ((CursorPositionCallback.yPos / Main.getWindowSize()[1]) * 2.0F - 1.0F + 0.06F), 1.0F);
-            shader.start();
-            GL30.glBindVertexArray(quad.getVaoID());                            //Bind the VAO of the quad to memory
-            GL20.glEnableVertexAttribArray(0);                            //Enable the vertices buffer
         }
     }
 
@@ -115,8 +110,12 @@ public class RendererGui {
 
     public void drawString(String text, float posX, float posY, float size) {
         GuiText guiText = new GuiText(text, size, TextRenderingHelper.FONTS.fontProductSans, new FontEffect(), new Vector2f(posX, posY), 1.0F, false);
-
+        shader.stop();
         TextRenderingHelper.renderText(guiText);
+        shader.start();
+
+        GL30.glBindVertexArray(quad.getVaoID());                            //Bind the VAO of the quad to memory
+        GL20.glEnableVertexAttribArray(0);                            //Enable the vertices buffer
     }
 
     /*

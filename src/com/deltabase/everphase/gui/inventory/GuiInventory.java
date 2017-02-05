@@ -1,6 +1,5 @@
 package com.deltabase.everphase.gui.inventory;
 
-import com.deltabase.everphase.engine.render.RendererMaster;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.gui.slot.Slot;
 import com.deltabase.everphase.inventory.Inventory;
@@ -12,8 +11,7 @@ public abstract class GuiInventory extends Gui {
 
     private int inventorySize, maxStackSize;
 
-    public GuiInventory(RendererMaster renderer, Inventory inventory) {
-        super(renderer);
+    public GuiInventory(Inventory inventory) {
 
         this.inventorySize = inventory.getInventorySize();
         this.maxStackSize = inventory.getMaxItemStackSize();

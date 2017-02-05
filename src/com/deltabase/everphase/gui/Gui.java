@@ -1,15 +1,14 @@
 package com.deltabase.everphase.gui;
 
-import com.deltabase.everphase.engine.render.RendererMaster;
+import com.deltabase.everphase.engine.render.RendererGui;
 
 public class Gui {
-    protected RendererMaster renderer;
 
-    public Gui(RendererMaster renderer) {
-        this.renderer = renderer;
+    public Gui() {
+
     }
 
-    public void render() {
+    public void render(RendererGui renderer) {
 
     }
 }

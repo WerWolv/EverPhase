@@ -27,14 +27,12 @@ public class Terrain {
     private TextureTerrainPack texturePack;
     private TextureTerrain blendMap;
     private float[][] heights;
+    private String heightMap;
 
-
-    public Terrain(int gridX, int gridZ, TextureTerrainPack texturePack, String heightMap) {
+    public Terrain(TextureTerrainPack texturePack, String heightMap) {
         this.texturePack = texturePack;
         this.blendMap = texturePack.getBlendMap();
-        this.x = gridX * SIZE;
-        this.z = gridZ * SIZE;
-
+        this.heightMap = heightMap;
         this.model = generateTerrain(heightMap);
     }
 
@@ -161,5 +159,10 @@ public class Terrain {
 
     public TextureTerrain getBlendMap() {
         return blendMap;
+    }
+
+    public void setGridPosition(int centerX, int centerZ) {
+        this.x = centerX * SIZE;
+        this.z = centerZ * SIZE;
     }
 }

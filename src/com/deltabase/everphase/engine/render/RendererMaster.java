@@ -1,16 +1,11 @@
 package com.deltabase.everphase.engine.render;
 
 import com.deltabase.everphase.engine.model.ModelTextured;
-import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
-import com.deltabase.everphase.engine.shader.ShaderEntity;
-import com.deltabase.everphase.engine.shader.ShaderTerrain;
 import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.entity.EntityLight;
 import com.deltabase.everphase.entity.EntityPlayer;
-import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.main.Settings;
 import com.deltabase.everphase.terrain.Terrain;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
@@ -21,52 +16,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.deltabase.everphase.api.EverPhaseApi.RendererUtils.*;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class RendererMaster {
 
     public static final Vector3f SKY_COLOR = new Vector3f(0.446F, 0.696F, 0.946F);   //The color of the sky
-    public static final float FOV = 70;                //The field of view
-    public static final float NEAR_PLANE = 0.01F;       //The plane to start rendering
-    public static final float FAR_PLANE = 1000.0F;     //The plane to stop rendering
-    private Matrix4f projectionMatrix;                  //The projection matrix
-
-    private ShaderEntity shaderEntity = new ShaderEntity();     //The shader to use for rendering entities
-    private ShaderTerrain shaderTerrain = new ShaderTerrain();  //The shader to use for rendering the terrain
-
-    private RendererEntity  rendererEntity;             //The renderer to render entities
-    private RendererNormalMapping rendererNM;
-    private RendererTerrain rendererTerrain;            //The renderer to render the terrain
-    private RendererSkybox  rendererSkybox;             //The renderer to render the skybox
-    private RendererWater   rendererWater;              //The renderer to render all water planes
-    private RendererGui     rendererGui;
-    private RendererShadowMapMaster shadowMapMasterRenderer;
-
-    /* Shadow Renderer */
-
 
     private Map<ModelTextured, List<Entity>> entities = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
     private Map<ModelTextured, List<Entity>> entitiesNM = new HashMap<>();    //A Map that links multiple entities that share the same model to that model
 
     private List<Terrain> terrains = new ArrayList<>(); //A list of all terrains in the game
 
-    public RendererMaster(EntityPlayer player) {
+    public RendererMaster() {
         enableCulling();                                //Enable culling. This disables the rendering of the not seen triangles
-
-        createProjectionMatrix();                       //Create a new projection matrix
-
-
-        //Renderer initializing
-
-        rendererEntity = new RendererEntity(shaderEntity, projectionMatrix);
-        rendererNM = new RendererNormalMapping(projectionMatrix);
-        rendererTerrain = new RendererTerrain(shaderTerrain, projectionMatrix);
-        rendererSkybox = new RendererSkybox(projectionMatrix);
-        rendererWater = new RendererWater(projectionMatrix, NEAR_PLANE, FAR_PLANE);
-        rendererGui = new RendererGui();
-
-        shadowMapMasterRenderer = new RendererShadowMapMaster(player);
     }
 
     /**
@@ -110,27 +74,27 @@ public class RendererMaster {
      */
     public void render(EntityPlayer player, List<EntityLight> lights, Vector4f clipPlane) {
         init();
-        shaderEntity.start();
-        shaderEntity.loadClipPlane(clipPlane);
-        shaderEntity.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
-        shaderEntity.loadLights(lights);
-        shaderEntity.loadViewMatrix(player);
+        RENDERER_ENTITY.getShader().start();
+        RENDERER_ENTITY.getShader().loadClipPlane(clipPlane);
+        RENDERER_ENTITY.getShader().loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
+        RENDERER_ENTITY.getShader().loadLights(lights);
+        RENDERER_ENTITY.getShader().loadViewMatrix(player);
 
-        rendererEntity.render(entities);
+        RENDERER_ENTITY.render(entities);
 
-        shaderEntity.stop();
+        RENDERER_TERRAIN.getShader().stop();
 
-        rendererNM.render(entitiesNM, clipPlane, lights, player);
+        RENDERER_NM.render(entitiesNM, clipPlane, lights, player);
 
-        shaderTerrain.start();
-        shaderTerrain.loadClipPlane(clipPlane);
-        shaderTerrain.loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
-        shaderTerrain.loadLights(lights);
-        shaderTerrain.loadViewMatrix(player);
-        rendererTerrain.render(terrains, shadowMapMasterRenderer.getToShadowMapSpaceMatrix());
-        shaderTerrain.stop();
+        RENDERER_TERRAIN.getShader().start();
+        RENDERER_TERRAIN.getShader().loadClipPlane(clipPlane);
+        RENDERER_TERRAIN.getShader().loadSkyColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
+        RENDERER_TERRAIN.getShader().loadLights(lights);
+        RENDERER_TERRAIN.getShader().loadViewMatrix(player);
+        RENDERER_TERRAIN.render(terrains, RENDERER_SHADOW_MAP.getToShadowMapSpaceMatrix());
+        RENDERER_TERRAIN.getShader().stop();
 
-        rendererSkybox.render(player, SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
+        RENDERER_SKYBOX.render(player, SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z);
 
 
         entities.clear();
@@ -143,7 +107,7 @@ public class RendererMaster {
             for (Entity entity : entities) processEntity(entity);
             for (Entity entity : entitiesNM) processEntityNM(entity);
         }
-            shadowMapMasterRenderer.render(this.entities, this.entitiesNM, sun);
+        RENDERER_SHADOW_MAP.render(this.entities, this.entitiesNM, sun);
 
     }
 
@@ -155,25 +119,7 @@ public class RendererMaster {
         glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0F);            //Clears the screen to the sky color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);    //Reset the color buffer- and depth buffer bit
         GL13.glActiveTexture(GL13.GL_TEXTURE5);
-        GL11.glBindTexture(GL_TEXTURE_2D, getShadowMapTexture());
-    }
-
-    /**
-     * Create a new projection matrix
-     */
-    public void createProjectionMatrix() {
-        projectionMatrix = new Matrix4f();
-        float aspectRatio = Main.getAspectRatio();
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
-        float x_scale = y_scale / aspectRatio;
-        float frustum_length = FAR_PLANE - NEAR_PLANE;
-
-        projectionMatrix.m00(x_scale);
-        projectionMatrix.m11(y_scale);
-        projectionMatrix.m22(-((FAR_PLANE + NEAR_PLANE) / frustum_length));
-        projectionMatrix.m23(-1);
-        projectionMatrix.m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
-        projectionMatrix.m33(0);
+        GL11.glBindTexture(GL_TEXTURE_2D, RENDERER_SHADOW_MAP.getShadowMap());
     }
 
     /**
@@ -221,43 +167,11 @@ public class RendererMaster {
      * Cleanup method to clear the memory after using it
      */
     public void clean() {
-        shaderEntity.clean();
-        shaderTerrain.clean();
-        rendererWater.clean();
-        rendererGui.clean();
-        rendererNM.clean();
-        shadowMapMasterRenderer.cleanUp();
-    }
-
-    /* Getter */
-
-    public Matrix4f getProjectionMatrix() { return projectionMatrix; }
-
-    public RendererEntity getRendererEntity() {
-        return rendererEntity;
-    }
-
-    public RendererTerrain getRendererTerrain() {
-        return rendererTerrain;
-    }
-
-    public RendererSkybox getRendererSkybox() {
-        return rendererSkybox;
-    }
-
-    public RendererWater getRendererWater() {
-        return rendererWater;
-    }
-
-    public RendererGui getRendererGui() {
-        return rendererGui;
-    }
-
-    public int getShadowMapTexture() {
-        return shadowMapMasterRenderer.getShadowMap();
-    }
-
-    public void clearShadowMapTexture() {
-        shadowMapMasterRenderer.clearDepthTexture();
+        RENDERER_TERRAIN.getShader().clean();
+        RENDERER_ENTITY.getShader().clean();
+        RENDERER_WATER.clean();
+        RENDERER_GUI.clean();
+        RENDERER_NM.clean();
+        RENDERER_SHADOW_MAP.clean();
     }
 }

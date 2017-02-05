@@ -74,4 +74,8 @@ public class Slot {
 
         return isHovering;
     }
+
+    public boolean shouldOverlayBeDrawn() {
+        return true;
+    }
 }

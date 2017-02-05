@@ -11,7 +11,6 @@ import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.item.ItemStack;
 import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.skill.Skill;
-import com.deltabase.everphase.skill.SkillAttack;
 import com.deltabase.everphase.terrain.Terrain;
 import org.joml.Vector3f;
 
@@ -41,10 +40,8 @@ public class EntityPlayer extends Entity{
 
     private List<Skill> skills = new ArrayList<>();
 
-    public EntityPlayer(Vector3f position, Vector3f rotation, float scale) {
-        super("", "", position, rotation, scale, false);
-
-        skills.add(new SkillAttack("Attack", "gui/skills", 99));
+    public EntityPlayer(Vector3f rotation, float scale) {
+        super("", "", rotation, scale, false);
     }
 
     public void update() {

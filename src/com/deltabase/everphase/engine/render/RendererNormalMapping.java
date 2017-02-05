@@ -1,5 +1,6 @@
 package com.deltabase.everphase.engine.render;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
 import com.deltabase.everphase.engine.model.ModelTextured;
 import com.deltabase.everphase.engine.resource.TextureModel;
@@ -22,10 +23,10 @@ public class RendererNormalMapping {
 
     private ShaderNormalMapping shader;
 
-    public RendererNormalMapping(Matrix4f projectionMatrix) {
+    public RendererNormalMapping() {
         this.shader = new ShaderNormalMapping();
         shader.start();
-        shader.loadProjectionMatrix(projectionMatrix);
+        shader.loadProjectionMatrix(EverPhaseApi.RendererUtils.PROJECTION_MATRIX);      //Load the projection matrix to the shader to add perspective);
         shader.connectTextureUnits();
         shader.stop();
     }

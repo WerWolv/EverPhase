@@ -1,5 +1,6 @@
 package com.deltabase.everphase.engine.render;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
 import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
 import com.deltabase.everphase.engine.resource.TextureTerrainPack;
@@ -20,12 +21,12 @@ public class RendererTerrain {
     private ShaderTerrain shader;
 
 
-    public RendererTerrain(ShaderTerrain shader, Matrix4f projectionMatrix) {
-        this.shader = shader;
+    public RendererTerrain() {
+        this.shader = new ShaderTerrain();
 
         shader.start();                                     //Start the terrain shader
         shader.connectTextureUnits();                       //Connect the 4 textures together in the way specified in the blend map
-        shader.loadProjectionMatrix(projectionMatrix);      //Load up the projection matrix to the shader
+        shader.loadProjectionMatrix(EverPhaseApi.RendererUtils.PROJECTION_MATRIX);      //Load the projection matrix to the shader to add perspective
         shader.loadMapSize(RendererShadowMapMaster.SHADOW_MAP_SIZE);
         shader.stop();                                      //Stop the terrain shader
     }
@@ -96,6 +97,9 @@ public class RendererTerrain {
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 0.0F, terrain.getZ()), 0.0F, 0.0F, 0.0F, 1);
 
         shader.loadTransformationMatrix(transformationMatrix);
+    }
 
+    public ShaderTerrain getShader() {
+        return shader;
     }
 }

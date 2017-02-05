@@ -30,8 +30,8 @@ public class RendererWater {
 
 	private int textureIdDuDvMap, textureIdNormalMap;
 
-	public RendererWater(Matrix4f projectionMatrix, float nearPlane, float farPlane) {
-		this.shader = new ShaderWater();
+    public RendererWater() {
+        this.shader = new ShaderWater();
 		fboReflection = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 		fboRefraction = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
@@ -39,10 +39,10 @@ public class RendererWater {
 		textureIdNormalMap = EverPhaseApi.RESOURCE_LOADER.loadTexture("normalMap");
 
 		shader.start();
-		shader.loadNearAndFarPlane(nearPlane, farPlane);
-		shader.connectsTextureUnits();
-		shader.loadProjectionMatrix(projectionMatrix);
-		shader.stop();
+        shader.loadNearAndFarPlane(EverPhaseApi.RendererUtils.NEAR_PLANE, EverPhaseApi.RendererUtils.FAR_PLANE);
+        shader.connectsTextureUnits();
+        shader.loadProjectionMatrix(EverPhaseApi.RendererUtils.createProjectionMatrix());      //Load the projection matrix to the shader to add perspective
+        shader.stop();
 		setUpVAO();
 	}
 
@@ -55,8 +55,8 @@ public class RendererWater {
 
 	public void renderWithoutEffects(List<TileWater> water) {
 		for (TileWater tile : water) {
-			Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0, TileWater.TILE_SIZE);
-			shader.loadModelMatrix(modelMatrix);
+            Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getY(), tile.getZ()), 0, 0, 0, TileWater.TILE_SIZE);
+            shader.loadModelMatrix(modelMatrix);
 			GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCnt());
 		}
 	}

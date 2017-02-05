@@ -33,7 +33,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class LevelOverworld extends Level {
 
-    private Entity entity, entityNm;
+    private Entity entity, entityNm, entityPine;
     private TextureTerrainPack textureTerrainPack;
     private Terrain terrain;
 
@@ -41,7 +41,7 @@ public class LevelOverworld extends Level {
 
     private Gui guiIngame, guiInventory, guiMiniMap;
 
-    private EntityLight entitySun = new EntityLight(new Vector3f(1000, 1000, -1000), new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
+    private EntityLight entitySun = new EntityLight(new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
 
     private List<Gui> currentGui = new ArrayList<>();
 
@@ -59,10 +59,9 @@ public class LevelOverworld extends Level {
 
     @Override
     public void initLevel() {
-        lights.add(entitySun);
-        entity = new Entity("dragon", "crate", new Vector3f(10, 0, -10), new Vector3f(0, 60, 0), 1, false);
-        entityNm = new Entity("crate", "crate", new Vector3f(20, 20, -10), new Vector3f(0, 60, 0), 0.03F, true);
-
+        this.spawnEntity(entitySun, new Vector3f(1000, 1000, -1000));
+        entity = new Entity("dragon", "crate", new Vector3f(0, 60, 0), 1, false);
+        entityNm = new Entity("crate", "crate", new Vector3f(0, 60, 0), 0.03F, true);
         entity.getModel().getTexture().setReflectivity(1.0F);
         entity.getModel().getTexture().setShineDamper(3);
 
@@ -73,39 +72,39 @@ public class LevelOverworld extends Level {
 
         textureTerrainPack = new TextureTerrainPack("grassy", "dirt", "path", "pinkFlowers", "blendMap");
 
-        terrain = new Terrain(0, -1, textureTerrainPack, "heightmap");
+        terrain = new Terrain(textureTerrainPack, "heightmap");
+        this.addTerrain(terrain, 0, -1);
 
         labyrinth = new Labyrinth(0, 0, 0, 3, 10);
 
 
-        entities.add(entity);
-        entitiesNM.add(entityNm);
+        this.spawnEntity(entity, new Vector3f(10, 0, -10));
+        this.spawnEntity(entityNm, new Vector3f(20, 20, -10));
 
         Random random = new Random();
         for (int i = 0; i < 127; i++) {
             int x = random.nextInt(250);
             int z = -random.nextInt(250);
-            entities.add(new Entity("pine", "pine", new Vector3f(x, terrain.getHeightOfTerrain(x, z), z), new Vector3f(0, 0, 0), 1, false));
+            this.spawnEntity(new Entity("pine", "pine", new Vector3f(0, 0, 0), 1, false), new Vector3f(x, this.getCurrTerrain().getHeightOfTerrain(x, z), z));
         }
 
         labyrinth.process();
         //entities.addAll(labyrinth.RenderLabyrinth());
 
-        terrains.add(terrain);
+        this.addWaterPlane(new TileWater(this), new Vector3f(75.0F, 0.0F, -75.0F));
 
-        waters.add(new TileWater(renderer, this, 75, -75, 0));
-
-        guiIngame = new GuiIngame(renderer);
-        guiInventory = new GuiInventoryPlayer(renderer);
-        guiMiniMap = new GuiMiniMap(renderer);
-        guis.add(guiIngame);
-        guis.add(guiMiniMap);
+        guiIngame = new GuiIngame();
+        guiInventory = new GuiInventoryPlayer();
+        guiMiniMap = new GuiMiniMap();
+        EverPhaseApi.GuiUtils.registerGui(guiIngame);
 
         currentGui.add(null);
 
         TextRenderingHelper.initTextRendering();
 
         text = new GuiText("Hello World! Hopefully...", 3, TextRenderingHelper.FONTS.fontProductSans, new FontEffect(), new Vector2f(0.5F, 0.5F), 0.5F, true);
+
+        player.setPosition(getEntities().get(0).getPosition());
     }
 
     @Override
@@ -114,20 +113,21 @@ public class LevelOverworld extends Level {
         ParticleHelper.update(player);
         /*system.randomizeRotation();
         system.generateParticles(new Vector3f(20, 5, -20));*/
+
     }
 
     @Override
     public void renderLevel() {
-        renderer.renderShadowMap(entities, entitiesNM, entitySun);
+        EverPhaseApi.RendererUtils.RENDERER_MASTER.renderShadowMap(this.getEntities(), this.getEntitiesNM(), entitySun);
         entity.increaseRotation(0, 0.5F, 0);
 
-        for (TileWater water : waters)
+        for (TileWater water : this.getWaters())
             water.renderWaterEffects();
 
 
         postProcessing.bindFrameBuffer();
-        renderer.renderScene(entities, entitiesNM, terrains, lights, player, new Vector4f(0, -1, 0, 100000));
-        renderer.getRendererWater().render(waters, lights, player);
+        EverPhaseApi.RendererUtils.RENDERER_MASTER.renderScene(this.getEntities(), this.getEntitiesNM(), this.getTerrains(), this.getLights(), player, new Vector4f(0, -1, 0, 100000));
+        EverPhaseApi.RendererUtils.RENDERER_WATER.render(this.getWaters(), this.getLights(), player);
 
         ParticleHelper.renderParticles(player);
 
@@ -140,11 +140,11 @@ public class LevelOverworld extends Level {
     @Override
     public void renderGUI() {
 
-        for (Gui gui : guis)
-            renderer.getRendererGui().render(gui);
+        for (Gui gui : EverPhaseApi.GuiUtils.getRegisteredGuis())
+            EverPhaseApi.RendererUtils.RENDERER_GUI.render(gui);
 
         if (player.getCurrentGui() != null) {
-            renderer.getRendererGui().render(player.getCurrentGui());
+            EverPhaseApi.RendererUtils.RENDERER_GUI.render(player.getCurrentGui());
         }
 
         TextRenderingHelper.renderTexts();
@@ -164,7 +164,7 @@ public class LevelOverworld extends Level {
         }
 
         if (player.getCurrentGui() == null) {
-            player.onMove(terrain);
+            player.onMove(getCurrTerrain());
             player.onInteract();
         }
     }

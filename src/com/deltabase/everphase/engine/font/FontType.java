@@ -17,12 +17,12 @@ public class FontType {
      * Creates a new fontProductSans and loads up the data about each character from the
      * fontProductSans file.
      *
-	 * @param textureAtlas
+     * @param textureAtlas
      *            - the ID of the fontProductSans atlas texture.
      * @param fontFile
      *            - the fontProductSans file containing information about each character in
      *            the texture atlas.
-	 */
+     */
 	public FontType(int textureAtlas, File fontFile) {
 		this.textureAtlas = textureAtlas;
         this.meshCreator = new TextMeshCreator(fontFile);
@@ -31,7 +31,7 @@ public class FontType {
 	/**
      * @return The fontProductSans texture atlas.
      */
-	public int getTextureAtlas() {
+    public int getTextureAtlas() {
 		return textureAtlas;
 	}
 
@@ -40,7 +40,7 @@ public class FontType {
 	 * on which this text will be rendered. The vertex positions and texture
      * coords and calculated based on the information from the fontProductSans file.
      *
-	 * @param text
+     * @param text
 	 *            - the unloaded text.
 	 * @return Information about the vertices of all the quads.
 	 */

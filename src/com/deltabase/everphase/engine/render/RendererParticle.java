@@ -29,7 +29,7 @@ public class RendererParticle {
 	private int vboID;
 	private int floatArraypointer = 0;
 
-	public RendererParticle(Matrix4f projectionMatrix) {
+	public RendererParticle() {
 		quad = EverPhaseApi.RESOURCE_LOADER.loadToVAO(VERTICES, 2);
 		shader = new ShaderParticle();
 
@@ -43,7 +43,7 @@ public class RendererParticle {
 
 
 		shader.start();
-		shader.loadProjectionMatrix(projectionMatrix);
+		shader.loadProjectionMatrix(EverPhaseApi.RendererUtils.PROJECTION_MATRIX);      //Load the projection matrix to the shader to add perspective
 		shader.stop();
 	}
 

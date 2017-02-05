@@ -1,6 +1,6 @@
 package com.deltabase.everphase.engine.render.shadow;
 
-import com.deltabase.everphase.engine.render.RendererMaster;
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.toolbox.Maths;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.main.Main;
@@ -43,13 +43,11 @@ public class ShadowBox {
 	 *            transform a point from world space into "light" space (i.e.
 	 *            changes a point's coordinates from being in relation to the
 	 *            world's axis to being in terms of the light's local axis).
-	 * @param player
-	 *            - the in-game camera.
 	 */
-	protected ShadowBox(Matrix4f lightViewMatrix, EntityPlayer player) {
-		this.lightViewMatrix = lightViewMatrix;
-		this.player = player;
-		calculateWidthsAndHeights();
+    protected ShadowBox(Matrix4f lightViewMatrix) {
+        this.lightViewMatrix = lightViewMatrix;
+        this.player = Main.getPlayer();
+        calculateWidthsAndHeights();
 	}
 
 	/**
@@ -65,8 +63,8 @@ public class ShadowBox {
 		Vector3f toFar = new Vector3f(forwardVector);
 		toFar.mul(SHADOW_DISTANCE);
 		Vector3f toNear = new Vector3f(forwardVector);
-		toNear.mul(RendererMaster.NEAR_PLANE);
-		Vector3f centerNear = toNear.add(player.getPosition(), new Vector3f());
+        toNear.mul(EverPhaseApi.RendererUtils.NEAR_PLANE);
+        Vector3f centerNear = toNear.add(player.getPosition(), new Vector3f());
 		Vector3f centerFar = toFar.add(player.getPosition(), new Vector3f());
 
 		Vector4f[] points = calculateFrustumVertices(rotation, forwardVector, centerNear, centerFar);
@@ -214,9 +212,9 @@ public class ShadowBox {
 	 * but means that distant objects wouldn't cast shadows.
 	 */
 	private void calculateWidthsAndHeights() {
-		farWidth = (float) (SHADOW_DISTANCE * Math.tan(Math.toRadians(RendererMaster.FOV)));
-		nearWidth = (float) (RendererMaster.NEAR_PLANE * Math.tan(Math.toRadians(RendererMaster.FOV)));
-		farHeight = farWidth / Main.getAspectRatio();
+        farWidth = (float) (SHADOW_DISTANCE * Math.tan(Math.toRadians(EverPhaseApi.RendererUtils.FOV)));
+        nearWidth = (float) (EverPhaseApi.RendererUtils.NEAR_PLANE * Math.tan(Math.toRadians(EverPhaseApi.RendererUtils.FOV)));
+        farHeight = farWidth / Main.getAspectRatio();
 		nearHeight = nearWidth / Main.getAspectRatio();
 	}
 

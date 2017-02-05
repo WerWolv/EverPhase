@@ -48,8 +48,8 @@ public class RendererFont {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
-	private void renderWithoutBindText(GuiText text) {
-		GL30.glBindVertexArray(text.getMesh());
+    private void renderWithoutBindText(GuiText text) {
+        GL30.glBindVertexArray(text.getMesh());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
 

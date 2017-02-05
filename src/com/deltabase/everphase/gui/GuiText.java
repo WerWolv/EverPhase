@@ -3,7 +3,6 @@ package com.deltabase.everphase.gui;
 import com.deltabase.everphase.engine.font.FontType;
 import com.deltabase.everphase.engine.font.effects.FontEffect;
 import com.deltabase.everphase.engine.toolbox.TextRenderingHelper;
-import com.deltabase.everphase.level.Level;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -56,7 +55,6 @@ public class GuiText extends Gui{
 	 *            - whether the text should be centered or not.
 	 */
 	public GuiText(String text, float fontSize, FontType font, FontEffect effect, Vector2f position, float maxLineLength, boolean centered) {
-		super(Level.getRenderer());
 		this.textString = text;
 		this.fontSize = fontSize;
 		this.font = font;

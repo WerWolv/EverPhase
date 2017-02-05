@@ -1,18 +1,17 @@
 package com.deltabase.everphase.level;
 
 import com.deltabase.everphase.callback.KeyCallback;
-import com.deltabase.everphase.engine.render.RendererMaster;
 import com.deltabase.everphase.engine.render.postProcessing.*;
 import com.deltabase.everphase.engine.toolbox.ParticleHelper;
 import com.deltabase.everphase.engine.toolbox.ScreenShotHelper;
 import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.entity.EntityLight;
 import com.deltabase.everphase.entity.EntityPlayer;
-import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.main.Settings;
 import com.deltabase.everphase.terrain.Terrain;
 import com.deltabase.everphase.terrain.TileWater;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -22,30 +21,16 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_F2;
 
 public abstract class Level {
-
-    protected static RendererMaster renderer;
-    protected List<Entity> entities    = new ArrayList<>();
-    protected List<Entity> entitiesNM  = new ArrayList<>();
-    protected List<Terrain> terrains   = new ArrayList<>();
-    protected List<EntityLight> lights = new ArrayList<>();
-    protected List<TileWater> waters   = new ArrayList<>();
-    protected List<Gui> guis           = new ArrayList<>();
-
     protected EntityPlayer player;
+    private List<Entity> entities = new ArrayList<>();
+    private List<Entity> entitiesNM = new ArrayList<>();
+    private List<Terrain> terrains = new ArrayList<>();
+    private List<EntityLight> lights = new ArrayList<>();
+    private List<TileWater> waters = new ArrayList<>();
 
     public Level(EntityPlayer player) {
         this.player = player;
-        Level.renderer = new RendererMaster(player);
-        ParticleHelper.init(renderer.getProjectionMatrix());
-    }
-
-    public static RendererMaster getRenderer() {
-        return renderer;
-    }
-
-    public void reInitRenderer() {
-        Level.renderer.clean();
-        Level.renderer = new RendererMaster(player);
+        ParticleHelper.init();
     }
 
     public abstract void initLevel();
@@ -83,8 +68,25 @@ public abstract class Level {
         terrains.clear();
         lights.clear();
         waters.clear();
-        guis.clear();
         ParticleHelper.clean();
+    }
+
+    public void spawnEntity(Entity entity, Vector3f position) {
+        if (entity instanceof EntityLight)
+            lights.add((EntityLight) entity.setPosition(position));
+        else if (entity.isHasNormalMap())
+            entitiesNM.add(entity.setPosition(position));
+        else entities.add(entity.setPosition(position));
+    }
+
+    public void addTerrain(Terrain terrain, int gridX, int gridY) {
+        terrain.setGridPosition(gridX, gridY);
+        terrains.add(terrain);
+    }
+
+    public void addWaterPlane(TileWater water, Vector3f position) {
+        water.setCenterPosition(position.x, position.z, position.y);
+        waters.add(water);
     }
 
     public List<Entity> getEntities() {
@@ -105,10 +107,6 @@ public abstract class Level {
 
     public List<TileWater> getWaters() {
         return waters;
-    }
-
-    public List<Gui> getGuis() {
-        return guis;
     }
 
     public EntityPlayer getPlayer() {
