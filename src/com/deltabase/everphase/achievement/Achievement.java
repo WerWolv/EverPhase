@@ -16,7 +16,7 @@ public class Achievement {
         this.description = description;
         this.texture = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture(texturePath);
 
-        EverPhaseApi.ACHIEVEMENT_API.addAchievement(this);
+        EverPhaseApi.AchievementApi.addAchievement(this);
     }
 
     public void unlockAchievement() {

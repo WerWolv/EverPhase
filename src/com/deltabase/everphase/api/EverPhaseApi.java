@@ -20,11 +20,6 @@ public class EverPhaseApi {
 
     public static final EventBus EVENT_BUS = new EventBus();
     public static final ResourceLoader RESOURCE_LOADER = new ResourceLoader();
-    public static final RendererUtils RENDERER_UTILS = new RendererUtils();
-    public static final GuiUtils GUI_UTILS = new GuiUtils();
-
-    public static final AchievementApi ACHIEVEMENT_API = new AchievementApi();
-
 
     public static class GuiUtils {
         private static List<Gui> registeredGuis = new ArrayList<>();
@@ -92,18 +87,18 @@ public class EverPhaseApi {
 
         private static final double DISPLAY_TIME = 5.0D;
 
-        private List<Achievement> listAchievement = new ArrayList<>();
-        private Queue<Achievement> achievementQueue = new LinkedBlockingQueue<>();
-        private Achievement currProcessedAchievement;
+        private static List<Achievement> listAchievement = new ArrayList<>();
+        private static Queue<Achievement> achievementQueue = new LinkedBlockingQueue<>();
+        private static Achievement currProcessedAchievement;
 
-        private double achievementDisplayTicker = 0;
+        private static double achievementDisplayTicker = 0;
 
-        public void addAchievement(Achievement achievement) {
+        public static void addAchievement(Achievement achievement) {
             achievement.setAchievementId(listAchievement.size());
             listAchievement.add(achievement);
         }
 
-        public void unlockAchievement(EntityPlayer player, Achievement achievement) {
+        public static void unlockAchievement(EntityPlayer player, Achievement achievement) {
             for (Achievement ach : listAchievement) {
                 if (ach.getAchievementId() == achievement.getAchievementId()) {
                     if (!ach.isAchievementUnlocked()) {
@@ -117,15 +112,7 @@ public class EverPhaseApi {
             }
         }
 
-        public boolean hasAchievementBeenUnlocked(Achievement achievement) {
-            for (Achievement ach : listAchievement)
-                if (ach.getAchievementId() == achievement.getAchievementId())
-                    return ach.isAchievementUnlocked();
-
-            return false;
-        }
-
-        public boolean isAchievementBeingDisplayed() {
+        public static boolean isAchievementBeingDisplayed() {
             if (achievementDisplayTicker > 0) {
                 achievementDisplayTicker -= Main.getFrameTimeSeconds();
                 return true;
@@ -135,12 +122,20 @@ public class EverPhaseApi {
             return false;
         }
 
-        public double getAchievementPlayProgress() {
+        public static double getAchievementPlayProgress() {
             return (achievementDisplayTicker / DISPLAY_TIME) * 100;
         }
 
-        public Achievement getCurrentlyProcessedAchievement() {
+        public static Achievement getCurrentlyProcessedAchievement() {
             return currProcessedAchievement;
+        }
+
+        public boolean hasAchievementBeenUnlocked(Achievement achievement) {
+            for (Achievement ach : listAchievement)
+                if (ach.getAchievementId() == achievement.getAchievementId())
+                    return ach.isAchievementUnlocked();
+
+            return false;
         }
     }
 }

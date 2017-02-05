@@ -7,12 +7,12 @@ import com.deltabase.everphase.engine.modelloader.OBJModelLoader;
 import com.deltabase.everphase.engine.resource.TextureModel;
 import org.joml.Vector3f;
 
-public class Entity implements Cloneable {
+public class Entity {
 
     protected static final float GRAVITY = -60.0F;        //Gravity constance. Used for jumping in the moment
-    public Vector3f position;      //Position of the entity in the world
+    protected Vector3f position;      //Position of the entity in the world
+    protected float rotX, rotY, rotZ; //Rotation of the entity
     private ModelTextured model;    //Model and texture of the entity
-    private float rotX, rotY, rotZ; //Rotation of the entity
     private float scale;            //Size of the entity
     private boolean hasNormalMap;
 
@@ -171,10 +171,5 @@ public class Entity implements Cloneable {
 
     public boolean isHasNormalMap() {
         return hasNormalMap;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }

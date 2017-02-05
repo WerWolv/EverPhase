@@ -19,13 +19,11 @@ import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-
 public class EntityPlayer extends Entity{
 
     private static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
 
     private int selectedItem = 0;
-
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
     private boolean isInAir = false;                    //Is the player currently in the air?
     private boolean canFly = false;
@@ -92,14 +90,14 @@ public class EntityPlayer extends Entity{
             }
         }
 
-        EverPhaseApi.EVENT_BUS.postEvent(new PlayerMoveEvent(this, position, new Vector3f(speedX, speedY, speedZ), new Vector3f(pitch, yaw, roll)));
-
         float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z) + PLAYER_HEIGHT;   //Get the height of the terrain at the current position of the player
-        if(position.y < terrainHeight) {        //If the player is under the terrain plane...
+        if (this.position.y < terrainHeight) {        //If the player is under the terrain plane...
             speedY = 0;                         //...reset the downwards speed
             isInAir = false;                    //...set the player not in the air anymore
-            position.y = terrainHeight;         //...and set the y position of the player to the height of the the terrain
+            setPosition(new Vector3f(getPosition().x, terrainHeight, getPosition().z));         //...and set the y position of the player to the height of the the terrain
         }
+
+        EverPhaseApi.EVENT_BUS.postEvent(new PlayerMoveEvent(this, position, new Vector3f(speedX, speedY, speedZ), new Vector3f(pitch, yaw, roll)));
     }
 
     public void onInteract() {
@@ -122,9 +120,9 @@ public class EntityPlayer extends Entity{
     /* Getters and Setters */
 
     public void addPosition(float x, float y, float z) {
-        position.x += x * Main.getFrameTimeSeconds();
-        position.y += y * Main.getFrameTimeSeconds();
-        position.z += z * Main.getFrameTimeSeconds();
+        this.position.x += x * Main.getFrameTimeSeconds();
+        this.position.y += y * Main.getFrameTimeSeconds();
+        this.position.z += z * Main.getFrameTimeSeconds();
     }
 
     public float getPitch() {
@@ -173,6 +171,18 @@ public class EntityPlayer extends Entity{
             if (skillClass.isInstance(skill))
                 return skill;
         return null;
+    }
+
+    @Override
+    public Vector3f getPosition() {
+        return position;
+    }
+
+    @Override
+    public EntityPlayer setPosition(Vector3f position) {
+        this.position = position;
+
+        return this;
     }
 
     public ItemStack getHeldItem() {
