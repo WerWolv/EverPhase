@@ -31,7 +31,7 @@ public class Terrain {
 
     public Terrain(TextureTerrainPack texturePack, String heightMap) {
         this.texturePack = texturePack;
-        this.blendMap = texturePack.getBlendMap();
+        this.blendMap = texturePack.getBlendMapTexture();
         this.heightMap = heightMap;
         this.model = generateTerrain(heightMap);
     }

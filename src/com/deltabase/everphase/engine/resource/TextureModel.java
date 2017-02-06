@@ -65,7 +65,7 @@ public class TextureModel {
         return hasTransparency;
     }
 
-    public void sethasTransparency(boolean hasTransparency) {
+    public void setHasTransparency(boolean hasTransparency) {
         this.hasTransparency = hasTransparency;
     }
 
@@ -73,7 +73,7 @@ public class TextureModel {
         return useFakeLightning;
     }
 
-    public void setuseFakeLightning(boolean useFakeLightning) {
+    public void UseFakeLightning(boolean useFakeLightning) {
         this.useFakeLightning = useFakeLightning;
     }
 

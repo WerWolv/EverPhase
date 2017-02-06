@@ -106,6 +106,7 @@ public class RendererGui {
         shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f(posX, posY), new Vector2f(Math.min(scale, scale / Main.getAspectRatio()), -Math.min(scale, scale * Main.getAspectRatio()))));
         shader.loadSize(size.x / texture.getSize(), size.y / texture.getSize(), size.z / texture.getSize(), size.w / texture.getSize());
         GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
+        this.setDrawColor(new Vector4f(1.0F, 1.0F, 1.0F, 0.0F));
     }
 
     public void drawString(String text, float posX, float posY, float size) {
@@ -116,6 +117,10 @@ public class RendererGui {
 
         GL30.glBindVertexArray(quad.getVaoID());                            //Bind the VAO of the quad to memory
         GL20.glEnableVertexAttribArray(0);                            //Enable the vertices buffer
+    }
+
+    public void setDrawColor(Vector4f color) {
+        shader.loadOverlayColor(color);
     }
 
     /*

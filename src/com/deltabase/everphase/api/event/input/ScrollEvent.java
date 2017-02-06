@@ -7,8 +7,6 @@ public class ScrollEvent extends Event {
     private int xScroll, yScroll;
 
     public ScrollEvent(int xScroll, int yScroll) {
-        super("ONSCROLLEVENT");
-
         this.xScroll = xScroll;
         this.yScroll = yScroll;
     }

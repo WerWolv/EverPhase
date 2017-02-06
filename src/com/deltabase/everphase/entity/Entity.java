@@ -1,21 +1,30 @@
 package com.deltabase.everphase.entity;
 
 import com.deltabase.everphase.api.EverPhaseApi;
+import com.deltabase.everphase.api.IUpdateable;
+import com.deltabase.everphase.api.event.entity.EntityDeathEvent;
+import com.deltabase.everphase.capability.Capability;
+import com.deltabase.everphase.damageSource.DamageSource;
+import com.deltabase.everphase.damageSource.DamageSourceMagic;
 import com.deltabase.everphase.engine.model.ModelTextured;
 import com.deltabase.everphase.engine.modelloader.NormalMappedObjLoader;
 import com.deltabase.everphase.engine.modelloader.OBJModelLoader;
 import com.deltabase.everphase.engine.resource.TextureModel;
 import org.joml.Vector3f;
 
-public class Entity {
+public class Entity implements IUpdateable {
 
     protected static final float GRAVITY = -60.0F;        //Gravity constance. Used for jumping in the moment
+    public final Capability HEALTH = new Capability(100, 100);
+    public final Capability ENERGY = new Capability(100, 100);
+    public final Capability SPEED = new Capability(20, 20);
     protected Vector3f position;      //Position of the entity in the world
     protected float rotX, rotY, rotZ; //Rotation of the entity
     private ModelTextured model;    //Model and texture of the entity
     private float scale;            //Size of the entity
     private boolean hasNormalMap;
-
+    private boolean isAlive = true;
+    private DamageSource damageSourceOnDeath = new DamageSourceMagic();
     private int textureIndex = 0;   //Address of the texture stored in memory
 
     public Entity(String modelPath, String texturePath, Vector3f rotation, float scale, boolean hasNormalMap) {
@@ -59,7 +68,13 @@ public class Entity {
         this.hasNormalMap = false;
     }
 
-    /*
+
+    @Override
+    public void update() {
+        if (HEALTH.getValue() <= 0) this.setDead();
+    }
+
+    /**
      * Calculates the x coordinate of the texture inside the texture
      * atlas.
      *
@@ -70,7 +85,7 @@ public class Entity {
         return (float) col / (float) model.getTexture().getNumOfRows();
     }
 
-    /*
+    /**
      * Calculates the y coordinate of the texture inside the texture
      * atlas.
      *
@@ -81,7 +96,7 @@ public class Entity {
         return (float) row / (float) model.getTexture().getNumOfRows();
     }
 
-    /*
+    /**
      * Increases the position of the entity.
      *
      * @param dx    The amount to increase the position of the entity in the x direction.
@@ -94,7 +109,7 @@ public class Entity {
         this.position.z += dz;
     }
 
-    /*
+    /**
      * Increases the position of the entity.
      *
      * @param dx    The amount to increase the rotation of the entity in the x direction.
@@ -171,5 +186,24 @@ public class Entity {
 
     public boolean isHasNormalMap() {
         return hasNormalMap;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setDead() {
+        isAlive = false;
+    }
+
+    public void damageEntity(float damage, DamageSource damageSource) {
+        float newHealth = this.HEALTH.getValue() - damage;
+
+        if (newHealth < 0) {
+            this.damageSourceOnDeath = damageSource;
+            EverPhaseApi.EVENT_BUS.postEvent(new EntityDeathEvent(this, damageSource));
+        }
+
+        this.HEALTH.setValue(this.HEALTH.getValue() - damage);
     }
 }

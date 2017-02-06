@@ -22,17 +22,19 @@ public class TextureTerrainPack {
         return backgroundTexture;
     }
 
-    public TextureTerrain getrTexture() {
+    public TextureTerrain getRedTexture() {
         return rTexture;
     }
 
-    public TextureTerrain getgTexture() {
+    public TextureTerrain getGreenTexture() {
         return gTexture;
     }
 
-    public TextureTerrain getbTexture() {
+    public TextureTerrain getBlueTexture() {
         return bTexture;
     }
 
-    public TextureTerrain getBlendMap() { return blendMap; }
+    public TextureTerrain getBlendMapTexture() {
+        return blendMap;
+    }
 }

@@ -9,8 +9,6 @@ public class XPCollectEvent extends Event {
     private int xpAmount;
 
     public XPCollectEvent(EntityPlayer player, int xpAmount) {
-        super("XPCOLLECTEDEVENT");
-
         this.player = player;
         this.xpAmount = xpAmount;
     }

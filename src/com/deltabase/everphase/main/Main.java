@@ -7,8 +7,6 @@ import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
 import com.deltabase.everphase.callback.ScrollCallback;
 import com.deltabase.everphase.engine.audio.AudioHelper;
-import com.deltabase.everphase.entity.EntityPlayer;
-import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.level.LevelOverworld;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -32,11 +30,9 @@ public class Main {
     private static CursorPositionCallback cursorPosCallback;
     private static ScrollCallback scrollCallback;
 
-    private static Level currentLevel;
     private static long lastFrameTime;
     private static float delta;
     private static long window;
-    private static EntityPlayer player = new EntityPlayer(new Vector3f(0, 0, 0), 1);
 
 
     public static void main(String[] args) {
@@ -175,23 +171,23 @@ public class Main {
     private static void run() {
         init();
 
-        player.setPosition(new Vector3f(0, 0, 0));
+        EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(0, 0, 0));
 
-        currentLevel = new LevelOverworld(player);
+        EverPhaseApi.getEverPhase().theLevel = new LevelOverworld();
 
-        currentLevel.initLevel();
+        EverPhaseApi.getEverPhase().theLevel.initLevel();
 
-        currentLevel.applyPostProcessingEffects();
+        EverPhaseApi.getEverPhase().theLevel.applyPostProcessingEffects();
 
         while(true) {
             glfwSwapBuffers(window);
 
-            AudioHelper.setListener(player);
+            AudioHelper.setListenerPosition();
             EverPhaseApi.EVENT_BUS.processEvents();
-            currentLevel.updateLevel();
-            currentLevel.handleInput();
-            currentLevel.renderLevel();
-            currentLevel.renderGUI();
+            EverPhaseApi.getEverPhase().theLevel.updateLevel();
+            EverPhaseApi.getEverPhase().theLevel.handleInput();
+            EverPhaseApi.getEverPhase().theLevel.renderLevel();
+            EverPhaseApi.getEverPhase().theLevel.renderGUI();
 
             long currFrameTime = getCurrentTime();
             delta = (currFrameTime - lastFrameTime) / 1000.0F;
@@ -206,7 +202,7 @@ public class Main {
 
         glfwSetWindowShouldClose(window, false);
         glfwDestroyWindow(window);
-        currentLevel.clean();
+        EverPhaseApi.getEverPhase().theLevel.clean();
         keyCallback.free();
         mouseButtonCallback.free();
         cursorPosCallback.free();
@@ -236,9 +232,5 @@ public class Main {
 
     public static float getFrameTimeSeconds() {
         return delta;
-    }
-
-    public static EntityPlayer getPlayer() {
-        return player;
     }
 }

@@ -10,6 +10,12 @@ public class PlayerItemUseEvent extends Event {
     private EntityPlayer player;
     private Action useAction;
 
+    public PlayerItemUseEvent(Item item, EntityPlayer player, Action useAction) {
+        this.item = item;
+        this.player = player;
+        this.useAction = useAction;
+    }
+
     public enum Action {
         LEFT_CLICK,
         RIGHT_CLICK,
@@ -18,14 +24,6 @@ public class PlayerItemUseEvent extends Event {
         CTRL_LEFT_CLICK,
         CTRL_RIGHT_CLICK,
         NONE
-    }
-
-    public PlayerItemUseEvent(Item item, EntityPlayer player, Action useAction) {
-        super("PLAYERITEMUSEEVENT");
-
-        this.item = item;
-        this.player = player;
-        this.useAction = useAction;
     }
 
 }

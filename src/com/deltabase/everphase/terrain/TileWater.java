@@ -32,19 +32,19 @@ public class TileWater {
 
 		for(TileWater water : level.getWaters()) {
 			fboReflection.bindFrameBuffer();
-			float distance = 2 * (level.getPlayer().getPosition().y - water.getY());
-			level.getPlayer().setPosition(new Vector3f(level.getPlayer().getPosition().x, level.getPlayer().getPosition().y - distance, level.getPlayer().getPosition().z));
-			level.getPlayer().setPitch(-level.getPlayer().getPitch());
+            float distance = 2 * (EverPhaseApi.getEverPhase().thePlayer.getPosition().y - water.getY());
+            EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(EverPhaseApi.getEverPhase().thePlayer.getPosition().x, EverPhaseApi.getEverPhase().thePlayer.getPosition().y - distance, EverPhaseApi.getEverPhase().thePlayer.getPosition().z));
+            EverPhaseApi.getEverPhase().thePlayer.setPitch(-EverPhaseApi.getEverPhase().thePlayer.getPitch());
 
-			EverPhaseApi.RendererUtils.RENDERER_MASTER.renderScene(level.getEntities(), level.getEntitiesNM(), level.getTerrains(), level.getLights(), level.getPlayer(), new Vector4f(0, 1, 0, -water.getY() + 1.0F));
+            EverPhaseApi.RendererUtils.RENDERER_MASTER.renderScene(level.getEntities(), level.getEntitiesNM(), level.getTerrains(), level.getLights(), EverPhaseApi.getEverPhase().thePlayer, new Vector4f(0, 1, 0, -water.getY() + 1.0F));
 
-			level.getPlayer().setPosition(new Vector3f(level.getPlayer().getPosition().x, level.getPlayer().getPosition().y + distance, level.getPlayer().getPosition().z));
-			level.getPlayer().setPitch(-level.getPlayer().getPitch());
+            EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(EverPhaseApi.getEverPhase().thePlayer.getPosition().x, EverPhaseApi.getEverPhase().thePlayer.getPosition().y + distance, EverPhaseApi.getEverPhase().thePlayer.getPosition().z));
+            EverPhaseApi.getEverPhase().thePlayer.setPitch(-EverPhaseApi.getEverPhase().thePlayer.getPitch());
 
 			fboReflection.unbindFrameBuffer();
 			fboRefraction.bindFrameBuffer();
-			EverPhaseApi.RendererUtils.RENDERER_MASTER.renderScene(level.getEntities(), level.getEntitiesNM(), level.getTerrains(), level.getLights(), level.getPlayer(), new Vector4f(0, -1, 0, water.getY() + 1.0F));
-		}
+            EverPhaseApi.RendererUtils.RENDERER_MASTER.renderScene(level.getEntities(), level.getEntitiesNM(), level.getTerrains(), level.getLights(), EverPhaseApi.getEverPhase().thePlayer, new Vector4f(0, -1, 0, water.getY() + 1.0F));
+        }
 		fboRefraction.unbindFrameBuffer();
 
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);

@@ -46,7 +46,7 @@ public class ShadowBox {
 	 */
     protected ShadowBox(Matrix4f lightViewMatrix) {
         this.lightViewMatrix = lightViewMatrix;
-        this.player = Main.getPlayer();
+        this.player = EverPhaseApi.getEverPhase().thePlayer;
         calculateWidthsAndHeights();
 	}
 

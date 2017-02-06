@@ -26,7 +26,7 @@ public class Item {
         return itemStack;
     }
 
-    public Item setMaxStackSize(int stackSize) {
+    public Item setMaxStackSize(int maxStackSize) {
         this.maxStackSize = maxStackSize;
 
         return this;

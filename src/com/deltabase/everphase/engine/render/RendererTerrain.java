@@ -73,11 +73,11 @@ public class RendererTerrain {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);                                                     //Activate the first texture memory location
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainPack.getBackgroundTexture().getTextureID());  //Add the background texture to this location
         GL13.glActiveTexture(GL13.GL_TEXTURE1);                                                     //Activate the second texture memory location
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainPack.getrTexture().getTextureID());           //Add the first texture to this location
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainPack.getRedTexture().getTextureID());           //Add the first texture to this location
         GL13.glActiveTexture(GL13.GL_TEXTURE2);                                                     //Activate the third texture memory location
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainPack.getgTexture().getTextureID());           //Add the second texture to this location
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainPack.getGreenTexture().getTextureID());           //Add the second texture to this location
         GL13.glActiveTexture(GL13.GL_TEXTURE3);                                                     //Activate the fourth texture memory location
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainPack.getbTexture().getTextureID());           //Add the third texture to this location
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainPack.getBlueTexture().getTextureID());           //Add the third texture to this location
         GL13.glActiveTexture(GL13.GL_TEXTURE4);                                                     //Activate the fifth texture memory location
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendMap().getTextureID());               //Add the blend map to this location
     }

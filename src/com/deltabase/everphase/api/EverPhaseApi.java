@@ -8,8 +8,10 @@ import com.deltabase.everphase.engine.render.*;
 import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.gui.Gui;
+import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.main.Main;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,13 @@ public class EverPhaseApi {
 
     public static final EventBus EVENT_BUS = new EventBus();
     public static final ResourceLoader RESOURCE_LOADER = new ResourceLoader();
+    private static final EverPhaseApi INSTANCE = new EverPhaseApi();
+    public EntityPlayer thePlayer = new EntityPlayer(new Vector3f(0.0F, 0.0F, 0.0F), 1.0F);
+    public Level theLevel;
+
+    public static EverPhaseApi getEverPhase() {
+        return INSTANCE;
+    }
 
     public static class GuiUtils {
         private static List<Gui> registeredGuis = new ArrayList<>();

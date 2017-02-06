@@ -57,9 +57,9 @@ public class TextMeshCreator {
 
 	public TextMeshData createTextMesh(GuiText text) {
 		List<Line> lines = createStructure(text);
-		TextMeshData data = createQuadVertices(text, lines);
-		return data;
-	}
+
+        return createQuadVertices(text, lines);
+    }
 
 	private List<Line> createStructure(GuiText text) {
 		char[] chars = text.getTextString().toCharArray();
@@ -97,25 +97,25 @@ public class TextMeshCreator {
 
 	private TextMeshData createQuadVertices(GuiText text, List<Line> lines) {
 		text.setNumberOfLines(lines.size());
-		double curserX = 0f;
-		double curserY = 0f;
-		List<Float> vertices = new ArrayList<>();
+        double cursorX = 0f;
+        double cursorY = 0f;
+        List<Float> vertices = new ArrayList<>();
 		List<Float> textureCoords = new ArrayList<>();
 		for (Line line : lines) {
 			if (text.isCentered()) {
-				curserX = (line.getMaxLength() - line.getLineLength()) / 2;
-			}
+                cursorX = (line.getMaxLength() - line.getLineLength()) / 2;
+            }
 			for (Word word : line.getWords()) {
 				for (Character letter : word.getCharacters()) {
-					addVerticesForCharacter(curserX, curserY, letter, text.getFontSize(), vertices);
-					addTexCoords(textureCoords, letter.getxTextureCoord(), letter.getyTextureCoord(),
+                    addVerticesForCharacter(cursorX, cursorY, letter, text.getFontSize(), vertices);
+                    addTexCoords(textureCoords, letter.getxTextureCoord(), letter.getyTextureCoord(),
 							letter.getXMaxTextureCoord(), letter.getYMaxTextureCoord());
-					curserX += letter.getxAdvance() * text.getFontSize();
-				}
-				curserX += metaData.getSpaceWidth() * text.getFontSize();
-			}
-			curserX = 0;
-			curserY += LINE_HEIGHT * text.getFontSize();
+                    cursorX += letter.getxAdvance() * text.getFontSize();
+                }
+                cursorX += metaData.getSpaceWidth() * text.getFontSize();
+            }
+            cursorX = 0;
+            cursorY += LINE_HEIGHT * text.getFontSize();
         }
         return new TextMeshData(listToArray(vertices), listToArray(textureCoords));
 	}

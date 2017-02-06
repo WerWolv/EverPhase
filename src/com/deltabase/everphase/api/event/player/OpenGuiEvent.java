@@ -1,8 +1,8 @@
 package com.deltabase.everphase.api.event.player;
 
-import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.api.event.Event;
 import com.deltabase.everphase.entity.EntityPlayer;
+import com.deltabase.everphase.gui.Gui;
 
 public class OpenGuiEvent extends Event {
 
@@ -10,8 +10,6 @@ public class OpenGuiEvent extends Event {
     private Gui openGui;
 
     public OpenGuiEvent(EntityPlayer player, Gui openGui) {
-        super("PLAYEROPENEDGUIEVENT");
-
         this.player = player;
         this.openGui = openGui;
     }

@@ -10,8 +10,6 @@ public class PlayerMoveEvent extends Event {
     private Vector3f coords, speed, rotation;
 
     public PlayerMoveEvent(EntityPlayer player, Vector3f coords, Vector3f speed, Vector3f rotation) {
-        super("PLAYERMOVEDEVENT");
-
         this.player = player;
         this.coords = coords;
         this.speed = speed;

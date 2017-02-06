@@ -1,5 +1,6 @@
 package com.deltabase.everphase.main;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.Log;
 import com.deltabase.everphase.api.event.EventBusSubscriber;
 import com.deltabase.everphase.api.event.SubscribeEvent;
@@ -9,6 +10,7 @@ import com.deltabase.everphase.api.event.inventory.InventoryItemClickEvent;
 import com.deltabase.everphase.api.event.inventory.InventoryItemHoverEvent;
 import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
+import com.deltabase.everphase.gui.inventory.GuiInventory;
 import com.deltabase.everphase.item.ItemStack;
 
 @EventBusSubscriber
@@ -26,14 +28,14 @@ public class EventHandler {
     @SubscribeEvent
     public void onScroll(ScrollEvent event) {
 
-        if (Main.getPlayer().getCurrentGui() != null) return;
+        if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() != null) return;
 
-        Main.getPlayer().setSelectedItem(Main.getPlayer().getSelectedItem() - event.getYScroll());
+        EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(EverPhaseApi.getEverPhase().thePlayer.getSelectedItemIndex() - event.getYScroll());
 
-        if(Main.getPlayer().getSelectedItem() > 8)
-            Main.getPlayer().setSelectedItem(0);
-        else if(Main.getPlayer().getSelectedItem() < 0)
-            Main.getPlayer().setSelectedItem(8);
+        if (EverPhaseApi.getEverPhase().thePlayer.getSelectedItemIndex() > 8)
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(0);
+        else if (EverPhaseApi.getEverPhase().thePlayer.getSelectedItemIndex() < 0)
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(8);
     }
 
     @SubscribeEvent
@@ -43,11 +45,15 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onInventoryItemClick(InventoryItemClickEvent event) {
-        if (event.getPressedButton() == InventoryItemClickEvent.MOUSE_BUTTON_LEFT) {
-            ItemStack oldHeldItem = event.getInventory().getPickedUpItemStack();
+        if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() instanceof GuiInventory) {
+            GuiInventory guiInventory = (GuiInventory) EverPhaseApi.getEverPhase().thePlayer.getCurrentGui();
 
-            event.getInventory().setPickedUpItemStack(event.getSlot().getItemStack());
-            event.getSlot().setItemStack(oldHeldItem);
+            if (event.getPressedButton() == InventoryItemClickEvent.MOUSE_BUTTON_LEFT && event.getInventory() == guiInventory.getInventory()) {
+                ItemStack oldHeldItem = event.getInventory().getPickedUpItemStack();
+
+                event.getInventory().setPickedUpItemStack(event.getSlot().getItemStack());
+                event.getSlot().setItemStack(oldHeldItem);
+            }
         }
     }
 

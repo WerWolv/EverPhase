@@ -11,8 +11,6 @@ public class AchievementGetEvent extends Event {
 
 
     public AchievementGetEvent(EntityPlayer player, Achievement achievement) {
-        super("ACHIEVEMENTGETEVENT");
-
         this.player = player;
         this.achievement = achievement;
     }

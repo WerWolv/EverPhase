@@ -1,5 +1,6 @@
 package com.deltabase.everphase.engine.audio;
 
+import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.Log;
 import com.deltabase.everphase.engine.toolbox.Maths;
 import com.deltabase.everphase.entity.EntityPlayer;
@@ -64,7 +65,9 @@ public class AudioHelper {
         return bufferPointer;
     }
 
-    public static void setListener(EntityPlayer player) {
+    public static void setListenerPosition() {
+        EntityPlayer player = EverPhaseApi.getEverPhase().thePlayer;
+
         AL10.alListener3f(AL10.AL_POSITION, player.getPosition().x(), player.getPosition().y(), player.getPosition().z());
         AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
 

@@ -23,7 +23,7 @@ public class EntityPlayer extends Entity{
 
     private static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
 
-    private int selectedItem = 0;
+    private int selectedItemIndex = 0;
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
     private boolean isInAir = false;                    //Is the player currently in the air?
     private boolean canFly = false;
@@ -42,6 +42,7 @@ public class EntityPlayer extends Entity{
         super("", "", rotation, scale, false);
     }
 
+    @Override
     public void update() {
 
     }
@@ -62,20 +63,20 @@ public class EntityPlayer extends Entity{
 
         //Keybindings to move the player in different directions based of the pressed buttons and the direction of the camera
         if (KeyCallback.isKeyPressed(GLFW_KEY_W)) {
-            speedX += 40F * (float) Math.sin(Math.toRadians(getYaw()));
-            speedZ -= 40F * (float) Math.cos(Math.toRadians(getYaw()));
+            speedX += SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
+            speedZ -= SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
         }
         if (KeyCallback.isKeyPressed(GLFW_KEY_S)) {
-            speedX -= 40F * (float) Math.sin(Math.toRadians(getYaw()));
-            speedZ += 40F * (float) Math.cos(Math.toRadians(getYaw()));
+            speedX -= SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
+            speedZ += SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
         }
         if (KeyCallback.isKeyPressed(GLFW_KEY_A)) {
-            speedX -= 40F * (float) Math.cos(Math.toRadians(getYaw()));
-            speedZ -= 40F * (float) Math.sin(Math.toRadians(getYaw()));
+            speedX -= SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
+            speedZ -= SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
         }
         if (KeyCallback.isKeyPressed(GLFW_KEY_D)) {
-            speedX += 40F * (float) Math.cos(Math.toRadians(getYaw()));
-            speedZ += 40F * (float) Math.sin(Math.toRadians(getYaw()));
+            speedX += SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
+            speedZ += SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
         }
         if(canFly) {
             if(KeyCallback.isKeyPressed(GLFW_KEY_SPACE))
@@ -90,14 +91,14 @@ public class EntityPlayer extends Entity{
             }
         }
 
+        EverPhaseApi.EVENT_BUS.postEvent(new PlayerMoveEvent(this, position, new Vector3f(speedX, speedY, speedZ), new Vector3f(pitch, yaw, roll)));
+
         float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z) + PLAYER_HEIGHT;   //Get the height of the terrain at the current position of the player
         if (this.position.y < terrainHeight) {        //If the player is under the terrain plane...
             speedY = 0;                         //...reset the downwards speed
             isInAir = false;                    //...set the player not in the air anymore
             setPosition(new Vector3f(getPosition().x, terrainHeight, getPosition().z));         //...and set the y position of the player to the height of the the terrain
         }
-
-        EverPhaseApi.EVENT_BUS.postEvent(new PlayerMoveEvent(this, position, new Vector3f(speedX, speedY, speedZ), new Vector3f(pitch, yaw, roll)));
     }
 
     public void onInteract() {
@@ -173,31 +174,19 @@ public class EntityPlayer extends Entity{
         return null;
     }
 
-    @Override
-    public Vector3f getPosition() {
-        return position;
-    }
-
-    @Override
-    public EntityPlayer setPosition(Vector3f position) {
-        this.position = position;
-
-        return this;
-    }
-
     public ItemStack getHeldItem() {
         return this.heldItem;
     }
 
-    public int getSelectedItem(){
-        return selectedItem;
+    public int getSelectedItemIndex() {
+        return selectedItemIndex;
     }
 
-    public void setSelectedItem(int index) {
-        this.selectedItem = index;
+    public void setSelectedItemIndex(int index) {
+        this.selectedItemIndex = index;
     }
 
     public void toggleFlight() {
-        this.canFly = !canFly;
+        canFly = !canFly;
     }
 }

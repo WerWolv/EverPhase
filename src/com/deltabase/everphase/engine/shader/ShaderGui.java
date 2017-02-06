@@ -8,6 +8,7 @@ public class ShaderGui extends Shader{
     private int loc_transformationMatrix;
     private int loc_size;
     private int loc_overlay;
+    private int loc_overlayColor;
 
     public ShaderGui() {
         super("shaderGui", "shaderGui");
@@ -27,6 +28,7 @@ public class ShaderGui extends Shader{
         loc_transformationMatrix = super.getUniformLocation("transformationMatrix");
         loc_size = super.getUniformLocation("size");
         loc_overlay = super.getUniformLocation("overlay");
+        loc_overlayColor = super.getUniformLocation("overlayColor");
     }
 
     public void loadSize(float startX, float startY, float endX, float endY) {
@@ -35,5 +37,9 @@ public class ShaderGui extends Shader{
 
     public void loadOverlay(boolean enabled) {
         super.loadBoolean(loc_overlay, enabled);
+    }
+
+    public void loadOverlayColor(Vector4f color) {
+        super.loadVector(loc_overlayColor, color);
     }
 }

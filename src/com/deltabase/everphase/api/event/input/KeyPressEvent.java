@@ -7,8 +7,6 @@ public class KeyPressEvent extends Event {
     private int pressedKey;
 
     public KeyPressEvent(int pressedKey) {
-        super("KEYPRESSEVENT");
-
         this.pressedKey = pressedKey;
     }
 

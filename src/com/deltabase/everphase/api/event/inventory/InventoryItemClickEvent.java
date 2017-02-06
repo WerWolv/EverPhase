@@ -17,8 +17,6 @@ public class InventoryItemClickEvent extends Event {
     private Inventory inventory;
 
     public InventoryItemClickEvent(Inventory inventory, ItemStack itemstack, Slot slot, int pressedButton) {
-        super("INVENTORYITEMCLICKEVENT");
-
         this.inventory = inventory;
         this.itemStack = itemstack;
         this.slot = slot;
