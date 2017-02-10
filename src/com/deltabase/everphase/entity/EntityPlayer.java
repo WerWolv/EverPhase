@@ -8,20 +8,17 @@ import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
 import com.deltabase.everphase.collision.AABB;
+import com.deltabase.everphase.data.PlayerData;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.inventory.InventoryPlayer;
 import com.deltabase.everphase.item.ItemStack;
 import com.deltabase.everphase.main.Main;
-import com.deltabase.everphase.skill.Skill;
 import com.deltabase.everphase.terrain.Terrain;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.lwjgl.glfw.GLFW.*;
 
-public class EntityPlayer extends Entity{
+public class EntityPlayer extends Entity {
 
     protected static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
 
@@ -40,7 +37,7 @@ public class EntityPlayer extends Entity{
 
     private ItemStack heldItem;
 
-    private List<Skill> skills = new ArrayList<>();
+    private PlayerData playerData = new PlayerData();
 
     public EntityPlayer(Vector3f rotation, float scale) {
         super("", "", rotation, scale, new Vector3f(2.5F, 2.5F, 2.5F), false);
@@ -52,14 +49,6 @@ public class EntityPlayer extends Entity{
         this.boundingBox = new AABB(new Vector3f(position.x, position.y - PLAYER_HEIGHT, position.z), bbSize.mul(scale));
     }
 
-    public void onXPEarned() {
-        for (Skill skill : skills) {
-            if (skill.getCurrentXP() >= skill.getXPToNextLevel(skill.getCurrentLevel())) {
-                skill.levelUp();
-                skill.onLevelUp();
-            }
-        }
-    }
 
     public void onMove(Terrain terrain) {
 
@@ -186,13 +175,6 @@ public class EntityPlayer extends Entity{
         this.currentGui = currentGui;
     }
 
-    public Skill getSkill(Class skillClass) {
-        for (Skill skill : skills)
-            if (skillClass.isInstance(skill))
-                return skill;
-        return null;
-    }
-
     public ItemStack getHeldItem() {
         return this.heldItem;
     }
@@ -211,5 +193,13 @@ public class EntityPlayer extends Entity{
 
     public InventoryPlayer getInventoryPlayer() {
         return this.inventoryPlayer;
+    }
+
+    public PlayerData getPlayerData() {
+        return playerData;
+    }
+
+    public void setPlayerData(PlayerData playerData) {
+        this.playerData = playerData;
     }
 }

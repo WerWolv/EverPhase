@@ -118,7 +118,7 @@ public class Main {
         if (!glfwInit())
             Log.wtf("GLFW", "Initialization failed!");
 
-        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 

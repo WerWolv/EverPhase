@@ -4,6 +4,7 @@ import com.deltabase.everphase.achievement.Achievement;
 import com.deltabase.everphase.api.crafting.CraftingRecipe;
 import com.deltabase.everphase.api.event.EventBus;
 import com.deltabase.everphase.api.event.advance.AchievementGetEvent;
+import com.deltabase.everphase.data.PlayerData;
 import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.render.*;
 import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
@@ -13,6 +14,7 @@ import com.deltabase.everphase.gui.inventory.GuiInventory;
 import com.deltabase.everphase.inventory.Inventory;
 import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.main.Main;
+import com.deltabase.everphase.quest.Quest;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -47,6 +49,60 @@ public class EverPhaseApi {
         updateables = new ArrayList<>();
 
         this.thePlayer = new EntityPlayer(new Vector3f(0.0F, 0.0F, 0.0F), 1.0F);
+
+    }
+
+    public static class QuestingApi {
+        private static Map<String, Quest> registeredQuests = new HashMap<>();
+
+        public static void registerQuest(String questName, Quest quest) {
+            registeredQuests.put(questName, quest);
+        }
+
+        public static boolean canPlayerStartQuest(String questName) {
+            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.containsValue(registeredQuests.get(questName).getDependencies());
+        }
+
+        public static boolean canPlayerFinishQuest(String questName) {
+            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.get(questName).getLeftOverQuestTasks().isEmpty();
+        }
+
+        public static boolean isQuestFinished(String questName) {
+            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.containsKey(questName);
+        }
+
+        public static void startQuest(String questName) {
+            if (canPlayerStartQuest(questName)) {
+                Log.i("QuestApi", "Player cannot start quest because he's missing some dependencies.");
+                return;
+            }
+
+            PlayerData playerData = EverPhaseApi.getEverPhase().thePlayer.getPlayerData();
+            if (playerData.notStartedQuests.containsKey(questName)) {
+                Quest questToStart = playerData.notStartedQuests.get(questName);
+                playerData.notStartedQuests.remove(questName);
+                playerData.startedQuests.put(questName, questToStart);
+            }
+        }
+
+        public static void finishQuest(String questName) {
+            if (isQuestFinished(questName)) {
+                Log.i("QuestApi", "Player cannot finish quest because it's already finished ");
+                return;
+            }
+
+            if (canPlayerFinishQuest(questName)) {
+                Log.i("QuestApi", "Player cannot finish quest because not all of the tasks are finished");
+                return;
+            }
+
+            PlayerData playerData = EverPhaseApi.getEverPhase().thePlayer.getPlayerData();
+            if (playerData.startedQuests.containsKey(questName)) {
+                Quest questToStart = playerData.startedQuests.get(questName);
+                playerData.startedQuests.remove(questName);
+                playerData.finishedQuests.put(questName, questToStart);
+            }
+        }
 
     }
 
