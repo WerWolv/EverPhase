@@ -22,7 +22,7 @@ License: BSD 3-Clause (see LICENSE.txt)
 |CMake Build|SmallJoker|◔|
 |Inventory System|WerWolv|◔|
 |Crafting System|Mrasam|◔|
-|Achievements|-|✗|
+|Achievements|WerWolv|◔|
 |Random Dungeons (Rogue Like)|Mrasam|◔|
 |Magic (Teleports, etc.)|-|✗|
 |Quests|-|✗|
@@ -32,7 +32,7 @@ License: BSD 3-Clause (see LICENSE.txt)
 |Shadows on Entities|WerWolv|◔|
 |Fixing Audio issues when unpluging default device|WerWolv|◔|
 |Raytrace interaction with entities|-|◔|
-|AABBs|WerWolv|✗|
+|AABBs|WerWolv|✓|
 |Main Menu|WerWolv|✗|
 |Login system|WerWolv|✗|
 |Server|WerWolv|✗|
