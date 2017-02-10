@@ -50,6 +50,8 @@ public class Entity implements IUpdateable {
         this.rotZ = rotation.z;
         this.scale = scale;
         this.hasNormalMap = hasNormalMap;
+
+        setUpdatable();
     }
 
     public Entity(String modelPath, String texturePath, int index, Vector3f rotation, float scale, Vector3f bbSize, boolean hasNormalMap) {
@@ -68,6 +70,8 @@ public class Entity implements IUpdateable {
         this.rotZ = rotation.z;
         this.scale = scale;
         this.hasNormalMap = hasNormalMap;
+
+        setUpdatable();
     }
 
     public Entity(float rotation, float scale, Vector3f bbSize) {
@@ -79,6 +83,8 @@ public class Entity implements IUpdateable {
         this.rotZ = rotation;
         this.scale = scale;
         this.hasNormalMap = false;
+
+        setUpdatable();
     }
 
 

@@ -4,4 +4,8 @@ public interface IUpdateable {
 
     void update();
 
+    default void setUpdatable() {
+        EverPhaseApi.updateables.add(this);
+    }
+
 }

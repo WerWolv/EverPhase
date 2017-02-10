@@ -162,7 +162,6 @@ public class Main {
         AudioHelper.createContext();
         AudioHelper.loadSoundFile("random");
 
-        EverPhaseApi.RendererUtils.initRenderers();
     }
 
     public static void setCursorVisibility(boolean visible) {
@@ -171,6 +170,9 @@ public class Main {
 
     private static void run() {
         init();
+
+        EverPhaseApi.getEverPhase().initApi();
+        EverPhaseApi.RendererUtils.initRenderers();
 
         LocalizationUtil.loadFiles("lang");
 

@@ -24,11 +24,30 @@ public class EverPhaseApi {
     public static final EventBus EVENT_BUS = new EventBus();
     public static final ResourceLoader RESOURCE_LOADER = new ResourceLoader();
     private static final EverPhaseApi INSTANCE = new EverPhaseApi();
-    public EntityPlayer thePlayer = new EntityPlayer(new Vector3f(0.0F, 0.0F, 0.0F), 1.0F);
+
+    static List<IUpdateable> updateables;
+    private static boolean hasBeenInitialized = false;
+    public EntityPlayer thePlayer;
     public Level theLevel;
 
     public static EverPhaseApi getEverPhase() {
         return INSTANCE;
+    }
+
+    public static List<IUpdateable> getUpdateables() {
+        return updateables;
+    }
+
+    public void initApi() {
+        if (hasBeenInitialized)
+            throw new IllegalAccessError("The API can only be initialized once!");
+
+        hasBeenInitialized = true;
+
+        updateables = new ArrayList<>();
+
+        this.thePlayer = new EntityPlayer(new Vector3f(0.0F, 0.0F, 0.0F), 1.0F);
+
     }
 
     public static class CraftingApi {
@@ -203,4 +222,5 @@ public class EverPhaseApi {
             return false;
         }
     }
+
 }

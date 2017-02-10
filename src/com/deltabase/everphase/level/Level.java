@@ -1,6 +1,7 @@
 package com.deltabase.everphase.level;
 
 import com.deltabase.everphase.api.EverPhaseApi;
+import com.deltabase.everphase.api.IUpdateable;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.engine.audio.AudioHelper;
 import com.deltabase.everphase.engine.fbo.FrameBufferObject;
@@ -45,10 +46,8 @@ public abstract class Level {
     public void updateLevel() {
         glfwPollEvents();
         ParticleHelper.update(EverPhaseApi.getEverPhase().thePlayer);
-        getEntities().forEach(Entity::update);
-        getEntitiesNM().forEach(Entity::update);
 
-        EverPhaseApi.getEverPhase().thePlayer.update();
+        EverPhaseApi.getUpdateables().forEach(IUpdateable::update);
 
         removeDeadEntities();
     }

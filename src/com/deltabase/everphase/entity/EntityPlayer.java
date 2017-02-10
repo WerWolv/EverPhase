@@ -50,7 +50,6 @@ public class EntityPlayer extends Entity{
     public void update() {
         super.update();
         this.boundingBox = new AABB(new Vector3f(position.x, position.y - PLAYER_HEIGHT, position.z), bbSize.mul(scale));
-
     }
 
     public void onXPEarned() {
