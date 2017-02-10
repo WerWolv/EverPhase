@@ -46,4 +46,21 @@ public abstract class Inventory {
         }
     }
 
+    public void addItemStackToInventory(ItemStack itemStack) {
+        for (Slot slot : inventorySlots) {
+            if (slot.getItemStack() == itemStack) {
+                for (; itemStack.getStackSize() > 0 && slot.getItemStack().getStackSize() < this.getMaxItemStackSize(); itemStack.setStackSize(itemStack.getStackSize() - 1)) {
+                    slot.getItemStack().setStackSize(slot.getItemStack().getStackSize() + 1);
+                }
+            }
+        }
+
+        for (Slot slot : inventorySlots) {
+            if (slot.getItemStack() == null && itemStack.getStackSize() > 0) {
+                slot.setItemStack(itemStack);
+                itemStack.setStackSize(0);
+            }
+        }
+    }
+
 }

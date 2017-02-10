@@ -94,7 +94,6 @@ public class RendererNormalMapping {
 
     private void prepare(Vector4f clipPlane, List<EntityLight> lights, EntityPlayer player) {
         shader.loadClipPlane(clipPlane);
-        //need to be public variables in MasterRenderer
         shader.loadSkyColor(RendererMaster.SKY_COLOR);
         Matrix4f viewMatrix = Maths.createViewMatrix(player);
 

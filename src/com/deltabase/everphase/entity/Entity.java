@@ -1,9 +1,10 @@
 package com.deltabase.everphase.entity;
 
+import com.deltabase.everphase.api.Capability;
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.IUpdateable;
 import com.deltabase.everphase.api.event.entity.EntityDeathEvent;
-import com.deltabase.everphase.capability.Capability;
+import com.deltabase.everphase.collision.AABB;
 import com.deltabase.everphase.damageSource.DamageSource;
 import com.deltabase.everphase.damageSource.DamageSourceMagic;
 import com.deltabase.everphase.engine.model.ModelTextured;
@@ -15,19 +16,25 @@ import org.joml.Vector3f;
 public class Entity implements IUpdateable {
 
     protected static final float GRAVITY = -60.0F;        //Gravity constance. Used for jumping in the moment
+    protected static final float PLAYER_HEIGHT = 0.0F;    //Height of the player to render the camera above the ground.
+
     public final Capability HEALTH = new Capability(100, 100);
     public final Capability ENERGY = new Capability(100, 100);
     public final Capability SPEED = new Capability(20, 20);
+
     protected Vector3f position;      //Position of the entity in the world
     protected float rotX, rotY, rotZ; //Rotation of the entity
-    private ModelTextured model;    //Model and texture of the entity
-    private float scale;            //Size of the entity
-    private boolean hasNormalMap;
-    private boolean isAlive = true;
-    private DamageSource damageSourceOnDeath = new DamageSourceMagic();
-    private int textureIndex = 0;   //Address of the texture stored in memory
+    protected ModelTextured model;    //Model and texture of the entity
+    protected float scale;            //Size of the entity
+    protected boolean hasNormalMap;
+    protected boolean isAlive = true;
+    protected DamageSource damageSourceOnDeath = new DamageSourceMagic();
+    protected int textureIndex = 0;   //Address of the texture stored in memory
 
-    public Entity(String modelPath, String texturePath, Vector3f rotation, float scale, boolean hasNormalMap) {
+    protected AABB boundingBox;
+    protected Vector3f bbSize;
+
+    public Entity(String modelPath, String texturePath, Vector3f rotation, float scale, Vector3f bbSize, boolean hasNormalMap) {
         if (!(modelPath.equals("") || texturePath.equals(""))) {
             if (hasNormalMap)
                 this.model = new ModelTextured(NormalMappedObjLoader.loadOBJ(modelPath), new TextureModel(EverPhaseApi.RESOURCE_LOADER.loadTexture(texturePath)));
@@ -36,6 +43,8 @@ public class Entity implements IUpdateable {
         }
 
         this.position = new Vector3f(0, 0, 0);
+        this.boundingBox = new AABB(position, bbSize.mul(scale));
+        this.bbSize = bbSize.mul(scale);
         this.rotX = rotation.x;
         this.rotY = rotation.y;
         this.rotZ = rotation.z;
@@ -43,7 +52,7 @@ public class Entity implements IUpdateable {
         this.hasNormalMap = hasNormalMap;
     }
 
-    public Entity(String modelPath, String texturePath, int index, Vector3f rotation, float scale, boolean hasNormalMap) {
+    public Entity(String modelPath, String texturePath, int index, Vector3f rotation, float scale, Vector3f bbSize, boolean hasNormalMap) {
         this.textureIndex = index;
         if (!(modelPath.equals("") || texturePath.equals(""))) {
             if (hasNormalMap)
@@ -52,6 +61,8 @@ public class Entity implements IUpdateable {
                 this.model = new ModelTextured(EverPhaseApi.RESOURCE_LOADER.loadToVAO(OBJModelLoader.loadOBJ(modelPath)), new TextureModel(EverPhaseApi.RESOURCE_LOADER.loadTexture(texturePath)));
         }
         this.position = new Vector3f(0, 0, 0);
+        this.boundingBox = new AABB(position, bbSize.mul(scale));
+        this.bbSize = bbSize.mul(scale);
         this.rotX = rotation.x;
         this.rotY = rotation.y;
         this.rotZ = rotation.z;
@@ -59,8 +70,10 @@ public class Entity implements IUpdateable {
         this.hasNormalMap = hasNormalMap;
     }
 
-    public Entity(float rotation, float scale) {
+    public Entity(float rotation, float scale, Vector3f bbSize) {
         this.position = new Vector3f(0, 0, 0);
+        this.boundingBox = new AABB(position, bbSize.mul(scale));
+        this.bbSize = bbSize.mul(scale);
         this.rotX = rotation;
         this.rotY = rotation;
         this.rotZ = rotation;
@@ -72,6 +85,9 @@ public class Entity implements IUpdateable {
     @Override
     public void update() {
         if (HEALTH.getValue() <= 0) this.setDead();
+
+        this.boundingBox = new AABB(new Vector3f(position).sub(0.0F, PLAYER_HEIGHT, 0.0F), bbSize);
+
     }
 
     /**
@@ -206,4 +222,10 @@ public class Entity implements IUpdateable {
 
         this.HEALTH.setValue(this.HEALTH.getValue() - damage);
     }
+
+    public AABB getBoundingBox() {
+        return boundingBox;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.deltabase.everphase.api;
 
 import com.deltabase.everphase.achievement.Achievement;
+import com.deltabase.everphase.api.crafting.CraftingRecipe;
 import com.deltabase.everphase.api.event.EventBus;
 import com.deltabase.everphase.api.event.advance.AchievementGetEvent;
 import com.deltabase.everphase.engine.modelloader.ResourceLoader;
@@ -8,14 +9,14 @@ import com.deltabase.everphase.engine.render.*;
 import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.gui.Gui;
+import com.deltabase.everphase.gui.inventory.GuiInventory;
+import com.deltabase.everphase.inventory.Inventory;
 import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.main.Main;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class EverPhaseApi {
@@ -30,17 +31,72 @@ public class EverPhaseApi {
         return INSTANCE;
     }
 
-    public static class GuiUtils {
-        private static List<Gui> registeredGuis = new ArrayList<>();
+    public static class CraftingApi {
+        private static List<CraftingRecipe> registeredShapedRecipes = new ArrayList<>();
+        private static List<CraftingRecipe> registeredShapelessRecipes = new ArrayList<>();
 
-        public static void registerGui(Gui gui) {
-            if (!registeredGuis.contains(gui))
-                registeredGuis.add(gui);
+        public static void addShapelessCraftingRecipe(CraftingRecipe recipe) {
+            registeredShapelessRecipes.add(recipe);
         }
 
-        public static List<Gui> getRegisteredGuis() {
+        private static void addCraftingRecipe(CraftingRecipe recipe) {
+            registeredShapedRecipes.add(recipe);
+        }
+
+    }
+
+    public static class GuiUtils {
+        private static Map<Integer, Gui> registeredGuis = new HashMap<>();
+        private static List<Gui> registeredHuds = new ArrayList<>();
+
+        public static void registerGui(Gui gui, int id) {
+            if (!registeredGuis.keySet().contains(id))
+                registeredGuis.put(id, gui);
+
+            Log.i("GUI", "Gui:" + gui.toString() + " ID:" + id);
+        }
+
+
+        public static Map<Integer, Gui> getRegisteredGuis() {
             return registeredGuis;
         }
+
+        public static List<Gui> getRegisteredHuds() {
+            return registeredHuds;
+        }
+
+        public static void displayGuiScreen(int guiID) {
+            Gui gui = getRegisteredGuis().get(guiID);
+
+            if (gui instanceof GuiInventory)
+                Log.wtf("GUI", "Gui is an instance of GuiInventory. Are you sure you did not want to pass the Inventory?");
+
+            if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null)
+                EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(gui);
+            else EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(null);
+
+            Log.i("GUI", getRegisteredGuis().get(guiID).toString());
+        }
+
+        public static void displayGuiScreen(int guiID, Inventory inventory) {
+            Gui gui = getRegisteredGuis().get(guiID);
+
+            if (!(gui instanceof GuiInventory)) {
+                Log.wtf("GUI", "Gui is not an instance of GuiInventory!");
+                return;
+            }
+
+            if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null) {
+                GuiInventory guiInventory = (GuiInventory) gui;
+                guiInventory.setInventory(inventory);
+                EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(guiInventory);
+            } else EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(null);
+        }
+
+        public static void registerHUD(Gui gui) {
+            registeredHuds.add(gui);
+        }
+
     }
 
     public static class RendererUtils {

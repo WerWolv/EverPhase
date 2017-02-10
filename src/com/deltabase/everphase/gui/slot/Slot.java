@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class Slot {
 
-    public static final float SLOT_SIZE = 0.07F;
+    public static final float SLOT_SIZE = 0.06F;
 
     private Inventory inventory;
     private Vector2f position;

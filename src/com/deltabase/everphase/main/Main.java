@@ -2,6 +2,7 @@ package com.deltabase.everphase.main;
 
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.Log;
+import com.deltabase.everphase.api.localization.LocalizationUtil;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
@@ -171,12 +172,12 @@ public class Main {
     private static void run() {
         init();
 
+        LocalizationUtil.loadFiles("lang");
+
         EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(0, 0, 0));
 
         EverPhaseApi.getEverPhase().theLevel = new LevelOverworld();
-
         EverPhaseApi.getEverPhase().theLevel.initLevel();
-
         EverPhaseApi.getEverPhase().theLevel.applyPostProcessingEffects();
 
         while(true) {

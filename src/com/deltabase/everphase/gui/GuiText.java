@@ -1,5 +1,6 @@
 package com.deltabase.everphase.gui;
 
+import com.deltabase.everphase.api.localization.LocalizationUtil;
 import com.deltabase.everphase.engine.font.FontType;
 import com.deltabase.everphase.engine.font.effects.FontEffect;
 import com.deltabase.everphase.engine.toolbox.TextRenderingHelper;
@@ -32,10 +33,10 @@ public class GuiText extends Gui{
 	/**
 	 * Creates a new text, loads the text's quads into a VAO, and adds the text
 	 * to the screen.
-	 * 
-	 * @param text
-	 *            - the text.
-	 * @param fontSize
+	 *
+     * @param unlocalizedText
+     *            - the unlocalized text.
+     * @param fontSize
 	 *            - the fontProductSans size of the text, where a fontProductSans size of 1 is the
 	 *            default size.
 	 * @param font
@@ -54,9 +55,9 @@ public class GuiText extends Gui{
 	 * @param centered
 	 *            - whether the text should be centered or not.
 	 */
-	public GuiText(String text, float fontSize, FontType font, FontEffect effect, Vector2f position, float maxLineLength, boolean centered) {
-		this.textString = text;
-		this.fontSize = fontSize;
+    public GuiText(String unlocalizedText, float fontSize, FontType font, FontEffect effect, Vector2f position, float maxLineLength, boolean centered) {
+        this.textString = LocalizationUtil.getLocalizedString(unlocalizedText);
+        this.fontSize = fontSize;
 		this.font = font;
 		this.effect = effect;
 		this.position = position;

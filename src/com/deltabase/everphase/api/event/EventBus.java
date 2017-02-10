@@ -12,8 +12,8 @@ import java.util.Stack;
 
 public class EventBus {
 
-    private Stack<Event> eventStack = new Stack<>();
-    private List<Class<?>> eventHandlers = new ArrayList<>();
+    private static Stack<Event> eventStack = new Stack<>();
+    private static List<Class<?>> eventHandlers = new ArrayList<>();
 
     public void registerEventHandlers() {
         Reflections reflections = new Reflections("");

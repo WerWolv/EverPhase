@@ -7,7 +7,9 @@ import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
 import com.deltabase.everphase.callback.CursorPositionCallback;
 import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
+import com.deltabase.everphase.collision.AABB;
 import com.deltabase.everphase.gui.Gui;
+import com.deltabase.everphase.inventory.InventoryPlayer;
 import com.deltabase.everphase.item.ItemStack;
 import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.skill.Skill;
@@ -21,7 +23,9 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class EntityPlayer extends Entity{
 
-    private static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
+    protected static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
+
+    private InventoryPlayer inventoryPlayer = new InventoryPlayer(28, 99);
 
     private int selectedItemIndex = 0;
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
@@ -39,11 +43,13 @@ public class EntityPlayer extends Entity{
     private List<Skill> skills = new ArrayList<>();
 
     public EntityPlayer(Vector3f rotation, float scale) {
-        super("", "", rotation, scale, false);
+        super("", "", rotation, scale, new Vector3f(2.5F, 2.5F, 2.5F), false);
     }
 
     @Override
     public void update() {
+        super.update();
+        this.boundingBox = new AABB(new Vector3f(position.x, position.y - PLAYER_HEIGHT, position.z), bbSize.mul(scale));
 
     }
 
@@ -57,37 +63,41 @@ public class EntityPlayer extends Entity{
     }
 
     public void onMove(Terrain terrain) {
-        speedX = speedZ = 0;    //Reset the speed of the player
+
+        speedX = speedZ = 0.0F;
 
         speedY += canFly ? -speedY : GRAVITY * Main.getFrameTimeSeconds();      //Add gravity to the player to keep it on the ground
 
         //Keybindings to move the player in different directions based of the pressed buttons and the direction of the camera
-        if (KeyCallback.isKeyPressed(GLFW_KEY_W)) {
-            speedX += SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
-            speedZ -= SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
-        }
-        if (KeyCallback.isKeyPressed(GLFW_KEY_S)) {
-            speedX -= SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
-            speedZ += SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
-        }
-        if (KeyCallback.isKeyPressed(GLFW_KEY_A)) {
-            speedX -= SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
-            speedZ -= SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
-        }
-        if (KeyCallback.isKeyPressed(GLFW_KEY_D)) {
-            speedX += SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
-            speedZ += SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
-        }
-        if(canFly) {
-            if(KeyCallback.isKeyPressed(GLFW_KEY_SPACE))
-                speedY += 40F;
+        if (this.getCurrentGui() == null) {
+            if (KeyCallback.isKeyPressed(GLFW_KEY_W)) {
+                speedX += SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
+                speedZ -= SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
+            }
+            if (KeyCallback.isKeyPressed(GLFW_KEY_S)) {
+                speedX -= SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
+                speedZ += SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
+            }
+            if (KeyCallback.isKeyPressed(GLFW_KEY_A)) {
+                speedX -= SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
+                speedZ -= SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
+            }
+            if (KeyCallback.isKeyPressed(GLFW_KEY_D)) {
+                speedX += SPEED.getValue() * (float) Math.cos(Math.toRadians(getYaw()));
+                speedZ += SPEED.getValue() * (float) Math.sin(Math.toRadians(getYaw()));
+            }
 
-            if (KeyCallback.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
-                speedY -= 40F;
-        } else {
-            if (KeyCallback.isKeyPressed(GLFW_KEY_SPACE) && !isInAir) {
-                speedY += 30F;
-                isInAir = true;
+            if (canFly) {
+                if (KeyCallback.isKeyPressed(GLFW_KEY_SPACE))
+                    speedY += 40F;
+
+                if (KeyCallback.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
+                    speedY -= 40F;
+            } else {
+                if (KeyCallback.isKeyPressed(GLFW_KEY_SPACE) && !isInAir) {
+                    speedY += 30F;
+                    isInAir = true;
+                }
             }
         }
 
@@ -102,6 +112,8 @@ public class EntityPlayer extends Entity{
     }
 
     public void onInteract() {
+        if (this.getCurrentGui() != null) return;
+
         PlayerItemUseEvent.Action currAction = PlayerItemUseEvent.Action.NONE;
         if(MouseButtonCallback.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
             if(KeyCallback.isKeyPressed(GLFW_MOD_SHIFT)) currAction = PlayerItemUseEvent.Action.SHIFT_LEFT_CLICK;
@@ -118,12 +130,20 @@ public class EntityPlayer extends Entity{
 
     }
 
+    public void pickUpItem(Entity entityItem) {
+        /*EverPhaseApi.EVENT_BUS.postEvent(new ItemPickupEvent(entityItem));
+
+        this.inventoryPlayer.addItemStackToInventory(entityItem.getItemStack());*/
+        entityItem.setDead();
+    }
+
     /* Getters and Setters */
 
     public void addPosition(float x, float y, float z) {
         this.position.x += x * Main.getFrameTimeSeconds();
         this.position.y += y * Main.getFrameTimeSeconds();
         this.position.z += z * Main.getFrameTimeSeconds();
+
     }
 
     public float getPitch() {
@@ -188,5 +208,9 @@ public class EntityPlayer extends Entity{
 
     public void toggleFlight() {
         canFly = !canFly;
+    }
+
+    public InventoryPlayer getInventoryPlayer() {
+        return this.inventoryPlayer;
     }
 }

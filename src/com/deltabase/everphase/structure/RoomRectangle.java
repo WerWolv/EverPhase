@@ -31,27 +31,27 @@ public class RoomRectangle {
     }
 
     public void process(){
-        blocks.add(new Entity("labyrinth/floor", "models/labyrinth/floor", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x, this.y, this.z)));
+        blocks.add(new Entity("labyrinth/floor", "models/labyrinth/floor", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x, this.y, this.z)));
 
         if (north)
-            blocks.add(new Entity("labyrinth/door1", "models/labyrinth/door1", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x, this.y + 1, this.z + 8.5F)));
+            blocks.add(new Entity("labyrinth/door1", "models/labyrinth/door1", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x, this.y + 1, this.z + 8.5F)));
         else
-            blocks.add(new Entity("labyrinth/wall1", "models/labyrinth/wall1", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x, this.y + 1, this.z + 8.5F)));
+            blocks.add(new Entity("labyrinth/wall1", "models/labyrinth/wall1", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x, this.y + 1, this.z + 8.5F)));
 
         if (south)
-            blocks.add(new Entity("labyrinth/door1", "models/labyrinth/door1", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x, this.y + 1, this.z - 8.5F)));
+            blocks.add(new Entity("labyrinth/door1", "models/labyrinth/door1", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x, this.y + 1, this.z - 8.5F)));
         else
-            blocks.add(new Entity("labyrinth/wall1", "models/labyrinth/wall1", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x, this.y + 1, this.z - 8.5F)));
+            blocks.add(new Entity("labyrinth/wall1", "models/labyrinth/wall1", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x, this.y + 1, this.z - 8.5F)));
 
         if (west)
-            blocks.add(new Entity("labyrinth/door2", "models/labyrinth/door2", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x + 8.5F, this.y + 1, this.z)));
+            blocks.add(new Entity("labyrinth/door2", "models/labyrinth/door2", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x + 8.5F, this.y + 1, this.z)));
         else
-            blocks.add(new Entity("labyrinth/wall2", "models/labyrinth/wall2", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x + 8.5F, this.y + 1, this.z)));
+            blocks.add(new Entity("labyrinth/wall2", "models/labyrinth/wall2", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x + 8.5F, this.y + 1, this.z)));
 
         if (east)
-            blocks.add(new Entity("labyrinth/door2", "models/labyrinth/door2", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x - 8.5F, this.y + 1, this.z)));
+            blocks.add(new Entity("labyrinth/door2", "models/labyrinth/door2", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x - 8.5F, this.y + 1, this.z)));
         else
-            blocks.add(new Entity("labyrinth/wall2", "models/labyrinth/wall2", new Vector3f(0, 0, 0), 1F, false).setPosition(new Vector3f(this.x - 8.5F, this.y + 1, this.z)));
+            blocks.add(new Entity("labyrinth/wall2", "models/labyrinth/wall2", new Vector3f(0, 0, 0), 1F, new Vector3f(1.0F, 1.0F, 1.0F), false).setPosition(new Vector3f(this.x - 8.5F, this.y + 1, this.z)));
     }
 
     public void set_Doors(boolean north, boolean south, boolean west, boolean east){

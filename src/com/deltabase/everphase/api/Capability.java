@@ -1,4 +1,4 @@
-package com.deltabase.everphase.capability;
+package com.deltabase.everphase.api;
 
 public class Capability {
 

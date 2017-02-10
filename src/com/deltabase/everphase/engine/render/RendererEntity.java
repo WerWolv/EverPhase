@@ -3,10 +3,12 @@ package com.deltabase.everphase.engine.render;
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.engine.model.ModelRaw;
 import com.deltabase.everphase.engine.model.ModelTextured;
+import com.deltabase.everphase.engine.modelloader.OBJModelLoader;
 import com.deltabase.everphase.engine.resource.TextureModel;
 import com.deltabase.everphase.engine.shader.ShaderEntity;
 import com.deltabase.everphase.engine.toolbox.Maths;
 import com.deltabase.everphase.entity.Entity;
+import com.deltabase.everphase.main.Settings;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -19,6 +21,7 @@ import java.util.Map;
 public class RendererEntity {
 
     private ShaderEntity shader;
+    private ModelTextured boundingBoxModel;
 
     public RendererEntity() {
         this.shader = new ShaderEntity();
@@ -27,6 +30,8 @@ public class RendererEntity {
         shader.loadProjectionMatrix(EverPhaseApi.RendererUtils.PROJECTION_MATRIX);      //Load the projection matrix to the shader to add perspective
         shader.connectTextureUnits();
         shader.stop();                                      //Stop the shader rendering
+
+        boundingBoxModel = new ModelTextured(EverPhaseApi.RESOURCE_LOADER.loadToVAO(OBJModelLoader.loadOBJ("labyrinth/block")), new TextureModel(EverPhaseApi.RESOURCE_LOADER.loadTexture("models/labyrinth/floor")));
     }
 
     /*
@@ -45,6 +50,19 @@ public class RendererEntity {
             }
             unbindModels();                                 //Unbind all models
         }
+
+        if (!Settings.showBoundingBoxes) return;
+
+        prepareModels(boundingBoxModel);
+        for (List<Entity> e : entities.values()) {
+            for (Entity ent : e) {
+                Matrix4f transformationMatrix = Maths.createTransformationMatrix(ent.getBoundingBox().getCenter(), ent.getBoundingBox().getExtent());    //Create a fresh transformation matrix
+                shader.loadTransformationMatrix(transformationMatrix);  //Load the transformation matrix to the shader
+                shader.loadOffset(0, 0);  //Load the x and y offset of the texture on the texture atlas to the shader
+                GL11.glDrawElements(GL11.GL_TRIANGLES, boundingBoxModel.getModelRaw().getVertexCnt(), GL11.GL_UNSIGNED_INT, 0);
+            }
+        }
+        unbindModels();
     }
 
     /*

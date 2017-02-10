@@ -119,6 +119,17 @@ public class RendererGui {
         GL20.glEnableVertexAttribArray(0);                            //Enable the vertices buffer
     }
 
+    public void drawDefaultBackground() {
+        this.setDrawColor(new Vector4f(0.1F, 0.1F, 0.1F, -0.6F));
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, slotTexture);
+        shader.loadTransformationMatrix(Maths.createTransformationMatrix(new Vector2f(0.0F, 0.0F), new Vector2f(100F, 100F)));
+        shader.loadSize(0.0F, 0.0F, 1.0F, 1.0F);
+
+        GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt());
+        this.setDrawColor(new Vector4f(1.0F, 1.0F, 1.0F, 0.0F));
+    }
+
     public void setDrawColor(Vector4f color) {
         shader.loadOverlayColor(color);
     }

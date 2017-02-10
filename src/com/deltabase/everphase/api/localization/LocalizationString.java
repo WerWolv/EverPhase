@@ -1,4 +1,4 @@
-package com.deltabase.everphase.localization;
+package com.deltabase.everphase.api.localization;
 
 public class LocalizationString {
     private String localizationString, localizedString;

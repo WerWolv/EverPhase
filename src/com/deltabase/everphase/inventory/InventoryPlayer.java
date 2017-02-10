@@ -1,7 +1,10 @@
 package com.deltabase.everphase.inventory;
 
 import com.deltabase.everphase.gui.slot.Slot;
+import com.deltabase.everphase.main.Main;
 import org.joml.Vector2f;
+
+import java.util.List;
 
 public class InventoryPlayer extends Inventory {
 
@@ -13,9 +16,9 @@ public class InventoryPlayer extends Inventory {
         this.maxStackSize = maxStackSize;
 
 
-        this.addSlot(new Slot(this, new Vector2f(0.5F, 0.5F), 99));
-        this.addSlot(new Slot(this, new Vector2f(0.35F, 0.5F), 99));
-        this.addSlot(new Slot(this, new Vector2f(0.20F, 0.5F), 99));
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 9; j++)
+                this.addSlot(new Slot(this, new Vector2f(-0.924F + (0.13F) * i, 0.605F - (0.13F * Main.getAspectRatio()) * j), 99));
 
     }
 
@@ -27,6 +30,10 @@ public class InventoryPlayer extends Inventory {
     @Override
     public int getMaxItemStackSize() {
         return maxStackSize;
+    }
+
+    public List<Slot> getHotbarSlots() {
+        return this.getInventorySlots().subList(27, 35);
     }
 
     //TODO: Add functions!!

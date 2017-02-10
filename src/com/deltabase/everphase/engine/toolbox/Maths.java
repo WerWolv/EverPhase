@@ -24,6 +24,15 @@ public class Maths {
         return matrix;
     }
 
+    public static Matrix4f createTransformationMatrix(Vector3f translation, Vector3f scale) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.identity();
+        matrix.translate(translation);
+        matrix.scale(scale);
+
+        return matrix;
+    }
+
     public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
         Matrix4f matrix = new Matrix4f();
         matrix.identity();

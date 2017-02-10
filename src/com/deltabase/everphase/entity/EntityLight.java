@@ -9,12 +9,12 @@ public class EntityLight extends Entity {
 
 
     public EntityLight(Vector3f color) {
-        super(0.0F, 0.0F);
+        super(0.0F, 0.0F, new Vector3f(1.0F, 1.0F, 1.0F));
         this.color = color;
     }
 
     public EntityLight(Vector3f color, Vector3f attenuation) {
-        super(0.0F, 0.0F);
+        super(0.0F, 0.0F, new Vector3f(1.0F, 1.0F, 1.0F));
         this.color = color;
         this.attenuation = attenuation;
     }

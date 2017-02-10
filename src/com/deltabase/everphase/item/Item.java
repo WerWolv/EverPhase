@@ -6,14 +6,14 @@ import com.deltabase.everphase.entity.EntityPlayer;
 
 public class Item {
 
-    private String name;
+    private String unlocalizedName;
     private int itemID, metaData;
     private int textureID;
 
     private int maxStackSize;
 
-    public Item(String name, int itemID, int metaData, String texturePath) {
-        this.name = name;
+    public Item(int itemID, int metaData, String texturePath) {
+        this.unlocalizedName = "item.null.name";
         this.itemID = itemID;
         this.metaData = metaData;
         this.textureID = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture(texturePath).getTextureID();
@@ -32,12 +32,18 @@ public class Item {
         return this;
     }
 
+    public Item setUnlocalizedName(String unlocalizedName) {
+        this.unlocalizedName = unlocalizedName;
+
+        return this;
+    }
+
     public String getTooltipDescription() {
         return "Hello World";
     }
 
     public String getName() {
-        return name;
+        return unlocalizedName;
     }
 
     public int getItemID() {

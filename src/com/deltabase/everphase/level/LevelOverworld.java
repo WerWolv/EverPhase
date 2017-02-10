@@ -28,7 +28,7 @@ public class LevelOverworld extends Level {
 
     private Labyrinth labyrinth;
 
-    private Gui guiIngame, guiInventory;
+    private Gui guiIngame;
 
     private List<Gui> currentGui = new ArrayList<>();
 
@@ -39,8 +39,8 @@ public class LevelOverworld extends Level {
     @Override
     public void initLevel() {
         this.spawnEntity(entitySun, new Vector3f(1000, 1000, -1000));
-        entity = new Entity("dragon", "crate", new Vector3f(0, 60, 0), 1, false);
-        entityNm = new Entity("crate", "crate", new Vector3f(0, 60, 0), 0.03F, true);
+        entity = new Entity("dragon", "crate", new Vector3f(0, 60, 0), 1, new Vector3f(1.0F, 1.0F, 1.0F), false);
+        entityNm = new Entity("crate", "crate", new Vector3f(0, 60, 0), 0.03F, new Vector3f(1.0F, 1.0F, 1.0F), true);
         entity.getModel().getTexture().setReflectivity(1.0F);
         entity.getModel().getTexture().setShineDamper(3);
 
@@ -54,7 +54,7 @@ public class LevelOverworld extends Level {
         terrain = new Terrain(textureTerrainPack, "heightmap");
         this.addTerrain(terrain, 0, -1);
 
-        labyrinth = new Labyrinth(0, 0, 0, 3, 10);
+        //labyrinth = new Labyrinth(0, 0, 0, 3, 10);
 
 
         this.spawnEntity(entity, new Vector3f(10, 0, -10));
@@ -64,17 +64,18 @@ public class LevelOverworld extends Level {
         for (int i = 0; i < 127; i++) {
             int x = random.nextInt(250);
             int z = -random.nextInt(250);
-            this.spawnEntity(new Entity("pine", "pine", new Vector3f(0, 0, 0), 1, false), new Vector3f(x, this.getCurrTerrain().getHeightOfTerrain(x, z), z));
+            this.spawnEntity(new Entity("pine", "pine", new Vector3f(0, 0, 0), 1, new Vector3f(0.05F, 0.4F, 0.05F), false), new Vector3f(x, this.getCurrTerrain().getHeightOfTerrain(x, z), z));
         }
 
-        labyrinth.process();
-        this.spawnEntities(labyrinth.RenderLabyrinth());
+        //labyrinth.process();
+        //this.spawnEntities(labyrinth.RenderLabyrinth());
 
         this.addWaterPlane(new TileWater(this), new Vector3f(75.0F, 0.0F, -75.0F));
 
         guiIngame = new GuiIngame(EverPhaseApi.getEverPhase().thePlayer);
-        guiInventory = new GuiInventoryPlayer();
-        EverPhaseApi.GuiUtils.registerGui(guiIngame);
+        EverPhaseApi.GuiUtils.registerHUD(guiIngame);
+
+        EverPhaseApi.GuiUtils.registerGui(new GuiInventoryPlayer(), 0);
 
         currentGui.add(null);
 
@@ -85,6 +86,9 @@ public class LevelOverworld extends Level {
     public void updateLevel() {
         super.updateLevel();
 
+        for (Entity entity : getEntities())
+            if (entity.getBoundingBox().intersectsWith(EverPhaseApi.getEverPhase().thePlayer.getBoundingBox()))
+                ;//Do Something
     }
 
     @Override
@@ -104,17 +108,12 @@ public class LevelOverworld extends Level {
         super.handleInput();
 
         if (KeyCallback.isKeyPressedEdge(GLFW_KEY_E)) {
-            EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null ? guiInventory : null);
+            EverPhaseApi.GuiUtils.displayGuiScreen(0, EverPhaseApi.getEverPhase().thePlayer.getInventoryPlayer());
         }
 
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F)) {
             EverPhaseApi.getEverPhase().thePlayer.toggleFlight();
             EverPhaseApi.getEverPhase().thePlayer.HEALTH.setValue(EverPhaseApi.getEverPhase().thePlayer.HEALTH.getValue() - 10);
-        }
-
-        if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null) {
-            EverPhaseApi.getEverPhase().thePlayer.onMove(getCurrTerrain());
-            EverPhaseApi.getEverPhase().thePlayer.onInteract();
         }
     }
 

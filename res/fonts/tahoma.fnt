@@ -1,4 +1,4 @@
-info face="Tahoma" size=73 bold=0 italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1 padding=3,3,3,3 spacing=0,0
+info face="Tahoma" extent=73 bold=0 italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1 padding=3,3,3,3 spacing=0,0
 common lineHeight=95 base=73 scaleW=512 scaleH=512 pages=1 packed=0
 page id=0 file="tahoma.png"
 chars count=95

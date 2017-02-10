@@ -26,6 +26,7 @@ import java.util.List;
 import static org.lwjgl.glfw.GLFW.*;
 
 public abstract class Level {
+
     protected EntityLight entitySun = new EntityLight(new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> entitiesNM = new ArrayList<>();
@@ -46,6 +47,8 @@ public abstract class Level {
         ParticleHelper.update(EverPhaseApi.getEverPhase().thePlayer);
         getEntities().forEach(Entity::update);
         getEntitiesNM().forEach(Entity::update);
+
+        EverPhaseApi.getEverPhase().thePlayer.update();
 
         removeDeadEntities();
     }
@@ -70,7 +73,7 @@ public abstract class Level {
     }
 
     public void renderGUI() {
-        for (Gui gui : EverPhaseApi.GuiUtils.getRegisteredGuis())
+        for (Gui gui : EverPhaseApi.GuiUtils.getRegisteredHuds())
             EverPhaseApi.RendererUtils.RENDERER_GUI.render(gui);
 
         if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() != null) {
@@ -100,6 +103,13 @@ public abstract class Level {
             GLFW.glfwSetWindowShouldClose(Main.getWindow(), true);
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F2))
             ScreenShotHelper.takeScreenShot();
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_F3))
+            Settings.showBoundingBoxes = !Settings.showBoundingBoxes;
+
+
+        EverPhaseApi.getEverPhase().thePlayer.onMove(getCurrTerrain());
+        EverPhaseApi.getEverPhase().thePlayer.onInteract();
+
     }
 
     public void clean() {

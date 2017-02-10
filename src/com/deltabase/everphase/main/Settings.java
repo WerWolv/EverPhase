@@ -13,5 +13,6 @@ public class Settings {
     public static int mipmappingType = GL11.GL_NONE;
     public static int mipmappingLevel = 0;
     public static boolean debugMode = false;
+    public static boolean showBoundingBoxes = false;
 
 }

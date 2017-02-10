@@ -6,8 +6,9 @@ public class Log {
 
     public static void d(String tag, String msg) {
         if (!Settings.debugMode) return;
-        System.out.println("[" + tag + "] " + msg);
+        System.out.println("[DEBUG][" + tag + "] " + msg);
     }
+
 
     public static void i(String tag, String msg) {
         System.out.println("[" + tag + "] " + msg);

@@ -11,11 +11,7 @@ public abstract class GuiInventory extends Gui {
 
     private int inventorySize, maxStackSize;
 
-    public GuiInventory(Inventory inventory) {
-
-        this.inventorySize = inventory.getInventorySize();
-        this.maxStackSize = inventory.getMaxItemStackSize();
-        this.inventory = inventory;
+    public GuiInventory() {
 
     }
 
@@ -59,6 +55,18 @@ public abstract class GuiInventory extends Gui {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+        this.inventorySize = inventory.getInventorySize();
+        this.maxStackSize = inventory.getMaxItemStackSize();
+
+        this.addSlotsToInventory();
+    }
+
+    public void addSlotsToInventory() {
+
     }
 
 }

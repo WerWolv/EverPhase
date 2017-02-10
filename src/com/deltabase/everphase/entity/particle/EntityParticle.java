@@ -28,7 +28,7 @@ public class EntityParticle extends Entity {
     private Vector3f change = new Vector3f();
 
     public EntityParticle(TextureParticle texture, Vector3f velocity, float gravityEffect, float lifeLength, float rotation, float scale) {
-        super(rotation, scale);
+        super(rotation, scale, new Vector3f(1.0F, 1.0F, 1.0F));
         this.texture = texture;
         this.velocity = velocity;
         this.gravityEffect = gravityEffect;
