@@ -4,7 +4,7 @@ import com.deltabase.everphase.achievement.Achievement;
 import com.deltabase.everphase.api.crafting.CraftingRecipe;
 import com.deltabase.everphase.api.event.EventBus;
 import com.deltabase.everphase.api.event.advance.AchievementGetEvent;
-import com.deltabase.everphase.data.PlayerData;
+import com.deltabase.everphase.api.event.quest.QuestStartMissingDependenciesEvent;
 import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.render.*;
 import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
@@ -53,57 +53,63 @@ public class EverPhaseApi {
     }
 
     public static class QuestingApi {
-        private static Map<String, Quest> registeredQuests = new HashMap<>();
+        private static List<Quest> registeredQuests = new ArrayList<>();
 
-        public static void registerQuest(String questName, Quest quest) {
-            registeredQuests.put(questName, quest);
+        public static void registerQuest(Quest quest) {
+            registeredQuests.add(quest);
         }
 
-        public static boolean canPlayerStartQuest(String questName) {
-            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.containsValue(registeredQuests.get(questName).getDependencies());
+        public static Quest getQuestByName(String questName) {
+            for (Quest q : registeredQuests)
+                if (q.getQuestName().equals(questName))
+                    return q;
+
+            return null;
         }
 
-        public static boolean canPlayerFinishQuest(String questName) {
-            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.get(questName).getLeftOverQuestTasks().isEmpty();
-        }
+        public static void finishQuestTask(String questName, String questTaskName) {
+            Quest quest = getQuestByName(questName);
 
-        public static boolean isQuestFinished(String questName) {
-            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.containsKey(questName);
+            if (quest.getCurrentTask().getTaskName().equals(questTaskName))
+                quest.finishCurrentTask();
         }
 
         public static void startQuest(String questName) {
-            if (canPlayerStartQuest(questName)) {
-                Log.i("QuestApi", "Player cannot start quest because he's missing some dependencies.");
+            Iterator<Quest> iter = EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.iterator();
+
+            if (!EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.containsAll(getQuestByName(questName).getDependencies())) {
+                List<Quest> missingQuests = new ArrayList<>();
+                for (Quest quest : EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests) {
+                    if (getQuestByName(questName).getDependencies().contains(quest))
+                        missingQuests.add(quest);
+                }
+
+                EverPhaseApi.EVENT_BUS.postEvent(new QuestStartMissingDependenciesEvent(getQuestByName(questName), missingQuests));
                 return;
             }
 
-            PlayerData playerData = EverPhaseApi.getEverPhase().thePlayer.getPlayerData();
-            if (playerData.notStartedQuests.containsKey(questName)) {
-                Quest questToStart = playerData.notStartedQuests.get(questName);
-                playerData.notStartedQuests.remove(questName);
-                playerData.startedQuests.put(questName, questToStart);
+            while (iter.hasNext()) {
+                Quest quest = iter.next();
+
+                if (quest.getQuestName().equals(questName)) {
+                    iter.remove();
+                    EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.add(quest);
+                }
             }
         }
 
         public static void finishQuest(String questName) {
-            if (isQuestFinished(questName)) {
-                Log.i("QuestApi", "Player cannot finish quest because it's already finished ");
-                return;
-            }
+            Iterator<Quest> iter = EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.iterator();
 
-            if (canPlayerFinishQuest(questName)) {
-                Log.i("QuestApi", "Player cannot finish quest because not all of the tasks are finished");
-                return;
-            }
+            while (iter.hasNext()) {
+                Quest quest = iter.next();
 
-            PlayerData playerData = EverPhaseApi.getEverPhase().thePlayer.getPlayerData();
-            if (playerData.startedQuests.containsKey(questName)) {
-                Quest questToStart = playerData.startedQuests.get(questName);
-                playerData.startedQuests.remove(questName);
-                playerData.finishedQuests.put(questName, questToStart);
+                if (quest.getQuestName().equals(questName)) {
+                    iter.remove();
+                    EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.add(quest);
+                }
             }
         }
-
     }
 
     public static class CraftingApi {
@@ -128,7 +134,7 @@ public class EverPhaseApi {
             if (!registeredGuis.keySet().contains(id))
                 registeredGuis.put(id, gui);
 
-            Log.i("GUI", "Gui:" + gui.toString() + " ID:" + id);
+            Log.i("GUI", "Gui " + gui.toString() + " registered with the ID " + id);
         }
 
 
