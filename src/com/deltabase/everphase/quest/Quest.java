@@ -1,16 +1,18 @@
 package com.deltabase.everphase.quest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedTransferQueue;
 
-public abstract class Quest {
+public abstract class Quest implements Serializable {
 
     private String questDescription;
 
     private Queue<QuestTask> questTasks = new LinkedTransferQueue<>();
     private List<String> questTaskNames = new ArrayList<>();
+
     private Difficulty difficulty;
     private List<Quest> dependencies;
 
@@ -57,7 +59,6 @@ public abstract class Quest {
     public List<Quest> getDependencies() {
         return dependencies;
     }
-
     public Queue<QuestTask> getLeftOverQuestTasks() {
         return questTasks;
     }

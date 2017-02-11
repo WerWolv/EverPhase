@@ -2,7 +2,9 @@ package com.deltabase.everphase.quest;
 
 import org.joml.Vector3f;
 
-public class QuestTask {
+import java.io.Serializable;
+
+public class QuestTask implements Serializable {
 
     private String taskName = "";
     private String taskDescription = "";

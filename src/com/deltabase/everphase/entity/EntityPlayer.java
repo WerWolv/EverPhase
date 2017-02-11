@@ -21,23 +21,17 @@ import static org.lwjgl.glfw.GLFW.*;
 public class EntityPlayer extends Entity {
 
     protected static final float PLAYER_HEIGHT = 6.0F;    //Height of the player to render the camera above the ground.
-
+    private final PlayerData playerData = (PlayerData) new PlayerData().deserialize();
     private InventoryPlayer inventoryPlayer = new InventoryPlayer(28, 99);
-
     private int selectedItemIndex = 0;
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
     private boolean isInAir = false;                    //Is the player currently in the air?
     private boolean canFly = false;
-
     private float pitch;    //The horizontal angle of the camera
     private float yaw;      //The vertical angle of the camera
     private float roll;     //The longitudinal angle of the camera
-
     private Gui currentGui;
-
     private ItemStack heldItem;
-
-    private PlayerData playerData = new PlayerData();
 
     public EntityPlayer(Vector3f rotation, float scale) {
         super("", "", rotation, scale, new Vector3f(2.5F, 2.5F, 2.5F), false);
@@ -197,9 +191,5 @@ public class EntityPlayer extends Entity {
 
     public PlayerData getPlayerData() {
         return playerData;
-    }
-
-    public void setPlayerData(PlayerData playerData) {
-        this.playerData = playerData;
     }
 }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerData {
+public class PlayerData extends SDO {
 
     public List<Skill> skillLevels = new ArrayList<>();
 

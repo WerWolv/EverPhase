@@ -176,6 +176,8 @@ public class Main {
 
         LocalizationUtil.loadFiles("lang");
 
+        saveDataToFiles();
+
         EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(0, 0, 0));
 
         EverPhaseApi.getEverPhase().theLevel = new LevelOverworld();
@@ -202,6 +204,7 @@ public class Main {
             }
         }
 
+        saveDataToFiles();
 
         glfwSetWindowShouldClose(window, false);
         glfwDestroyWindow(window);
@@ -211,6 +214,9 @@ public class Main {
         cursorPosCallback.free();
     }
 
+    public static void saveDataToFiles() {
+        EverPhaseApi.getEverPhase().thePlayer.getPlayerData().serialize();
+    }
 
     public static long getWindow() {
         return window;

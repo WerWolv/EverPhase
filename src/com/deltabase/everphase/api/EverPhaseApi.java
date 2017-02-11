@@ -61,8 +61,7 @@ public class EverPhaseApi {
         }
 
         public static void addQuestsToPlayer() {
-            //TODO: Serialization stuff to read the Playerdata.
-            EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.putAll(registeredQuests);
+            registeredQuests.forEach((k, o) -> EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.putIfAbsent(k, o));
         }
 
         public static Quest getQuestByName(String questName) {
@@ -88,8 +87,7 @@ public class EverPhaseApi {
             }
 
             if (EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.get(questName).getCurrentTask().getTaskName().equals(questTaskName)) {
-                EverPhaseApi.EVENT_BUS.postEvent(new QuestTaskFinishedEvent(getQuestByName(questName), getQuestByName(questName).getCurrentTask()));
-                EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.get(questName).finishCurrentTask();
+                EverPhaseApi.EVENT_BUS.postEvent(new QuestTaskFinishedEvent(getQuestByName(questName), EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.get(questName).finishCurrentTask()));
             }
 
             if (EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.get(questName).getCurrentTask() == null) {
