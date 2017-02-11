@@ -1,22 +1,20 @@
 package com.deltabase.everphase.quest;
 
-import com.deltabase.everphase.api.EverPhaseApi;
-import com.deltabase.everphase.api.event.quest.QuestTaskFinishedEvent;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedTransferQueue;
 
 public abstract class Quest {
 
-    private String questName, questDescription;
+    private String questDescription;
 
     private Queue<QuestTask> questTasks = new LinkedTransferQueue<>();
+    private List<String> questTaskNames = new ArrayList<>();
     private Difficulty difficulty;
     private List<Quest> dependencies;
 
-    public Quest(String questName, Difficulty difficulty, List<Quest> dependencies) {
-        this.questName = questName;
+    public Quest(Difficulty difficulty, List<Quest> dependencies) {
         this.difficulty = difficulty;
         this.dependencies = dependencies;
 
@@ -25,16 +23,12 @@ public abstract class Quest {
 
     public abstract void addQuestTasks();
 
-    public void finishCurrentTask() {
-        EverPhaseApi.EVENT_BUS.postEvent(new QuestTaskFinishedEvent(this, questTasks.poll()));
+    public QuestTask finishCurrentTask() {
+        return questTasks.poll();
     }
 
     public Difficulty getDifficulty() {
         return difficulty;
-    }
-
-    public String getQuestName() {
-        return questName;
     }
 
     public String getQuestDescription() {
@@ -49,6 +43,11 @@ public abstract class Quest {
 
     public void addQuestTask(QuestTask questTask) {
         this.questTasks.add(questTask);
+        this.questTaskNames.add(questTask.getTaskName());
+    }
+
+    public boolean doesQuestHasTask(String taskName) {
+        return this.questTaskNames.contains(taskName);
     }
 
     public QuestTask getCurrentTask() {

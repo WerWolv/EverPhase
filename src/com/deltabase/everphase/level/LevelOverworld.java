@@ -81,7 +81,9 @@ public class LevelOverworld extends Level {
 
         TextRenderingHelper.initTextRendering();
 
-        EverPhaseApi.QuestingApi.registerQuest(new QuestTest());
+        EverPhaseApi.QuestingApi.registerQuest("test", new QuestTest());
+        EverPhaseApi.QuestingApi.addQuestsToPlayer();
+
         EverPhaseApi.QuestingApi.startQuest("test");
     }
 

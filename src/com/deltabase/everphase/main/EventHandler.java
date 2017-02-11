@@ -66,7 +66,7 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onQuestFinished(QuestFinishedEvent event) {
-        System.out.println(event.getQuest().getQuestName());
+        System.out.println("Finished");
     }
 
     @SubscribeEvent

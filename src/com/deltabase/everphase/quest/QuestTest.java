@@ -8,7 +8,7 @@ public class QuestTest extends Quest {
 
 
     public QuestTest() {
-        super("test", Difficulty.GRANDMASTER, new ArrayList<>());
+        super(Difficulty.GRANDMASTER, new ArrayList<>());
     }
 
     @Override
