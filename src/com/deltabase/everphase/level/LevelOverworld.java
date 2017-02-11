@@ -22,19 +22,13 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class LevelOverworld extends Level {
 
+    private static int GUI_INVENTORY_ID;
     private Entity entity, entityNm;
     private TextureTerrainPack textureTerrainPack;
     private Terrain terrain;
-
     private Labyrinth labyrinth;
-
     private Gui guiIngame;
-
     private List<Gui> currentGui = new ArrayList<>();
-
-    public LevelOverworld() {
-
-    }
 
     @Override
     public void initLevel() {
@@ -75,7 +69,7 @@ public class LevelOverworld extends Level {
         guiIngame = new GuiIngame(EverPhaseApi.getEverPhase().thePlayer);
         EverPhaseApi.GuiUtils.registerHUD(guiIngame);
 
-        EverPhaseApi.GuiUtils.registerGui(new GuiInventoryPlayer(), 0);
+        GUI_INVENTORY_ID = EverPhaseApi.GuiUtils.registerGui(new GuiInventoryPlayer());
 
         currentGui.add(null);
 
@@ -113,7 +107,7 @@ public class LevelOverworld extends Level {
         super.handleInput();
 
         if (KeyCallback.isKeyPressedEdge(GLFW_KEY_E)) {
-            EverPhaseApi.GuiUtils.displayGuiScreen(0, EverPhaseApi.getEverPhase().thePlayer.getInventoryPlayer());
+            EverPhaseApi.GuiUtils.displayGuiScreen(GUI_INVENTORY_ID);
         }
 
         if(KeyCallback.isKeyPressedEdge(GLFW_KEY_F)) {

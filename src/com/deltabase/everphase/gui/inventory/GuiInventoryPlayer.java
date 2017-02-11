@@ -12,12 +12,11 @@ public class GuiInventoryPlayer extends GuiInventory {
     private TextureGui textureInventory = EverPhaseApi.RESOURCE_LOADER.loadGuiTexture("gui/guiInventory");
 
     public GuiInventoryPlayer() {
-
+        super(EverPhaseApi.getEverPhase().thePlayer.getInventoryPlayer());
     }
 
     @Override
     public void addSlotsToInventory() {
-        super.addSlotsToInventory();
 
         this.setItemStackInSlot(new ItemStack(Items.itemTest, 1), 0);
         this.setItemStackInSlot(new ItemStack(Items.itemTest2, 1), 1);

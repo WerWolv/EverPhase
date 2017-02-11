@@ -12,7 +12,6 @@ import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.gui.inventory.GuiInventory;
-import com.deltabase.everphase.inventory.Inventory;
 import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.quest.Quest;
@@ -33,17 +32,35 @@ public class EverPhaseApi {
     public EntityPlayer thePlayer;
     public Level theLevel;
 
+    /**
+     * Gets an instance of the Api class to access some deeper objects
+     *
+     * @return the instance of this class
+     */
     public static EverPhaseApi getEverPhase() {
         return INSTANCE;
     }
 
+    /**
+     * Gets the list of all updateable objects. These are all objects that implement the
+     *
+     * @return the list of all updateable objects
+     * @link IUpdateable interface and call the @link IUpdateable.setUpdatable method in the
+     * constructor.
+     */
     public static List<IUpdateable> getUpdateables() {
         return updateables;
     }
 
+    /**
+     * Sets up everything in order to use the Api properly. This class should only be
+     * called once at the startup of the Game.
+     *
+     * @throws InstantiationError if the method gets called a second time
+     */
     public void initApi() {
         if (hasBeenInitialized)
-            throw new IllegalAccessError("The API can only be initialized once!");
+            throw new InstantiationError("The API can only be initialized once!");
 
         hasBeenInitialized = true;
 
@@ -53,30 +70,60 @@ public class EverPhaseApi {
 
     }
 
+    /**
+     * The QuestingApi. In there are all methods used to add and manage Quests.
+     */
     public static class QuestingApi {
         private static Map<String, Quest> registeredQuests = new HashMap<>();
 
+        /**
+         * Adds a new quest to the game.
+         * @param questName the name of the quest. This is an identifier so please use a constant String for this
+         * @param quest the instance of the quest to be registered
+         */
         public static void registerQuest(String questName, Quest quest) {
             registeredQuests.put(questName, quest);
         }
 
+        /**
+         * If a new quest was added to the game and the player doesn't have it in his list already, it adds them.
+         */
         public static void addQuestsToPlayer() {
             registeredQuests.forEach((k, o) -> EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.putIfAbsent(k, o));
         }
 
+        /**
+         * Gets a quest by its name
+         * @param questName the name of the quest
+         * @return the quest object associated with this name
+         */
         public static Quest getQuestByName(String questName) {
             return registeredQuests.get(questName);
         }
 
+        /**
+         * Checks if the quest specified by the quest name was started by the player
+         * @param questName the name of the quest
+         * @return true if the quest was started
+         */
         public static boolean isQuestStarted(String questName) {
             return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.containsKey(questName);
         }
 
+        /**
+         * Checks if the quest specified by the quest name was finished by the player
+         * @param questName the name of the quest
+         * @return true if the quest was finished
+         */
         public static boolean isQuestFinished(String questName) {
             return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.containsKey(questName);
         }
 
-        //TODO: Not working properly
+        /**
+         * Finishes the passed quest task if the quest task name maches the name of the current quest task.
+         * @param questName the name of the quest.
+         * @param questTaskName the name of the quest task.
+         */
         public static void finishQuestTask(String questName, String questTaskName) {
             if (!EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.containsKey(questName))
                 return;
@@ -97,7 +144,10 @@ public class EverPhaseApi {
             }
         }
 
-        //TODO: Not working properly
+        /**
+         * Starts the passed quest if it wasn't started already.
+         * @param questName the quest to start
+         */
         public static void startQuest(String questName) {
 
             if (EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.containsKey(questName) ||
@@ -119,7 +169,10 @@ public class EverPhaseApi {
             EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.put(questName, EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.remove(questName));
         }
 
-        //TODO: Not working properly
+        /**
+         * Finishes the passed quest if it wasn't finished already.
+         * @param questName the quest to finish
+         */
         public static void finishQuest(String questName) {
             if (!EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.containsKey(questName)) {
                 Log.i("QuestingApi", "Cannot finish quest because it is already finished or not yet started");
@@ -130,45 +183,92 @@ public class EverPhaseApi {
         }
     }
 
+    /**
+     * The CraftingApi. In there are all methods used to add and manage crafting recipes.
+     */
     public static class CraftingApi {
         private static List<CraftingRecipe> registeredShapedRecipes = new ArrayList<>();
         private static List<CraftingRecipe> registeredShapelessRecipes = new ArrayList<>();
 
+        /**
+         * Adds a new recipe that doesn't have a layout specified. This means all the items in the recipe can
+         * be placed in any order in the crafting interface.
+         * @param recipe the recipe to add
+         */
         public static void addShapelessCraftingRecipe(CraftingRecipe recipe) {
             registeredShapelessRecipes.add(recipe);
         }
 
+        /**
+         * Adds a new recipe that has a layout specified.
+         * @param recipe the recipe to add
+         */
         private static void addCraftingRecipe(CraftingRecipe recipe) {
             registeredShapedRecipes.add(recipe);
         }
 
     }
 
+    /**
+     * The GuiApi. In there are all methods used to add and manage GUIs
+     */
     public static class GuiUtils {
         private static Map<Integer, Gui> registeredGuis = new HashMap<>();
         private static List<Gui> registeredHuds = new ArrayList<>();
 
-        public static void registerGui(Gui gui, int id) {
-            if (!registeredGuis.keySet().contains(id))
-                registeredGuis.put(id, gui);
+        /**
+         * Registers a new GUI to the game. From now on the GUIs get accessed by the id.
+         *
+         * @param gui the GUI to register
+         * @return the id of the GUI under which it got registered
+         */
+        public static int registerGui(Gui gui) {
+            registeredGuis.put(registeredGuis.size(), gui);
 
-            Log.i("GuiApi", gui.getClass().getSimpleName() + " was registered under the ID #" + id);
+            Log.i("GuiApi", gui.getClass().getSimpleName() + " was registered under the ID #" + (registeredGuis.size() - 1));
+
+            return registeredGuis.size() - 1;
         }
 
+        /**
+         * Registers a GUI as a HUD. It cannot be called by displayGuiScreen as it will always be displayed.
+         *
+         * @param hud the hud to register
+         */
+        public static void registerHUD(Gui hud) {
+            registeredHuds.add(hud);
+        }
 
+        /**
+         * Gets all GUIs that were registered previously
+         * @return the registered GUIs
+         */
         public static Map<Integer, Gui> getRegisteredGuis() {
             return registeredGuis;
         }
 
+        /**
+         * Gets all HUDs that were registered previously
+         * @return the registered HUDs
+         */
         public static List<Gui> getRegisteredHuds() {
             return registeredHuds;
         }
 
+        /**
+         * Displays a GUI screen if one isn't open already. Otherwise it closes the current one
+         * @param guiID the GUI ID of the GUI to open
+         */
         public static void displayGuiScreen(int guiID) {
             Gui gui = getRegisteredGuis().get(guiID);
 
-            if (gui instanceof GuiInventory)
-                Log.wtf("GuiApi", "Gui is an instance of GuiInventory. Are you sure you did not want to pass the Inventory?");
+            if (gui instanceof GuiInventory) {
+                GuiInventory guiInventory = (GuiInventory) gui;
+                if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null)
+                    EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(guiInventory);
+                else EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(null);
+                return;
+            }
 
             if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null)
                 EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(gui);
@@ -176,28 +276,11 @@ public class EverPhaseApi {
 
             Log.i("GuiApi", getRegisteredGuis().get(guiID).toString());
         }
-
-        public static void displayGuiScreen(int guiID, Inventory inventory) {
-            Gui gui = getRegisteredGuis().get(guiID);
-
-            if (!(gui instanceof GuiInventory)) {
-                Log.wtf("GuiApi", "Gui is not an instance of GuiInventory!");
-                return;
-            }
-
-            if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null) {
-                GuiInventory guiInventory = (GuiInventory) gui;
-                guiInventory.setInventory(inventory);
-                EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(guiInventory);
-            } else EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(null);
-        }
-
-        public static void registerHUD(Gui gui) {
-            registeredHuds.add(gui);
-        }
-
     }
 
+    /**
+     * The RendererUtils. In there are all constants and methods associated with rendering
+     */
     public static class RendererUtils {
         public static final float FOV = 70.0F;                //The field of view
         public static final float NEAR_PLANE = 0.01F;       //The plane to start rendering
@@ -215,6 +298,10 @@ public class EverPhaseApi {
         public static RendererShadowMapMaster RENDERER_SHADOW_MAP;
         public static RendererParticle RENDERER_PARTICLE;
 
+        /**
+         * Creates a new projection matrix
+         * @return the newly created projection matrix
+         */
         public static Matrix4f createProjectionMatrix() {
             Matrix4f projectionMatrix = new Matrix4f();
             float aspectRatio = Main.getAspectRatio();
@@ -232,6 +319,9 @@ public class EverPhaseApi {
             return projectionMatrix;
         }
 
+        /**
+         * Initializes all renderers
+         */
         public static void initRenderers() {
             PROJECTION_MATRIX = createProjectionMatrix();
 
@@ -247,6 +337,9 @@ public class EverPhaseApi {
         }
     }
 
+    /**
+     * The AchievementApi. In there are all methods used to add and manage achievements.
+     */
     public static class AchievementApi {
 
         private static final double DISPLAY_TIME = 5.0D;
@@ -257,16 +350,25 @@ public class EverPhaseApi {
 
         private static double achievementDisplayTicker = 0;
 
+        /**
+         * Adds a new achievement to the Game
+         * @param achievement the achievement to add
+         */
         public static void addAchievement(Achievement achievement) {
             achievement.setAchievementId(listAchievement.size());
             listAchievement.add(achievement);
         }
 
-        public static void unlockAchievement(EntityPlayer player, Achievement achievement) {
+        /**
+         * Unlocks the passed achievement
+         *
+         * @param achievement the achievement to unlock
+         */
+        public static void unlockAchievement(Achievement achievement) {
             for (Achievement ach : listAchievement) {
                 if (ach.getAchievementId() == achievement.getAchievementId()) {
                     if (!ach.isAchievementUnlocked()) {
-                        EVENT_BUS.postEvent(new AchievementGetEvent(player, achievement));
+                        EVENT_BUS.postEvent(new AchievementGetEvent(getEverPhase().thePlayer, achievement));
                         ach.unlockAchievement();
                         listAchievement.set(listAchievement.indexOf(ach), ach);
                         achievementDisplayTicker = DISPLAY_TIME;
@@ -276,6 +378,10 @@ public class EverPhaseApi {
             }
         }
 
+        /**
+         * Checks wether an achievement is currently displayed.
+         * @return true if an achievement gets displayed
+         */
         public static boolean isAchievementBeingDisplayed() {
             if (achievementDisplayTicker > 0) {
                 achievementDisplayTicker -= Main.getFrameTimeSeconds();
@@ -286,14 +392,27 @@ public class EverPhaseApi {
             return false;
         }
 
+        /**
+         * Gets the progress of the current achievement display animation
+         * @return the progress in percent
+         */
         public static double getAchievementPlayProgress() {
             return (achievementDisplayTicker / DISPLAY_TIME) * 100;
         }
 
+        /**
+         * Gets the achievement that is currently getting processed and displayed
+         * @return the currently processed achievement
+         */
         public static Achievement getCurrentlyProcessedAchievement() {
             return currProcessedAchievement;
         }
 
+        /**
+         * Checks wether the passed achievement is already unlocked
+         * @param achievement the achievement to check upon
+         * @return if it is unlocked
+         */
         public boolean hasAchievementBeenUnlocked(Achievement achievement) {
             for (Achievement ach : listAchievement)
                 if (ach.getAchievementId() == achievement.getAchievementId())
