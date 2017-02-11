@@ -61,7 +61,7 @@ public class EverPhaseApi {
         }
 
         public static void addQuestsToPlayer() {
-            //TODO: Serialization stuff to read the Playerdata
+            //TODO: Serialization stuff to read the Playerdata.
             EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.putAll(registeredQuests);
         }
 
