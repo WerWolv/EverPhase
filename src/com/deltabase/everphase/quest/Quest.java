@@ -1,7 +1,6 @@
 package com.deltabase.everphase.quest;
 
 import com.deltabase.everphase.api.EverPhaseApi;
-import com.deltabase.everphase.api.event.quest.QuestFinishedEvent;
 import com.deltabase.everphase.api.event.quest.QuestTaskFinishedEvent;
 
 import java.util.List;
@@ -16,7 +15,8 @@ public abstract class Quest {
     private Difficulty difficulty;
     private List<Quest> dependencies;
 
-    public Quest(Difficulty difficulty, List<Quest> dependencies) {
+    public Quest(String questName, Difficulty difficulty, List<Quest> dependencies) {
+        this.questName = questName;
         this.difficulty = difficulty;
         this.dependencies = dependencies;
 
@@ -26,13 +26,6 @@ public abstract class Quest {
     public abstract void addQuestTasks();
 
     public void finishCurrentTask() {
-
-        if (questTasks.isEmpty()) {
-            EverPhaseApi.EVENT_BUS.postEvent(new QuestFinishedEvent(this));
-            EverPhaseApi.QuestingApi.finishQuest(this.getQuestName());
-            return;
-        }
-
         EverPhaseApi.EVENT_BUS.postEvent(new QuestTaskFinishedEvent(this, questTasks.poll()));
     }
 
@@ -46,6 +39,16 @@ public abstract class Quest {
 
     public String getQuestDescription() {
         return questDescription;
+    }
+
+    public Quest setQuestDescription(String questDescription) {
+        this.questDescription = questDescription;
+
+        return this;
+    }
+
+    public void addQuestTask(QuestTask questTask) {
+        this.questTasks.add(questTask);
     }
 
     public QuestTask getCurrentTask() {

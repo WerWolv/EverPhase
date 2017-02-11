@@ -8,6 +8,7 @@ import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.gui.GuiIngame;
 import com.deltabase.everphase.gui.inventory.GuiInventoryPlayer;
+import com.deltabase.everphase.quest.QuestTest;
 import com.deltabase.everphase.structure.Labyrinth;
 import com.deltabase.everphase.terrain.Terrain;
 import com.deltabase.everphase.terrain.TileWater;
@@ -17,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_F;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class LevelOverworld extends Level {
 
@@ -80,6 +80,9 @@ public class LevelOverworld extends Level {
         currentGui.add(null);
 
         TextRenderingHelper.initTextRendering();
+
+        EverPhaseApi.QuestingApi.registerQuest(new QuestTest());
+        EverPhaseApi.QuestingApi.startQuest("test");
     }
 
     @Override
@@ -115,6 +118,21 @@ public class LevelOverworld extends Level {
             EverPhaseApi.getEverPhase().thePlayer.toggleFlight();
             EverPhaseApi.getEverPhase().thePlayer.HEALTH.setValue(EverPhaseApi.getEverPhase().thePlayer.HEALTH.getValue() - 10);
         }
+
+        if (KeyCallback.isKeyPressed(GLFW_KEY_1))
+            EverPhaseApi.QuestingApi.finishQuestTask("test", "test0");
+
+        if (KeyCallback.isKeyPressed(GLFW_KEY_2))
+            EverPhaseApi.QuestingApi.finishQuestTask("test", "test1");
+
+        if (KeyCallback.isKeyPressed(GLFW_KEY_3))
+            EverPhaseApi.QuestingApi.finishQuestTask("test", "test2");
+
+        if (KeyCallback.isKeyPressed(GLFW_KEY_4))
+            EverPhaseApi.QuestingApi.finishQuestTask("test", "test3");
+
+        if (KeyCallback.isKeyPressed(GLFW_KEY_8))
+            EverPhaseApi.QuestingApi.finishQuestTask("test", "test4");
     }
 
     public void clean() {

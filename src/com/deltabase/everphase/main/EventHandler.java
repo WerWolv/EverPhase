@@ -10,6 +10,8 @@ import com.deltabase.everphase.api.event.inventory.InventoryItemClickEvent;
 import com.deltabase.everphase.api.event.inventory.InventoryItemHoverEvent;
 import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
+import com.deltabase.everphase.api.event.quest.QuestFinishedEvent;
+import com.deltabase.everphase.api.event.quest.QuestTaskFinishedEvent;
 import com.deltabase.everphase.gui.inventory.GuiInventory;
 import com.deltabase.everphase.item.ItemStack;
 
@@ -60,5 +62,15 @@ public class EventHandler {
     @SubscribeEvent
     public void onAchievementGet(AchievementGetEvent event) {
         Log.i("ABC", event.getAchievement().getName());
+    }
+
+    @SubscribeEvent
+    public void onQuestFinished(QuestFinishedEvent event) {
+        System.out.println(event.getQuest().getQuestName());
+    }
+
+    @SubscribeEvent
+    public void onQuestTaskFinished(QuestTaskFinishedEvent event) {
+        System.out.println(event.getQuestTask().getTaskName());
     }
 }

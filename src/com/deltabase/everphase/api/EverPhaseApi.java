@@ -4,6 +4,7 @@ import com.deltabase.everphase.achievement.Achievement;
 import com.deltabase.everphase.api.crafting.CraftingRecipe;
 import com.deltabase.everphase.api.event.EventBus;
 import com.deltabase.everphase.api.event.advance.AchievementGetEvent;
+import com.deltabase.everphase.api.event.quest.QuestFinishedEvent;
 import com.deltabase.everphase.api.event.quest.QuestStartMissingDependenciesEvent;
 import com.deltabase.everphase.engine.modelloader.ResourceLoader;
 import com.deltabase.everphase.engine.render.*;
@@ -67,13 +68,37 @@ public class EverPhaseApi {
             return null;
         }
 
+        public static boolean isQuestStarted(String questName) {
+            for (Quest q : EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests)
+                return q.getQuestName().equals(questName);
+
+            return false;
+        }
+
+        public static boolean isQuestFinished(String questName) {
+            for (Quest q : EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests)
+                return q.getQuestName().equals(questName);
+
+            return false;
+        }
+
+        //TODO: Not working properly
         public static void finishQuestTask(String questName, String questTaskName) {
             Quest quest = getQuestByName(questName);
+
+            if (quest.getCurrentTask() == null) {
+                if (!isQuestFinished(questName)) {
+                    EverPhaseApi.EVENT_BUS.postEvent(new QuestFinishedEvent(getQuestByName(questName)));
+                    finishQuest(questName);
+                }
+                return;
+            }
 
             if (quest.getCurrentTask().getTaskName().equals(questTaskName))
                 quest.finishCurrentTask();
         }
 
+        //TODO: Not working properly
         public static void startQuest(String questName) {
             Iterator<Quest> iter = EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.iterator();
 
@@ -98,6 +123,7 @@ public class EverPhaseApi {
             }
         }
 
+        //TODO: Not working properly
         public static void finishQuest(String questName) {
             Iterator<Quest> iter = EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.iterator();
 
@@ -105,6 +131,7 @@ public class EverPhaseApi {
                 Quest quest = iter.next();
 
                 if (quest.getQuestName().equals(questName)) {
+                    System.out.println(quest.getQuestName());
                     iter.remove();
                     EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.add(quest);
                 }
@@ -134,7 +161,7 @@ public class EverPhaseApi {
             if (!registeredGuis.keySet().contains(id))
                 registeredGuis.put(id, gui);
 
-            Log.i("GUI", "Gui " + gui.toString() + " registered with the ID " + id);
+            Log.i("GuiApi", gui.getClass().getSimpleName() + " was registered under the ID #" + id);
         }
 
 
@@ -150,20 +177,20 @@ public class EverPhaseApi {
             Gui gui = getRegisteredGuis().get(guiID);
 
             if (gui instanceof GuiInventory)
-                Log.wtf("GUI", "Gui is an instance of GuiInventory. Are you sure you did not want to pass the Inventory?");
+                Log.wtf("GuiApi", "Gui is an instance of GuiInventory. Are you sure you did not want to pass the Inventory?");
 
             if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() == null)
                 EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(gui);
             else EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(null);
 
-            Log.i("GUI", getRegisteredGuis().get(guiID).toString());
+            Log.i("GuiApi", getRegisteredGuis().get(guiID).toString());
         }
 
         public static void displayGuiScreen(int guiID, Inventory inventory) {
             Gui gui = getRegisteredGuis().get(guiID);
 
             if (!(gui instanceof GuiInventory)) {
-                Log.wtf("GUI", "Gui is not an instance of GuiInventory!");
+                Log.wtf("GuiApi", "Gui is not an instance of GuiInventory!");
                 return;
             }
 
