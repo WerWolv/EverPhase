@@ -50,6 +50,20 @@ public abstract class Skill {
         return -1;
     }
 
+    public int getLevel() {
+        return currLevel;
+    }
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public int addXp(int xpAmount) {
+        this.currExperience += xpAmount;
+
+        return this.currExperience;
+    }
+
     public String getName() {
         return name;
     }

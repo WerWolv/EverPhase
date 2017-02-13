@@ -27,4 +27,11 @@ public class AABB {
     public Vector3f getExtent() {
         return extent;
     }
+
+    public enum Direction {
+        NORTH,
+        EAST,
+        SOUTH,
+        WEST
+    }
 }

@@ -215,7 +215,8 @@ public class Main {
     }
 
     public static void saveDataToFiles() {
-        EverPhaseApi.getEverPhase().thePlayer.getPlayerData().serialize();
+        if (!EverPhaseApi.getEverPhase().thePlayer.getPlayerData().doesFileExist())
+            EverPhaseApi.getEverPhase().thePlayer.getPlayerData().serialize();
     }
 
     public static long getWindow() {

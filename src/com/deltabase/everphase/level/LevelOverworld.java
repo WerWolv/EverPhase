@@ -75,7 +75,7 @@ public class LevelOverworld extends Level {
 
         TextRenderingHelper.initTextRendering();
 
-        EverPhaseApi.QuestingApi.registerQuest("test", new QuestTest());
+        EverPhaseApi.QuestingApi.registerQuest("test", new QuestTest().setQuestDescription("Hello"));
         EverPhaseApi.QuestingApi.addQuestsToPlayer();
 
         EverPhaseApi.QuestingApi.startQuest("test");
@@ -84,6 +84,8 @@ public class LevelOverworld extends Level {
     @Override
     public void updateLevel() {
         super.updateLevel();
+
+        System.out.println(EverPhaseApi.QuestingApi.getQuestByName("test").getQuestDescription());
 
         for (Entity entity : getEntities())
             if (entity.getBoundingBox().intersectsWith(EverPhaseApi.getEverPhase().thePlayer.getBoundingBox()))

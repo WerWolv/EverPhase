@@ -15,6 +15,8 @@ import com.deltabase.everphase.gui.inventory.GuiInventory;
 import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.quest.Quest;
+import com.deltabase.everphase.skill.ISkillRequirement;
+import com.deltabase.everphase.skill.Skill;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -70,6 +72,47 @@ public class EverPhaseApi {
 
     }
 
+    public static class SkillApi {
+        private static Map<String, Skill> registeredSkills = new HashMap<>();
+
+        public static void addSkillsToPlayer() {
+            for (String key : registeredSkills.keySet())
+                EverPhaseApi.getEverPhase().thePlayer.getPlayerData().skillLevels.putIfAbsent(key, registeredSkills.get(key));
+        }
+
+        public static void registerSkill(String skillName, Skill skill) {
+            if (registeredSkills.containsKey(skillName)) {
+                Log.wtf("SkillApi", "This skill is already registered");
+                return;
+            }
+            registeredSkills.put(skillName, skill);
+        }
+
+        public static int addXpToSkill(String skillName, int xpAmount) {
+            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().skillLevels.get(skillName).addXp(xpAmount);
+        }
+
+        public Skill getSkill(String skillName) {
+            return EverPhaseApi.getEverPhase().thePlayer.getPlayerData().skillLevels.get(skillName);
+        }
+
+        public boolean hasPlayerSkillRequirements(ISkillRequirement objectWithSkillRequirement) {
+            boolean result = true;
+
+            for (Skill skill : EverPhaseApi.getEverPhase().thePlayer.getPlayerData().skillLevels.values()) {
+                if (!objectWithSkillRequirement.getSkillRequirements().contains(skill)) continue;
+
+                for (Skill reqSkill : objectWithSkillRequirement.getSkillRequirements()) {
+                    if (skill.getName().equals(reqSkill.getName()))
+                        if (skill.getCurrentLevel() < reqSkill.getCurrentLevel())
+                            result = false;
+                }
+            }
+
+            return result;
+        }
+    }
+
     /**
      * The QuestingApi. In there are all methods used to add and manage Quests.
      */
@@ -98,7 +141,17 @@ public class EverPhaseApi {
          * @return the quest object associated with this name
          */
         public static Quest getQuestByName(String questName) {
-            return registeredQuests.get(questName);
+            Quest quest = null;
+
+            quest = EverPhaseApi.getEverPhase().thePlayer.getPlayerData().notStartedQuests.get(questName);
+            if (quest != null) return quest;
+
+            quest = EverPhaseApi.getEverPhase().thePlayer.getPlayerData().startedQuests.get(questName);
+            if (quest != null) return quest;
+
+            quest = EverPhaseApi.getEverPhase().thePlayer.getPlayerData().finishedQuests.get(questName);
+
+            return quest;
         }
 
         /**

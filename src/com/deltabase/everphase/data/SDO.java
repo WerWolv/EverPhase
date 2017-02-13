@@ -9,6 +9,12 @@ public abstract class SDO implements Serializable {
     public void serialize() {
         try {
             File file = new File(System.getProperty("user.home") + "/everphase/data/" + getClass().getSimpleName() + ".sdo");
+            File parent = file.getParentFile();
+
+            if (!parent.exists() && !parent.mkdirs()) {
+                throw new IllegalStateException("Couldn't create dir: " + parent);
+            }
+
             file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
@@ -26,6 +32,12 @@ public abstract class SDO implements Serializable {
         SDO sdo;
         try {
             File file = new File(System.getProperty("user.home") + "/everphase/data/" + getClass().getSimpleName() + ".sdo");
+            File parent = file.getParentFile();
+
+            if (!parent.exists() && !parent.mkdirs()) {
+                throw new IllegalStateException("Couldn't create dir: " + parent);
+            }
+
             file.createNewFile();
             FileInputStream fileInputStream = new FileInputStream(file);
             ObjectInputStream in = new ObjectInputStream(fileInputStream);
@@ -40,5 +52,11 @@ public abstract class SDO implements Serializable {
         }
 
         return sdo;
+    }
+
+    public boolean doesFileExist() {
+        File file = new File(System.getProperty("user.home") + "/everphase/data/" + getClass().getSimpleName() + ".sdo");
+
+        return file.exists();
     }
 }
