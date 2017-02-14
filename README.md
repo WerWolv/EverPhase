@@ -25,14 +25,14 @@ License: BSD 3-Clause (see LICENSE.txt)
 |Achievements|WerWolv|◔|
 |Random Dungeons (Rogue Like)|Mrasam|◔|
 |Magic (Teleports, etc.)|-|✗|
-|Quests|-|✗|
-|Skills|-|✗|
+|Questing System|WerWolv|✓|
+|Skilling System|WerWolv|✓|
 |Skilltree|-|✗|
 |Tinkering / Invention|-|✗|
 |Shadows on Entities|WerWolv|◔|
 |Fixing Audio issues when unpluging default device|WerWolv|◔|
 |Raytrace interaction with entities|-|◔|
-|AABBs|WerWolv|✓|
+|AABBs|WerWolv|◔|
 |Main Menu|WerWolv|✗|
 |Login system|WerWolv|✗|
 |Server|WerWolv|✗|
