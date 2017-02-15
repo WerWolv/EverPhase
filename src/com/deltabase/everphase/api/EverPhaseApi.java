@@ -12,11 +12,11 @@ import com.deltabase.everphase.engine.render.shadow.RendererShadowMapMaster;
 import com.deltabase.everphase.entity.EntityPlayer;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.gui.inventory.GuiInventory;
-import com.deltabase.everphase.level.Level;
 import com.deltabase.everphase.main.Main;
 import com.deltabase.everphase.quest.Quest;
 import com.deltabase.everphase.skill.ISkillRequirement;
 import com.deltabase.everphase.skill.Skill;
+import com.deltabase.everphase.world.World;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -32,7 +32,7 @@ public class EverPhaseApi {
     static List<IUpdateable> updateables;
     private static boolean hasBeenInitialized = false;
     public EntityPlayer thePlayer;
-    public Level theLevel;
+    public World theWorld;
 
     /**
      * Gets an instance of the Api class to access some deeper objects

@@ -8,7 +8,8 @@ import com.deltabase.everphase.callback.KeyCallback;
 import com.deltabase.everphase.callback.MouseButtonCallback;
 import com.deltabase.everphase.callback.ScrollCallback;
 import com.deltabase.everphase.engine.audio.AudioHelper;
-import com.deltabase.everphase.level.LevelOverworld;
+import com.deltabase.everphase.gui.Gui;
+import com.deltabase.everphase.gui.GuiSplashScreen;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -35,6 +36,8 @@ public class Main {
     private static float delta;
     private static long window;
 
+
+    private static Gui splashScreen;
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -180,19 +183,25 @@ public class Main {
 
         EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(0, 0, 0));
 
-        EverPhaseApi.getEverPhase().theLevel = new LevelOverworld();
-        EverPhaseApi.getEverPhase().theLevel.initLevel();
-        EverPhaseApi.getEverPhase().theLevel.applyPostProcessingEffects();
+        splashScreen = new GuiSplashScreen();
+        /*EverPhaseApi.getEverPhase().theWorld = new WorldSurface();
+        EverPhaseApi.getEverPhase().theWorld.initWorld();
+        EverPhaseApi.getEverPhase().theWorld.applyPostProcessingEffects();*/
+
 
         while(true) {
             glfwSwapBuffers(window);
 
             AudioHelper.setListenerPosition();
-            EverPhaseApi.EVENT_BUS.processEvents();
-            EverPhaseApi.getEverPhase().theLevel.updateLevel();
-            EverPhaseApi.getEverPhase().theLevel.handleInput();
-            EverPhaseApi.getEverPhase().theLevel.renderLevel();
-            EverPhaseApi.getEverPhase().theLevel.renderGUI();
+            if (EverPhaseApi.getEverPhase().theWorld != null) {
+                EverPhaseApi.EVENT_BUS.processEvents();
+                EverPhaseApi.getEverPhase().theWorld.updateWorld();
+                EverPhaseApi.getEverPhase().theWorld.handleInput();
+                EverPhaseApi.getEverPhase().theWorld.renderWorld();
+                EverPhaseApi.getEverPhase().theWorld.renderGUI();
+            } else {
+                EverPhaseApi.RendererUtils.RENDERER_GUI.render(splashScreen);
+            }
 
             long currFrameTime = getCurrentTime();
             delta = (currFrameTime - lastFrameTime) / 1000.0F;
@@ -208,7 +217,7 @@ public class Main {
 
         glfwSetWindowShouldClose(window, false);
         glfwDestroyWindow(window);
-        EverPhaseApi.getEverPhase().theLevel.clean();
+        EverPhaseApi.getEverPhase().theWorld.clean();
         keyCallback.free();
         mouseButtonCallback.free();
         cursorPosCallback.free();

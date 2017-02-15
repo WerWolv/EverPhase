@@ -1,4 +1,4 @@
-package com.deltabase.everphase.level;
+package com.deltabase.everphase.world;
 
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.IUpdateable;
@@ -26,7 +26,7 @@ import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public abstract class Level {
+public abstract class World {
 
     protected EntityLight entitySun = new EntityLight(new Vector3f(1, 0.9F, 0.9F), new Vector3f(1, 0, 0));
     private List<Entity> entities = new ArrayList<>();
@@ -37,14 +37,17 @@ public abstract class Level {
     private FrameBufferObject postProcessing = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1]);
     private FrameBufferObject outputFBO = new FrameBufferObject(Main.getWindowSize()[0], Main.getWindowSize()[1], FrameBufferObject.DEPTH_TEXTURE);
 
-    public Level() {
+    private boolean initialized = false;
+
+    public World() {
         ParticleHelper.init();
     }
 
-    public abstract void initLevel();
+    public abstract void initWorld();
 
-    public void updateLevel() {
+    public void updateWorld() {
         glfwPollEvents();
+        initialized = true;
         ParticleHelper.update(EverPhaseApi.getEverPhase().thePlayer);
 
         EverPhaseApi.getUpdateables().forEach(IUpdateable::update);
@@ -52,7 +55,7 @@ public abstract class Level {
         removeDeadEntities();
     }
 
-    public void renderLevel() {
+    public void renderWorld() {
         EverPhaseApi.RendererUtils.RENDERER_MASTER.renderShadowMap(this.getEntities(), this.getEntitiesNM(), entitySun);
 
         for (TileWater water : this.getWaters())
@@ -165,6 +168,10 @@ public abstract class Level {
         while (entityNMIterator.hasNext())
             if (!entityNMIterator.next().isAlive())
                 entityNMIterator.remove();
+    }
+
+    public boolean isWorldInitialized() {
+        return initialized;
     }
 
     public List<Entity> getEntities() {

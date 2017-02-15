@@ -1,4 +1,4 @@
-package com.deltabase.everphase.level;
+package com.deltabase.everphase.world;
 
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.callback.KeyCallback;
@@ -20,7 +20,7 @@ import java.util.Random;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class LevelOverworld extends Level {
+public class WorldSurface extends World {
 
     private static int GUI_INVENTORY_ID;
     private Entity entity, entityNm;
@@ -31,7 +31,7 @@ public class LevelOverworld extends Level {
     private List<Gui> currentGui = new ArrayList<>();
 
     @Override
-    public void initLevel() {
+    public void initWorld() {
         this.spawnEntity(entitySun, new Vector3f(1000, 1000, -1000));
         entity = new Entity("dragon", "crate", new Vector3f(0, 60, 0), 1, new Vector3f(1.0F, 1.0F, 1.0F), false);
         entityNm = new Entity("crate", "crate", new Vector3f(0, 60, 0), 0.03F, new Vector3f(1.0F, 1.0F, 1.0F), true);
@@ -82,8 +82,8 @@ public class LevelOverworld extends Level {
     }
 
     @Override
-    public void updateLevel() {
-        super.updateLevel();
+    public void updateWorld() {
+        super.updateWorld();
 
         System.out.println(EverPhaseApi.QuestingApi.getQuestByName("test").getQuestDescription());
 
@@ -93,8 +93,8 @@ public class LevelOverworld extends Level {
     }
 
     @Override
-    public void renderLevel() {
-        super.renderLevel();
+    public void renderWorld() {
+        super.renderWorld();
         entity.increaseRotation(0, 0.5F, 0);
 
     }

@@ -200,7 +200,7 @@ public class ResourceLoader {
         if(Settings.mipmappingType != GL11.GL_NONE) {
             GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, Settings.mipmappingType);   //Set the mipmap detail level to decrease linearly
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, Settings.mipmappingType);   //Set the mipmap detail world to decrease linearly
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, Settings.mipmappingType);
             GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -5 + Settings.mipmappingLevel);
         }
@@ -221,7 +221,7 @@ public class ResourceLoader {
         textures.add(texture.getTextureId());                                                   //Add the texture to the list of textures for cleanup
         texturesSize.add(texture.getWidth());
 
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);   //Set the mipmap detail level to decrease linearly
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);   //Set the mipmap detail world to decrease linearly
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);       //Set the texture to repeat itself if it gets drawn on a bigger surface
@@ -248,7 +248,7 @@ public class ResourceLoader {
                     0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
         }
 
-        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR); //Set the mipmap detail level to decrease linearly
+        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR); //Set the mipmap detail world to decrease linearly
         GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 
         textures.add(textureID);                                                                      //Add the texture id to the list of textures for cleanup
