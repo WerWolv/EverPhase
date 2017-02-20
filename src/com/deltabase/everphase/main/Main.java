@@ -10,6 +10,8 @@ import com.deltabase.everphase.callback.ScrollCallback;
 import com.deltabase.everphase.engine.audio.AudioHelper;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.gui.GuiSplashScreen;
+import com.deltabase.everphase.mp.ConnectionHandler;
+import com.deltabase.everphase.world.WorldSurface;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -184,10 +186,11 @@ public class Main {
         EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(0, 0, 0));
 
         splashScreen = new GuiSplashScreen();
-        /*EverPhaseApi.getEverPhase().theWorld = new WorldSurface();
+        EverPhaseApi.getEverPhase().theWorld = new WorldSurface();
         EverPhaseApi.getEverPhase().theWorld.initWorld();
-        EverPhaseApi.getEverPhase().theWorld.applyPostProcessingEffects();*/
+        EverPhaseApi.getEverPhase().theWorld.applyPostProcessingEffects();
 
+        ConnectionHandler.connectToServer();
 
         while(true) {
             glfwSwapBuffers(window);
@@ -217,6 +220,7 @@ public class Main {
 
         glfwSetWindowShouldClose(window, false);
         glfwDestroyWindow(window);
+        ConnectionHandler.quitConnection();
         EverPhaseApi.getEverPhase().theWorld.clean();
         keyCallback.free();
         mouseButtonCallback.free();

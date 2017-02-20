@@ -108,6 +108,24 @@ public abstract class World {
         if (KeyCallback.isKeyPressedEdge(GLFW_KEY_F3))
             Settings.showBoundingBoxes = !Settings.showBoundingBoxes;
 
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_1))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(0);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_2))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(1);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_3))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(2);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_4))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(3);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_5))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(4);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_6))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(5);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_7))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(6);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_8))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(7);
+        if (KeyCallback.isKeyPressedEdge(GLFW_KEY_9))
+            EverPhaseApi.getEverPhase().thePlayer.setSelectedItemIndex(8);
 
         EverPhaseApi.getEverPhase().thePlayer.onMove(getCurrTerrain());
         EverPhaseApi.getEverPhase().thePlayer.onInteract();

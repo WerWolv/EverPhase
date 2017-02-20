@@ -8,6 +8,7 @@ import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.gui.GuiIngame;
 import com.deltabase.everphase.gui.inventory.GuiInventoryPlayer;
+import com.deltabase.everphase.mp.ConnectionHandler;
 import com.deltabase.everphase.quest.QuestTest;
 import com.deltabase.everphase.structure.Labyrinth;
 import com.deltabase.everphase.terrain.Terrain;
@@ -85,8 +86,6 @@ public class WorldSurface extends World {
     public void updateWorld() {
         super.updateWorld();
 
-        System.out.println(EverPhaseApi.QuestingApi.getQuestByName("test").getQuestDescription());
-
         for (Entity entity : getEntities())
             if (entity.getBoundingBox().intersectsWith(EverPhaseApi.getEverPhase().thePlayer.getBoundingBox()))
                 ;//Do Something
@@ -118,19 +117,7 @@ public class WorldSurface extends World {
         }
 
         if (KeyCallback.isKeyPressed(GLFW_KEY_1))
-            EverPhaseApi.QuestingApi.finishQuestTask("test", "test0");
-
-        if (KeyCallback.isKeyPressed(GLFW_KEY_2))
-            EverPhaseApi.QuestingApi.finishQuestTask("test", "test1");
-
-        if (KeyCallback.isKeyPressed(GLFW_KEY_3))
-            EverPhaseApi.QuestingApi.finishQuestTask("test", "test2");
-
-        if (KeyCallback.isKeyPressed(GLFW_KEY_4))
-            EverPhaseApi.QuestingApi.finishQuestTask("test", "test3");
-
-        if (KeyCallback.isKeyPressed(GLFW_KEY_8))
-            EverPhaseApi.QuestingApi.finishQuestTask("test", "test4");
+            ConnectionHandler.sendMessageToServer("TEST");
     }
 
     public void clean() {

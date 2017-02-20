@@ -8,6 +8,7 @@ import com.deltabase.everphase.api.event.advance.AchievementGetEvent;
 import com.deltabase.everphase.api.event.input.ScrollEvent;
 import com.deltabase.everphase.api.event.inventory.InventoryItemClickEvent;
 import com.deltabase.everphase.api.event.inventory.InventoryItemHoverEvent;
+import com.deltabase.everphase.api.event.mp.ServerMessageReceivedEvent;
 import com.deltabase.everphase.api.event.player.OpenGuiEvent;
 import com.deltabase.everphase.api.event.player.PlayerMoveEvent;
 import com.deltabase.everphase.api.event.quest.QuestFinishedEvent;
@@ -72,5 +73,10 @@ public class EventHandler {
     @SubscribeEvent
     public void onQuestTaskFinished(QuestTaskFinishedEvent event) {
 
+    }
+
+    @SubscribeEvent
+    public void onServerMessageReceived(ServerMessageReceivedEvent event) {
+        Log.i("SERVER", event.getMessage());
     }
 }
