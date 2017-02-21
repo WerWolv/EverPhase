@@ -8,7 +8,7 @@ import com.deltabase.everphase.entity.Entity;
 import com.deltabase.everphase.gui.Gui;
 import com.deltabase.everphase.gui.GuiIngame;
 import com.deltabase.everphase.gui.inventory.GuiInventoryPlayer;
-import com.deltabase.everphase.mp.ConnectionHandler;
+import com.deltabase.everphase.net.ConnectionHandlerUDP;
 import com.deltabase.everphase.quest.QuestTest;
 import com.deltabase.everphase.structure.Labyrinth;
 import com.deltabase.everphase.terrain.Terrain;
@@ -117,7 +117,7 @@ public class WorldSurface extends World {
         }
 
         if (KeyCallback.isKeyPressed(GLFW_KEY_1))
-            ConnectionHandler.sendMessageToServer("TEST");
+            ConnectionHandlerUDP.sendMessageToServer("ADD:4+6");
     }
 
     public void clean() {

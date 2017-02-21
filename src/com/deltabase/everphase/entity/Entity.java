@@ -23,7 +23,7 @@ public class Entity implements IUpdateable {
     public final Capability SPEED = new Capability(20, 20);
 
     protected Vector3f position;      //Position of the entity in the world
-    protected float rotX, rotY, rotZ; //Rotation of the entity
+    protected float pitch, yaw, roll; //Rotation of the entity
     protected ModelTextured model;    //Model and texture of the entity
     protected float scale;            //Size of the entity
     protected boolean hasNormalMap;
@@ -45,9 +45,9 @@ public class Entity implements IUpdateable {
         this.position = new Vector3f(0, 0, 0);
         this.boundingBox = new AABB(position, bbSize.mul(scale));
         this.bbSize = bbSize.mul(scale);
-        this.rotX = rotation.x;
-        this.rotY = rotation.y;
-        this.rotZ = rotation.z;
+        this.pitch = rotation.x;
+        this.yaw = rotation.y;
+        this.roll = rotation.z;
         this.scale = scale;
         this.hasNormalMap = hasNormalMap;
 
@@ -65,9 +65,9 @@ public class Entity implements IUpdateable {
         this.position = new Vector3f(0, 0, 0);
         this.boundingBox = new AABB(position, bbSize.mul(scale));
         this.bbSize = bbSize.mul(scale);
-        this.rotX = rotation.x;
-        this.rotY = rotation.y;
-        this.rotZ = rotation.z;
+        this.pitch = rotation.x;
+        this.yaw = rotation.y;
+        this.roll = rotation.z;
         this.scale = scale;
         this.hasNormalMap = hasNormalMap;
 
@@ -78,9 +78,9 @@ public class Entity implements IUpdateable {
         this.position = new Vector3f(0, 0, 0);
         this.boundingBox = new AABB(position, bbSize.mul(scale));
         this.bbSize = bbSize.mul(scale);
-        this.rotX = rotation;
-        this.rotY = rotation;
-        this.rotZ = rotation;
+        this.pitch = rotation;
+        this.yaw = rotation;
+        this.roll = rotation;
         this.scale = scale;
         this.hasNormalMap = false;
 
@@ -139,9 +139,9 @@ public class Entity implements IUpdateable {
      * @param dz    The amount to increase the rotation of the entity in the z direction.
      */
     public void increaseRotation(float dx, float dy, float dz) {
-        this.rotX += dx;
-        this.rotY += dy;
-        this.rotZ += dz;
+        this.pitch += dx;
+        this.yaw += dy;
+        this.roll += dz;
     }
 
     /* Getters and Setters */
@@ -166,32 +166,32 @@ public class Entity implements IUpdateable {
         return this;
     }
 
-    public float getRotX() {
-        return rotX;
+    public float getPitch() {
+        return pitch;
     }
 
-    public Entity setRotX(float rotX) {
-        this.rotX = rotX;
+    public Entity setPitch(float pitch) {
+        this.pitch = pitch;
 
         return this;
     }
 
-    public float getRotY() {
-        return rotY;
+    public float getYaw() {
+        return yaw;
     }
 
-    public Entity setRotY(float rotY) {
-        this.rotY = rotY;
+    public Entity setYaw(float yaw) {
+        this.yaw = yaw;
 
         return this;
     }
 
-    public float getRotZ() {
-        return rotZ;
+    public float getRoll() {
+        return roll;
     }
 
-    public Entity setRotZ(float rotZ) {
-        this.rotZ = rotZ;
+    public Entity setRoll(float roll) {
+        this.roll = roll;
 
         return this;
     }

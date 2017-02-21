@@ -1,4 +1,4 @@
-package com.deltabase.everphase.mp;
+package com.deltabase.everphase.net;
 
 import com.deltabase.everphase.api.EverPhaseApi;
 import com.deltabase.everphase.api.Log;
@@ -9,13 +9,12 @@ import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public abstract class ConnectionHandler {
+public abstract class ConnectionHandlerTCP {
 
     private static Socket clientSocket;
     private static Thread sendThread, receiveThread;
 
     private static volatile String msgToSend = null;
-    private static volatile String receivedMsg = null;
 
     private static boolean connected = false;
 
@@ -23,18 +22,17 @@ public abstract class ConnectionHandler {
 
     public static void connectToServer() {
         try {
-            clientSocket = new Socket("localhost", 8192);
+            clientSocket = new Socket(NetworkUtils.getServerIP(), 8192);
 
             connected = true;
 
-            sendThread = new Thread(ConnectionHandler::send);
-            receiveThread = new Thread(ConnectionHandler::receive);
+            sendThread = new Thread(ConnectionHandlerTCP::send);
+            receiveThread = new Thread(ConnectionHandlerTCP::receive);
 
             sendThread.start();
             receiveThread.start();
         } catch (IOException e) {
             Log.wtf("SERVER", "Connection Failed!!");
-            e.printStackTrace();
         }
     }
 
@@ -68,7 +66,6 @@ public abstract class ConnectionHandler {
             while (connected) {
                 line = reader.readLine();
                 if (line == null || line.trim().length() == 0) continue;
-                receivedMsg = line;
                 EverPhaseApi.EVENT_BUS.postEvent(new ServerMessageReceivedEvent(line));
             }
 
@@ -95,9 +92,9 @@ public abstract class ConnectionHandler {
             Thread.sleep(50);
             sendThread.join();
             receiveThread.join();
-            clientSocket.close();
+            if (!clientSocket.isClosed())
+                clientSocket.close();
         } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
         }
     }
 

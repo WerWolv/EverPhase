@@ -9,8 +9,9 @@ import com.deltabase.everphase.callback.MouseButtonCallback;
 import com.deltabase.everphase.callback.ScrollCallback;
 import com.deltabase.everphase.engine.audio.AudioHelper;
 import com.deltabase.everphase.gui.Gui;
-import com.deltabase.everphase.gui.GuiSplashScreen;
-import com.deltabase.everphase.mp.ConnectionHandler;
+import com.deltabase.everphase.gui.GuiMainMenu;
+import com.deltabase.everphase.net.ConnectionHandlerTCP;
+import com.deltabase.everphase.net.ConnectionHandlerUDP;
 import com.deltabase.everphase.world.WorldSurface;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -39,7 +40,7 @@ public class Main {
     private static long window;
 
 
-    private static Gui splashScreen;
+    private static Gui guiMainMenu;
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -185,12 +186,14 @@ public class Main {
 
         EverPhaseApi.getEverPhase().thePlayer.setPosition(new Vector3f(0, 0, 0));
 
-        splashScreen = new GuiSplashScreen();
+        guiMainMenu = new GuiMainMenu();
         EverPhaseApi.getEverPhase().theWorld = new WorldSurface();
         EverPhaseApi.getEverPhase().theWorld.initWorld();
         EverPhaseApi.getEverPhase().theWorld.applyPostProcessingEffects();
 
-        ConnectionHandler.connectToServer();
+        //ConnectionHandlerTCP.connectToServer();
+        ConnectionHandlerUDP.connectToServer();
+        //EverPhaseApi.getEverPhase().thePlayer.setCurrentGui(guiMainMenu);
 
         while(true) {
             glfwSwapBuffers(window);
@@ -203,7 +206,7 @@ public class Main {
                 EverPhaseApi.getEverPhase().theWorld.renderWorld();
                 EverPhaseApi.getEverPhase().theWorld.renderGUI();
             } else {
-                EverPhaseApi.RendererUtils.RENDERER_GUI.render(splashScreen);
+                EverPhaseApi.RendererUtils.RENDERER_GUI.render(EverPhaseApi.getEverPhase().thePlayer.getCurrentGui());
             }
 
             long currFrameTime = getCurrentTime();
@@ -220,7 +223,10 @@ public class Main {
 
         glfwSetWindowShouldClose(window, false);
         glfwDestroyWindow(window);
-        ConnectionHandler.quitConnection();
+
+        ConnectionHandlerTCP.quitConnection();
+        ConnectionHandlerUDP.quitConnection();
+
         EverPhaseApi.getEverPhase().theWorld.clean();
         keyCallback.free();
         mouseButtonCallback.free();

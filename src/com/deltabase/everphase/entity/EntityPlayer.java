@@ -27,9 +27,6 @@ public class EntityPlayer extends Entity {
     private float speedX, speedY, speedZ;               //Speed of the player in different directions.
     private boolean isInAir = false;                    //Is the player currently in the air?
     private boolean canFly = false;
-    private float pitch;    //The horizontal angle of the camera
-    private float yaw;      //The vertical angle of the camera
-    private float roll;     //The longitudinal angle of the camera
     private Gui currentGui;
     private ItemStack heldItem;
 
@@ -126,30 +123,6 @@ public class EntityPlayer extends Entity {
         this.position.y += y * Main.getFrameTimeSeconds();
         this.position.z += z * Main.getFrameTimeSeconds();
 
-    }
-
-    public float getPitch() {
-        return pitch;
-    }
-
-    public void setPitch(float pitch) {
-        this.pitch = pitch;
-    }
-
-    public float getYaw() {
-        return yaw;
-    }
-
-    public void setYaw(float yaw) {
-        this.yaw = yaw;
-    }
-
-    public float getRoll() {
-        return roll;
-    }
-
-    public void setRoll(float roll) {
-        this.roll = roll;
     }
 
     public Gui getCurrentGui() {

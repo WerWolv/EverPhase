@@ -71,9 +71,9 @@ public class RendererParticle {
 			floatArraypointer = 0;
 			float[] vboData = new float[particleList.size() * INSTANCED_DATA_LENGTH];
 
-			for (EntityParticle particle :particleList) {
-				updateModelViewMatrix(particle.getPosition(), particle.getRotZ(), particle.getScale(), viewMatrix, vboData);
-				updateTexCoordInfo(particle, vboData);
+            for (EntityParticle particle : particleList) {
+                updateModelViewMatrix(particle.getPosition(), particle.getRoll(), particle.getScale(), viewMatrix, vboData);
+                updateTexCoordInfo(particle, vboData);
 			}
 			EverPhaseApi.RESOURCE_LOADER.updateVBO(vboID, vboData, buffer);
 			GL31.glDrawArraysInstanced(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCnt(), particleList.size());

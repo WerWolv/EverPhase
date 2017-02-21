@@ -87,8 +87,8 @@ public class RendererShadowMapEntity {
 	 */
 	private void prepareInstance(Entity entity) {
 		Matrix4f modelMatrix = Maths.createTransformationMatrix(entity.getPosition(),
-				entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
-		Matrix4f mvpMatrix = new Matrix4f();
+                entity.getPitch(), entity.getYaw(), entity.getRoll(), entity.getScale());
+        Matrix4f mvpMatrix = new Matrix4f();
 		projectionViewMatrix.mul(modelMatrix, mvpMatrix);
 		shader.loadMvpMatrix(mvpMatrix);
 	}

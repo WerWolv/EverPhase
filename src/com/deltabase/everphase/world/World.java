@@ -53,6 +53,13 @@ public abstract class World {
         EverPhaseApi.getUpdateables().forEach(IUpdateable::update);
 
         removeDeadEntities();
+
+        for (Gui gui : EverPhaseApi.GuiUtils.getRegisteredHuds())
+            gui.update();
+
+        if (EverPhaseApi.getEverPhase().thePlayer.getCurrentGui() != null) {
+            EverPhaseApi.getEverPhase().thePlayer.getCurrentGui().update();
+        }
     }
 
     public void renderWorld() {

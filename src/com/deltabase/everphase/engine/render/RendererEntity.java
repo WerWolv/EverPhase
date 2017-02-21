@@ -117,7 +117,7 @@ public class RendererEntity {
      * @param entity    The entity that should get rendered
      */
     private void prepareInstance(Entity entity) {
-        Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());    //Create a fresh transformation matrix
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getPitch(), entity.getYaw(), entity.getRoll(), entity.getScale());    //Create a fresh transformation matrix
         shader.loadTransformationMatrix(transformationMatrix);  //Load the transformation matrix to the shader
         shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());  //Load the x and y offset of the texture on the texture atlas to the shader
     }
